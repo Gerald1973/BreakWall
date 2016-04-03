@@ -1,0 +1,31 @@
+#ifndef BRICK_H
+#define BRICK_H
+#include "TextureWithPosition.h"
+#include <iostream>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
+
+class Brick
+{
+    public:
+        Brick();
+        virtual ~Brick();
+        void setValue(int value);
+        int getValue();
+        bool isDestroyed();
+        void setDestroyed(bool destroyed);
+        TextureWithPosition* getTextureWithPosition();
+        void setTextureWithPosition(TextureWithPosition* textureWithPosition);
+        void render(SDL_Renderer* render);
+        Mix_Chunk* getSound();
+        void setSound(Mix_Chunk* sound);
+    protected:
+    private:
+        int value;
+        bool destroyed;
+        TextureWithPosition* textureWithPosition;
+        Mix_Chunk* sound;
+
+};
+
+#endif // BRICK_H

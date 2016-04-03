@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="BreakWall" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/BreakWall" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add directory="include" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/BreakWall" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add directory="include" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="`sdl2-config --cflags --libs`" />
+			<Add option="-lSDL2_mixer" />
+			<Add option="-lSDL2_image" />
+			<Add option="-L /opt/vc/include" />
+			<Add option="-D_REENTRANT" />
+		</Compiler>
+		<Linker>
+			<Add option="`sdl2-config --cflags --libs`" />
+			<Add option="-lSDL2_image" />
+			<Add option="-lSDL2_mixer" />
+		</Linker>
+		<Unit filename="ball.bmp" />
+		<Unit filename="ball.png" />
+		<Unit filename="bare.bmp" />
+		<Unit filename="bare.png" />
+		<Unit filename="bare.wav" />
+		<Unit filename="brickRed.bmp" />
+		<Unit filename="cb.bmp" />
+		<Unit filename="include/Ball.h" />
+		<Unit filename="include/Bare.h" />
+		<Unit filename="include/Brick.h" />
+		<Unit filename="include/GlobalConstants.h" />
+		<Unit filename="include/TextureWithPosition.h" />
+		<Unit filename="include/UtilConstants.h" />
+		<Unit filename="include/Wall.h" />
+		<Unit filename="metal.wav" />
+		<Unit filename="src/Ball.cpp" />
+		<Unit filename="src/Bare.cpp" />
+		<Unit filename="src/Brick.cpp" />
+		<Unit filename="src/GlobalConstants.cpp" />
+		<Unit filename="src/TextureWithPosition.cpp" />
+		<Unit filename="src/UtilConstants.cpp" />
+		<Unit filename="src/Wall.cpp" />
+		<Unit filename="src/main.cpp">
+			<Option target="Debug" />
+		</Unit>
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
