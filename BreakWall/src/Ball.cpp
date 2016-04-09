@@ -85,8 +85,12 @@ bool Ball::bouncesOnBrick(Brick* brick) {
 					<= brick->getTextureWithPosition()->getY2()
 			&& getTextureWithPosition()->getY2()
 					>= brick->getTextureWithPosition()->getY()) {
+		//Destroy the brick and update the score.
 		brick->setDestroyed(true);
-		Mix_PlayChannel( -1,brick->getSound(), 0 );
+		getScoreSegments()->addScore(brick->getValue());
+		//....
+
+		Mix_PlayChannel(-1, brick->getSound(), 0);
 		if (getTextureWithPosition()->getAbsCenterX()
 				< brick->getTextureWithPosition()->getX()) {
 			dirX = -dirX;
@@ -113,6 +117,14 @@ bool Ball::bouncesOnBrick(Brick* brick) {
 
 	}
 	return result;
+}
+
+float Ball::getSpeed() {
+	return this->speed;
+}
+
+void Ball::setSpeed(float speed) {
+	this->speed = speed;
 }
 
 bool Ball::bouncesOnScreen() {
@@ -155,7 +167,7 @@ bool Ball::bouncesOnBare(Bare* bare) {
 					<= bare->getTextureWithPosition()->getY2()
 			&& getTextureWithPosition()->getY2()
 					>= bare->getTextureWithPosition()->getY()) {
-		Mix_PlayChannel( -1,bare->getSound(), 0 );
+		Mix_PlayChannel(-1, bare->getSound(), 0);
 		dirY = -dirY;
 		//calcul coeffX
 		float centerBare =
@@ -197,3 +209,10 @@ bool Ball::bouncesOnBare(Bare* bare) {
 	return result;
 }
 
+ScoreSegments* Ball::getScoreSegments() {
+	return this->scoreSegments;
+}
+
+void Ball::setScoreSegments(ScoreSegments* scoreSegments) {
+	this->scoreSegments = scoreSegments;
+}

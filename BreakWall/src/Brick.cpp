@@ -2,7 +2,7 @@
 #include "SDL2/SDL.h"
 
 Brick::Brick() {
-	this->value = 0;
+	this->value = 20;
 	this->sound = NULL;
 	this->destroyed = false;
 	this->textureWithPosition = NULL;

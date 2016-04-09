@@ -14,10 +14,10 @@ TextureWithPosition::TextureWithPosition(SDL_Texture* texture, SDL_Rect position
     this->originRect.h = height;
     this->position.w = width;
     this->position.h = height;
-    std::cout << "Origin w:" << this->originRect.w << "\n";
-    std::cout << "Origin h:" << this->originRect.h  <<"\n";
-    std::cout << "Origin x:" << this->originRect.x  <<"\n";
-    std::cout << "Origin y:" << this->originRect.y  <<"\n";
+    //std::cout << "Origin w:" << this->originRect.w << "\n";
+    //std::cout << "Origin h:" << this->originRect.h  <<"\n";
+    //std::cout << "Origin x:" << this->originRect.x  <<"\n";
+    //std::cout << "Origin y:" << this->originRect.y  <<"\n";
 }
 
 TextureWithPosition::~TextureWithPosition()

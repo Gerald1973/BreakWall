@@ -12,8 +12,9 @@
 #include "Brick.h"
 #include "Bare.h"
 #include "Wall.h"
-#include <vector>
 #include "Ball.h"
+#include "ScoreSegments.h"
+#include <vector>
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_image.h>
 
@@ -28,6 +29,7 @@ std::map<std::string,SDL_Texture*> mapTextures;
 void displayErrorMessage(){
     std::cout << SDL_GetError() << "\n";
 }
+
 SDL_Texture* loadTexture(const char *fileName,SDL_Renderer* renderer){
     SDL_Texture* result = NULL;
     result = IMG_LoadTexture(renderer,fileName);
@@ -43,6 +45,7 @@ void initTextureMap(SDL_Renderer *renderer){
     mapTextures["ball"] = loadTexture("ball.png",renderer);
     mapTextures["bare"] = loadTexture("bare.png",renderer);
     mapTextures["brickRed"] = loadTexture("brickRed.bmp",renderer);
+    mapTextures["segments"] = loadTexture("segments.png",renderer);
 }
 
 Mix_Chunk* loadSoundEffect(const char *fileName){
@@ -101,6 +104,12 @@ Ball* initBall(SDL_Renderer *renderer, Wall* wall,Bare *bare){
     return ball;
 }
 
+ScoreSegments* initScoreSegments(SDL_Renderer *renderer){
+	ScoreSegments* result =new ScoreSegments();
+	result->setTexture(mapTextures["segments"]);
+	return result;
+}
+
 void quit(){
     std::map<std::string,Mix_Chunk*>::iterator  mapSoundsIterator;
     for (mapSoundsIterator = mapSounds.begin(); mapSoundsIterator != mapSounds.end(); mapSoundsIterator++){
@@ -136,7 +145,7 @@ int main ( int argc, char** argv )
     const Uint8* keys = SDL_GetKeyboardState(NULL);
     std::map<int,bool> mapKbd;
     SDL_Window *pWindow = SDL_CreateWindow("",UtilConstants::getInstance()->screenSize.x,UtilConstants::getInstance()->screenSize.y,UtilConstants::getInstance()->screenSize.w,UtilConstants::getInstance()->screenSize.h,
-    		SDL_WINDOW_FULLSCREEN|SDL_WINDOW_OPENGL);
+    		SDL_WINDOW_OPENGL|SDL_WINDOW_OPENGL);
     		//SDL_WINDOW_FULLSCREEN|SDL_WINDOW_OPENGL);
     if (pWindow == NULL){
         std::cout <<  SDL_GetError() << "\n";
@@ -149,7 +158,9 @@ int main ( int argc, char** argv )
     Bare* bare = initBare(renderer);
     Wall* wall = initWall(renderer);
     wall->build();
+    ScoreSegments* scoreSegments = initScoreSegments(renderer);
     Ball* ball = initBall(renderer,wall, bare);
+    ball->setScoreSegments(scoreSegments);
     bool loop = true;
     while (loop){
         SDL_SetRenderTarget(renderer,tmpTexture);
@@ -174,6 +185,7 @@ int main ( int argc, char** argv )
         wall->render(renderer);
         bare->render(renderer);
         ball->render(renderer);
+        scoreSegments->render(renderer);
         SDL_SetRenderTarget(renderer,NULL);
         SDL_RenderCopy(renderer,tmpTexture,NULL,NULL);
         SDL_RenderPresent(renderer);
