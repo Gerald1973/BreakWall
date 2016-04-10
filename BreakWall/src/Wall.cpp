@@ -15,8 +15,8 @@ Wall::~Wall()
 
 void Wall::build()
 {
-    for (int j = 0; j < this->bricks.size(); j++){
-        for (int i = 0; i < this->bricks[j].size(); i ++){
+    for (unsigned int j = 0; j < this->bricks.size(); j++){
+        for (unsigned int i = 0; i < this->bricks[j].size(); i ++){
                 this->bricks[j][i]->getTextureWithPosition()->setX(i * this->bricks[j][i]->getTextureWithPosition()->getPosition().w);
                 this->bricks[j][i]->getTextureWithPosition()->setY(j * this->bricks[j][i]->getTextureWithPosition()->getPosition().h);
         }
@@ -25,8 +25,8 @@ void Wall::build()
 
 void Wall::render(SDL_Renderer *renderer)
 {
-    for (int j = 0; j < bricks.size(); j++){
-        for (int i = 0; i < bricks[j].size(); i ++){
+    for (unsigned int j = 0; j < bricks.size(); j++){
+        for (unsigned int i = 0; i < bricks[j].size(); i ++){
             bricks[j][i]->render(renderer);
         }
     }
