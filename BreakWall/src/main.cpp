@@ -145,7 +145,7 @@ int main ( int argc, char** argv )
     const Uint8* keys = SDL_GetKeyboardState(NULL);
     std::map<int,bool> mapKbd;
     SDL_Window *pWindow = SDL_CreateWindow("",UtilConstants::getInstance()->screenSize.x,UtilConstants::getInstance()->screenSize.y,UtilConstants::getInstance()->screenSize.w,UtilConstants::getInstance()->screenSize.h,
-    		SDL_WINDOW_OPENGL|SDL_WINDOW_OPENGL);
+    		SDL_WINDOW_OPENGL|SDL_WINDOW_OPENGL|SDL_WINDOW_RESIZABLE);
     		//SDL_WINDOW_FULLSCREEN|SDL_WINDOW_OPENGL);
     if (pWindow == NULL){
         std::cout <<  SDL_GetError() << "\n";
