@@ -2,9 +2,9 @@
 #include <SDL2/SDL_mixer.h>
 
 Ball::Ball() {
-	this->dirX = 1;
-	this->dirY = 1;
-	this->speed = 4;
+	this->dirX = 0.1;
+	this->dirY = 0.1;
+	this->speed = 0.1;
 	this->coeffX = 1;
 	this->coeffX = 0;
 	this->wall = NULL;
@@ -12,6 +12,7 @@ Ball::Ball() {
 	this->posX = 0;
 	this->posY = 0;
 	this->bare = NULL;
+	this->scoreSegments = NULL;
 }
 
 Ball::~Ball() {
@@ -172,11 +173,10 @@ bool Ball::bouncesOnBare(Bare* bare) {
 		//calcul coeffX
 		float centerBare =
 				(float) (bare->getTextureWithPosition()->getAbsCenterX());
-		float deltaCenter = (float) (getTextureWithPosition()->getAbsCenterX())
-				- centerBare;
+		float deltaCenter = getTextureWithPosition()->getAbsCenterX() - centerBare;
 		float halfWidht =
 				(float) (bare->getTextureWithPosition()->getPosition().w / 2);
-		coeffX = deltaCenter / halfWidht;
+		coeffX = (deltaCenter / halfWidht) * speed;
 		dirX = coeffX;
 		dirY = sqrt(speed * speed - dirX * dirX);
 		if (getTextureWithPosition()->getAbsCenterX()

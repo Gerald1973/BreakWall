@@ -150,7 +150,7 @@ int main ( int argc, char** argv )
     if (pWindow == NULL){
         std::cout <<  SDL_GetError() << "\n";
     }
-    SDL_Renderer *renderer =SDL_CreateRenderer(pWindow,-1,SDL_RENDERER_ACCELERATED|SDL_RENDERER_TARGETTEXTURE|SDL_RENDERER_PRESENTVSYNC);
+    SDL_Renderer *renderer =SDL_CreateRenderer(pWindow,-1,SDL_RENDERER_ACCELERATED|SDL_RENDERER_TARGETTEXTURE /*| SDL_RENDERER_PRESENTVSYNC*/);
     SDL_Event event;
     SDL_Texture *tmpTexture = SDL_CreateTexture(renderer,SDL_PIXELFORMAT_ABGR8888,SDL_TEXTUREACCESS_TARGET,UtilConstants::getInstance()->screenSize.w,UtilConstants::getInstance()->screenSize.h);
     initSoundMap();
