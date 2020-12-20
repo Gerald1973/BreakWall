@@ -1,4 +1,4 @@
-#include "GlobalConstants.h"
+#include "../include/GlobalConstants.h"
 
 GlobalConstants::GlobalConstants()
 {

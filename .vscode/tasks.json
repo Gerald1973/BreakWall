@@ -5,6 +5,11 @@
             "label": "C/C++: g++ build active file",
             "command": "/usr/bin/g++",
             "args": [
+                "`",
+                "sdl2-config",
+                "--cflags",
+                "--libs",
+                "`",
                 "-g",
                 "${file}",
                 "-o",

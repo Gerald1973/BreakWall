@@ -1,4 +1,4 @@
-#include "Brick.h"
+#include "../include/Brick.h"
 #include "SDL2/SDL.h"
 
 Brick::Brick() {

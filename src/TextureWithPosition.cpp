@@ -1,7 +1,7 @@
-#include "TextureWithPosition.h"
+#include "../include/TextureWithPosition.h"
 #include <iostream>
 #include <SDL2/SDL.h>
-#include "UtilConstants.h"
+#include "../include/UtilConstants.h"
 
 TextureWithPosition::TextureWithPosition(SDL_Texture* texture, SDL_Rect position)
 {

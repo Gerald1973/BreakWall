@@ -5,8 +5,8 @@
  *      Author: Papa
  */
 
-#include "ScoreSegments.h"
-#include "UtilConstants.h"
+#include "../include/ScoreSegments.h"
+#include "../include/UtilConstants.h"
 #include <math.h>
 
 ScoreSegments::ScoreSegments() {

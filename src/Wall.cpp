@@ -1,8 +1,8 @@
-#include "Wall.h"
+#include "../include/Wall.h"
 #include <SDL2/SDL.h>
-#include "Brick.h"
-#include "UtilConstants.h"
-#include "GlobalConstants.h"
+#include "../include/Brick.h"
+#include "../include/UtilConstants.h"
+#include "../include/GlobalConstants.h"
 Wall::Wall()
 {
     //ctor

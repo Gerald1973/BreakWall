@@ -1,10 +1,10 @@
-#include "Ball.h"
+#include "../include/Ball.h"
 #include <SDL2/SDL_mixer.h>
 
 Ball::Ball() {
 	this->dirX = 0.1;
 	this->dirY = 0.1;
-	this->speed = 0.1;
+	this->speed = 1;
 	this->coeffX = 1;
 	this->coeffX = 0;
 	this->wall = NULL;
@@ -27,7 +27,7 @@ void Ball::render(SDL_Renderer* renderer) {
 void Ball::moveBall() {
 	bouncesOnScreen();
 	bouncesOnBare(getBare());
-	//2� the wall
+	//2 the wall
 	std::vector<std::vector<Brick*> > bricks = getWall()->getBricks();
 	bool brickTouched = false;
 	for (unsigned int j = 0; j < bricks.size(); j++) {
@@ -41,7 +41,7 @@ void Ball::moveBall() {
 			break;
 		}
 	}
-	//4� Move
+	//4 Move
 	posX = posX + dirX;
 	posY = posY + dirY;
 	getTextureWithPosition()->setX(posX);
