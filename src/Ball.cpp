@@ -27,7 +27,7 @@ void Ball::render(SDL_Renderer* renderer) {
 void Ball::moveBall() {
 	bouncesOnScreen();
 	bouncesOnBare(getBare());
-	//2° the wall
+	//2ï¿½ the wall
 	std::vector<std::vector<Brick*> > bricks = getWall()->getBricks();
 	bool brickTouched = false;
 	for (unsigned int j = 0; j < bricks.size(); j++) {
@@ -41,7 +41,7 @@ void Ball::moveBall() {
 			break;
 		}
 	}
-	//4° Move
+	//4ï¿½ Move
 	posX = posX + dirX;
 	posY = posY + dirY;
 	getTextureWithPosition()->setX(posX);
