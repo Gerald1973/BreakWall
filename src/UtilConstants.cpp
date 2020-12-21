@@ -6,8 +6,6 @@ UtilConstants::UtilConstants()
 {
     this->screenSize.h=540;
     this->screenSize.w=960;
-	//this->screenSize.h=1080;
-	//    this->screenSize.w=1920;
     this->screenSize.x=0;
     this->screenSize.y=0;
 }

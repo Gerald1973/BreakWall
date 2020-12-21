@@ -5,12 +5,10 @@
 #include "../include/GlobalConstants.h"
 Wall::Wall()
 {
-    //ctor
 }
 
 Wall::~Wall()
 {
-    //dtor
 }
 
 void Wall::build()
@@ -41,8 +39,3 @@ void Wall::setBricks(std::vector<std::vector<Brick* > > bricks)
 {
     this->bricks = bricks;
 }
-
-
-
-
-

@@ -2,9 +2,9 @@
 #include <SDL2/SDL_mixer.h>
 
 Ball::Ball() {
-	this->dirX = 0.1;
-	this->dirY = 0.1;
-	this->speed = 1;
+	this->dirX = 0;
+	this->dirY = 2;
+	this->speed = 2;
 	this->coeffX = 1;
 	this->coeffX = 0;
 	this->wall = NULL;
