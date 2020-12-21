@@ -16,7 +16,7 @@ public:
 	void render(SDL_Renderer* renderer);
 	void render(SDL_Renderer* renderer,int score);
 	void setTexture(SDL_Texture* sdlTexture);
-	SDL_Rect caluclateSrcRect(int figure );
+	SDL_Rect calculateSrcRect(int figure );
 	void addScore(int value);
 private:
 	int posX;
@@ -24,8 +24,6 @@ private:
 	int numberOfDigit;
 	int score;
 	SDL_Texture* sdlTexture;
-	static const int width=96;
-	static const int height=128;
 };
 
 #endif /* SCORESEGMENTS_H_ */

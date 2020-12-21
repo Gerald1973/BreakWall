@@ -5,7 +5,7 @@ Ball::Ball()
 {
 	this->dirX = 0;
 	this->dirY = 2;
-	this->speed = 2;
+	this->speed = 5;
 	this->coeffX = 1;
 	this->coeffX = 0;
 	this->wall = NULL;
@@ -169,7 +169,10 @@ bool Ball::bouncesOnScreen()
 bool Ball::bouncesOnBare(Bare *bare)
 {
 	bool result = false;
-	if (getTextureWithPosition()->getX2() >= bare->getTextureWithPosition()->getX() && getTextureWithPosition()->getX() <= bare->getTextureWithPosition()->getX2() && getTextureWithPosition()->getY() <= bare->getTextureWithPosition()->getY2() && getTextureWithPosition()->getY2() >= bare->getTextureWithPosition()->getY())
+	if (
+		   getTextureWithPosition()->getX2() >= bare->getTextureWithPosition()->getX() && getTextureWithPosition()->getX() <= bare->getTextureWithPosition()->getX2() 
+		&& getTextureWithPosition()->getY2() >= bare->getTextureWithPosition()->getY() && getTextureWithPosition()->getY() <= bare->getTextureWithPosition()->getY2()
+	)
 	{
 		Mix_PlayChannel(-1, bare->getSound(), 0);
 		dirY = -dirY;

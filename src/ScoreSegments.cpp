@@ -6,60 +6,72 @@
  */
 
 #include "../include/ScoreSegments.h"
-#include "../include/UtilConstants.h"
+#include "../include/GlobalConstants.h"
 #include <math.h>
 
-ScoreSegments::ScoreSegments() {
+ScoreSegments::ScoreSegments()
+{
 	this->posX = 0;
-	this->posY = UtilConstants::getInstance()->screenSize.h - this->height;
+	this->posY = GlobalConstants::SCREEN_HEIGHT - GlobalConstants::SEVEN_SEGMENT_HEIGHT;
 	this->sdlTexture = NULL;
 	this->numberOfDigit = 6;
 	this->score = 0;
 }
 
-ScoreSegments::~ScoreSegments() {
+ScoreSegments::~ScoreSegments()
+{
 	// TODO Auto-generated destructor stub
 }
 
-void ScoreSegments::render(SDL_Renderer* renderer) {
+void ScoreSegments::render(SDL_Renderer *renderer)
+{
+
 	render(renderer, this->score);
 }
 
-void ScoreSegments::render(SDL_Renderer* renderer, int score) {
+void ScoreSegments::render(SDL_Renderer *renderer, int score)
+{
 	SDL_Rect srcRect;
 	SDL_Rect dstRect;
 	int tmp = score;
-	for (int i = 6; i > 0; i--) {
-		if (tmp > 0) {
-			srcRect = caluclateSrcRect(tmp % 10);
+	for (int i = numberOfDigit; i > 0; i--)
+	{
+		if (tmp > 0)
+		{
+			srcRect = calculateSrcRect(tmp % 10);
 			tmp = tmp / 10;
-		} else {
+		}
+		else
+		{
 			srcRect.x = 0;
 			srcRect.y = 0;
-			srcRect.h = this->height;
-			srcRect.w = this->width;
+			srcRect.h = GlobalConstants::SEVEN_SEGMENT_HEIGHT;
+			srcRect.w = GlobalConstants::SEVEN_SEGMENT_WIDTH;
 		}
-		dstRect.x = (i - 1) * this->width;
-		dstRect.y = UtilConstants::getInstance()->screenSize.h - this->height;
-		dstRect.w = this->width;
-		dstRect.h = this->height;
+		dstRect.x = (GlobalConstants::SCREEN_WIDTH - GlobalConstants::SEVEN_SEGMENT_WIDTH * numberOfDigit) / 2 + (i - 1) * GlobalConstants::SEVEN_SEGMENT_WIDTH;
+		dstRect.y = GlobalConstants::SCREEN_HEIGHT - GlobalConstants::SEVEN_SEGMENT_HEIGHT;
+		dstRect.w = GlobalConstants::SEVEN_SEGMENT_WIDTH;
+		dstRect.h = GlobalConstants::SEVEN_SEGMENT_HEIGHT;
 		SDL_RenderCopy(renderer, this->sdlTexture, &srcRect, &dstRect);
 	}
 }
 
-void ScoreSegments::setTexture(SDL_Texture* sdlTexture) {
+void ScoreSegments::setTexture(SDL_Texture *sdlTexture)
+{
 	this->sdlTexture = sdlTexture;
 }
 
-SDL_Rect ScoreSegments::caluclateSrcRect(int figure) {
+SDL_Rect ScoreSegments::calculateSrcRect(int figure)
+{
 	SDL_Rect result;
-	result.x = (figure + 1) * this->width;
+	result.x = (figure + 1) * GlobalConstants::SEVEN_SEGMENT_WIDTH;
 	result.y = 0;
-	result.w = this->width;
-	result.h = this->height;
+	result.w = GlobalConstants::SEVEN_SEGMENT_WIDTH;
+	result.h = GlobalConstants::SEVEN_SEGMENT_HEIGHT;
 	return result;
 }
 
-void ScoreSegments::addScore(int value) {
+void ScoreSegments::addScore(int value)
+{
 	this->score = this->score + value;
 }

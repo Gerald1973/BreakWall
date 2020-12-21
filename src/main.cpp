@@ -16,6 +16,7 @@
 #include <vector>
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_image.h>
+#include "../include/Background.h"
 
 Brick *wall[20][30];
 int dirX = 1;
@@ -45,7 +46,8 @@ void initTextureMap(SDL_Renderer *renderer)
     mapTextures["ball"] = loadTexture("ball.png", renderer);
     mapTextures["bare"] = loadTexture("bare.png", renderer);
     mapTextures["brickRed"] = loadTexture("brickRed.bmp", renderer);
-    mapTextures["segments"] = loadTexture("segments.png", renderer);
+    mapTextures["segments"] = loadTexture("segments_48_64.png", renderer);
+    mapTextures["background001"] = loadTexture("winter_01.jpg", renderer);
 }
 
 Mix_Chunk *loadSoundEffect(const char *fileName)
@@ -112,6 +114,17 @@ Ball *initBall(SDL_Renderer *renderer, Wall *wall, Bare *bare)
     return ball;
 }
 
+Background *initBackground(SDL_Renderer *renderer)
+{
+    Background *result = new Background();
+    SDL_Rect rect;
+    rect.x = UtilConstants::getInstance()->screenSize.x;
+    rect.y = UtilConstants::getInstance()->screenSize.y;
+    TextureWithPosition *textureWithPosition = new TextureWithPosition(mapTextures["background001"], rect);
+    result->setTextureWithPosition(textureWithPosition);
+    return result;
+}
+
 ScoreSegments *initScoreSegments(SDL_Renderer *renderer)
 {
     ScoreSegments *result = new ScoreSegments();
@@ -174,6 +187,7 @@ int main(int argc, char **argv)
     ScoreSegments *scoreSegments = initScoreSegments(renderer);
     Ball *ball = initBall(renderer, wall, bare);
     ball->setScoreSegments(scoreSegments);
+    Background *background = initBackground(renderer);
     bool loop = true;
     while (loop)
     {
@@ -198,6 +212,7 @@ int main(int argc, char **argv)
         {
             loop = false;
         }
+        background->render(renderer);
         wall->render(renderer);
         bare->render(renderer);
         ball->render(renderer);
