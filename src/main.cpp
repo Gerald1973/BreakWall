@@ -72,7 +72,7 @@ Bare *initBare(SDL_Renderer *renderer)
     Bare *result = new Bare();
     SDL_Rect position;
     TextureWithPosition *textureWithPosition = new TextureWithPosition(mapTextures["bare"], position);
-    textureWithPosition->setX(UtilConstants::getInstance()->screenSize.w / 2 - textureWithPosition->getPosition().w / 2);
+    textureWithPosition->setX((UtilConstants::getInstance()->screenSize.w - textureWithPosition->getPosition().w)/2);
     textureWithPosition->setY(UtilConstants::getInstance()->screenSize.h - textureWithPosition->getPosition().h);
     result->setTextureWithPosition(textureWithPosition);
     result->setSound(mapSounds["bare"]);

@@ -12,6 +12,11 @@ public:
     static inline int SCREEN_HEIGHT = 540;
     static inline int SEVEN_SEGMENT_WIDTH = 48;
     static inline int SEVEN_SEGMENT_HEIGHT = 64;
+    static inline int BALL_ZONE_X=0;
+    static inline int BALL_ZONE_Y=0;
+    static inline int BALL_ZONE_WIDTH=960;
+    static inline int BALL_ZONE_HEIGHT=476;
+
 protected:
 private:
 };

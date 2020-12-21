@@ -22,11 +22,10 @@ Height = 16
 
 ### Wall
 
-Maximum width in bricks : 15  
-Maximum height in bricks: 20
+Maximum width in bricks = 15  
+Maximum height in bricks= 20
 
 ### 7 segments
 
-Width :  96
-Height: 128
- 
+Width =  48
+Height=  64  
