@@ -139,25 +139,25 @@ void Ball::setSpeed(float speed)
 bool Ball::bouncesOnScreen()
 {
 	bool result = false;
-	if (posX <= UtilConstants::getInstance()->screenSize.x)
+	if (posX <= UtilConstants::getInstance()->gameZone.x)
 	{
 		dirX = -dirX;
-		posX = UtilConstants::getInstance()->screenSize.x;
+		posX = UtilConstants::getInstance()->gameZone.x;
 		result = true;
 	}
-	if (posX + getTextureWithPosition()->getPosition().w >= UtilConstants::getInstance()->screenSize.x + UtilConstants::getInstance()->screenSize.w)
+	if (posX + getTextureWithPosition()->getPosition().w >= UtilConstants::getInstance()->gameZone.x + UtilConstants::getInstance()->gameZone.w)
 	{
 		dirX = -dirX;
 		posX = posX - this->getTextureWithPosition()->getPosition().w;
 		result = true;
 	}
-	if (posY <= UtilConstants::getInstance()->screenSize.y)
+	if (posY <= UtilConstants::getInstance()->gameZone.y)
 	{
 		dirY = -dirY;
-		posY = UtilConstants::getInstance()->screenSize.y;
+		posY = UtilConstants::getInstance()->gameZone.y;
 		result = true;
 	}
-	if (posY + getTextureWithPosition()->getPosition().h >= UtilConstants::getInstance()->screenSize.y + UtilConstants::getInstance()->screenSize.h)
+	if (posY + getTextureWithPosition()->getPosition().h >= UtilConstants::getInstance()->gameZone.y + UtilConstants::getInstance()->gameZone.h)
 	{
 		dirY = -dirY;
 		posY = posY - this->getTextureWithPosition()->getPosition().h;

@@ -17,6 +17,7 @@
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_image.h>
 #include "../include/Background.h"
+#include "../include/GlobalConstants.h"
 
 Brick *wall[20][30];
 int dirX = 1;
@@ -72,8 +73,8 @@ Bare *initBare(SDL_Renderer *renderer)
     Bare *result = new Bare();
     SDL_Rect position;
     TextureWithPosition *textureWithPosition = new TextureWithPosition(mapTextures["bare"], position);
-    textureWithPosition->setX((UtilConstants::getInstance()->screenSize.w - textureWithPosition->getPosition().w)/2);
-    textureWithPosition->setY(UtilConstants::getInstance()->screenSize.h - textureWithPosition->getPosition().h);
+    textureWithPosition->setX((UtilConstants::getInstance()->gameZone.w - textureWithPosition->getPosition().w)/2);
+    textureWithPosition->setY(UtilConstants::getInstance()->gameZone.h - textureWithPosition->getPosition().h);
     result->setTextureWithPosition(textureWithPosition);
     result->setSound(mapSounds["bare"]);
     return result;
@@ -104,8 +105,8 @@ Wall *initWall(SDL_Renderer *renderer)
 Ball *initBall(SDL_Renderer *renderer, Wall *wall, Bare *bare)
 {
     SDL_Rect rect;
-    rect.x = UtilConstants::getInstance()->screenSize.w / 2 + UtilConstants::getInstance()->screenSize.x;
-    rect.y = (GlobalConstants::MAX_NUMBER_OF_BRICKS_ON_Y + 1) * GlobalConstants::BRICK_HEIGHT + UtilConstants::getInstance()->screenSize.y;
+    rect.x = UtilConstants::getInstance()->gameZone.w / 2 + UtilConstants::getInstance()->gameZone.x;
+    rect.y = (GlobalConstants::MAX_NUMBER_OF_BRICKS_ON_Y + 1) * GlobalConstants::BRICK_HEIGHT + UtilConstants::getInstance()->gameZone.y;
     TextureWithPosition *textureWithPosition = new TextureWithPosition(mapTextures["ball"], rect);
     Ball *ball = new Ball();
     ball->setTextureWithPosition(textureWithPosition);
@@ -117,10 +118,12 @@ Ball *initBall(SDL_Renderer *renderer, Wall *wall, Bare *bare)
 Background *initBackground(SDL_Renderer *renderer)
 {
     Background *result = new Background();
-    SDL_Rect rect;
-    rect.x = UtilConstants::getInstance()->screenSize.x;
-    rect.y = UtilConstants::getInstance()->screenSize.y;
-    TextureWithPosition *textureWithPosition = new TextureWithPosition(mapTextures["background001"], rect);
+    TextureWithPosition *textureWithPosition = new TextureWithPosition(
+        mapTextures["background001"],
+        UtilConstants::getInstance()->gameZone.x,
+        UtilConstants::getInstance()->gameZone.y,
+        UtilConstants::getInstance()->gameZone.w,
+        UtilConstants::getInstance()->gameZone.h);
     result->setTextureWithPosition(textureWithPosition);
     return result;
 }
@@ -169,16 +172,14 @@ int main(int argc, char **argv)
     SDL_SetRelativeMouseMode(SDL_TRUE);
     const Uint8 *keys = SDL_GetKeyboardState(NULL);
     std::map<int, bool> mapKbd;
-    SDL_Window *pWindow = SDL_CreateWindow("", UtilConstants::getInstance()->screenSize.x, UtilConstants::getInstance()->screenSize.y, UtilConstants::getInstance()->screenSize.w, UtilConstants::getInstance()->screenSize.h,
-                                           SDL_WINDOW_OPENGL | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
-    //SDL_WINDOW_FULLSCREEN|SDL_WINDOW_OPENGL);
+    SDL_Window *pWindow = SDL_CreateWindow("BreakWall", 0, 0, GlobalConstants::SCREEN_WIDTH, GlobalConstants::SCREEN_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
     if (pWindow == NULL)
     {
         std::cout << SDL_GetError() << "\n";
     }
     SDL_Renderer *renderer = SDL_CreateRenderer(pWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE /*| SDL_RENDERER_PRESENTVSYNC*/);
     SDL_Event event;
-    SDL_Texture *tmpTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_TARGET, UtilConstants::getInstance()->screenSize.w, UtilConstants::getInstance()->screenSize.h);
+    SDL_Texture *tmpTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_TARGET,GlobalConstants::SCREEN_WIDTH, GlobalConstants::SCREEN_HEIGHT);
     initSoundMap();
     initTextureMap(renderer);
     Bare *bare = initBare(renderer);

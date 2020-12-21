@@ -8,6 +8,7 @@ class TextureWithPosition
 {
     public:
         TextureWithPosition(SDL_Texture* texture, SDL_Rect position);
+        TextureWithPosition(SDL_Texture* texture, int x, int y, int width, int height);
         virtual ~TextureWithPosition();
         const SDL_Rect & getPosition();
         const SDL_Rect & getOriginRect();

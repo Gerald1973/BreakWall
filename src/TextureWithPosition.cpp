@@ -12,13 +12,30 @@ TextureWithPosition::TextureWithPosition(SDL_Texture* texture, SDL_Rect position
     SDL_QueryTexture(this->getTexture(),NULL,NULL,&width,&height);
     this->originRect.w = width;
     this->originRect.h = height;
+    this->originRect.x = 0;
+    this->originRect.y = 0;
     this->position.w = width;
     this->position.h = height;
-    //std::cout << "Origin w:" << this->originRect.w << "\n";
-    //std::cout << "Origin h:" << this->originRect.h  <<"\n";
-    //std::cout << "Origin x:" << this->originRect.x  <<"\n";
-    //std::cout << "Origin y:" << this->originRect.y  <<"\n";
 }
+
+TextureWithPosition::TextureWithPosition(SDL_Texture* texture,int x, int y, int width, int height)
+{
+    SDL_Rect position;
+    this->position=position;
+    this->texture=texture;
+    int _width = 0;
+    int _height = 0;
+    SDL_QueryTexture(this->getTexture(),NULL,NULL,&_width,&_height);
+    this->originRect.w = _width;
+    this->originRect.h = _height;
+    this->originRect.x = 0;
+    this->originRect.y = 0;
+    this->position.x = x;
+    this->position.y = y;
+    this->position.w = width;
+    this->position.h = height;
+}
+
 
 TextureWithPosition::~TextureWithPosition()
 {
@@ -37,26 +54,26 @@ const SDL_Rect & TextureWithPosition::getOriginRect(){
 void TextureWithPosition::setX(int x)
 {
     position.x = x;
-    if (position.x < UtilConstants::getInstance()->screenSize.x)
+    if (position.x < UtilConstants::getInstance()->gameZone.x)
     {
-        position.x = UtilConstants::getInstance()->screenSize.x;
+        position.x = UtilConstants::getInstance()->gameZone.x;
     }
-    else if (position.x > UtilConstants::getInstance()->screenSize.w - position.w)
+    else if (position.x > UtilConstants::getInstance()->gameZone.w - position.w)
     {
-        position.x = UtilConstants::getInstance()->screenSize.w - position.w;
+        position.x = UtilConstants::getInstance()->gameZone.w - position.w;
     }
 }
 
 void TextureWithPosition::setY(int y)
 {
     position.y = y;
-    if (position.y < UtilConstants::getInstance()->screenSize.y)
+    if (position.y < UtilConstants::getInstance()->gameZone.y)
     {
-        position.y = UtilConstants::getInstance()->screenSize.y;
+        position.y = UtilConstants::getInstance()->gameZone.y;
     }
-    else if (position.y > UtilConstants::getInstance()->screenSize.h)
+    else if (position.y > UtilConstants::getInstance()->gameZone.h)
     {
-        position.y = UtilConstants::getInstance()->screenSize.h - position.h;
+        position.y = UtilConstants::getInstance()->gameZone.h - position.h;
     }
 }
 

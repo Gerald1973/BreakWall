@@ -5,7 +5,7 @@
 class UtilConstants
 {
     public:
-        SDL_Rect screenSize;
+        SDL_Rect gameZone;
         static UtilConstants* getInstance();
         ~UtilConstants();
     private:
