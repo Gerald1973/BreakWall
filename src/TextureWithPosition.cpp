@@ -79,11 +79,20 @@ int TextureWithPosition::getY2()
 {
     return position.y + position.h;
 }
-
+/**
+ * @brief This method returns the position of the center of the elements in the main panel on the x axis.
+ * 
+ * @return int the position of the center of the elements in the main panel on the x axis.
+ */
 int TextureWithPosition::getAbsCenterX(){
     return (position.w / 2) + position.x;
 }
 
+/**
+ * @brief This method returns the position of the center of the elements in the main panel on the y axis.
+ * 
+ * @return int int the position of the center of the elements in the main panel on the y axis.
+ */
 int TextureWithPosition::getAbsCenterY(){
     return (position.h / 2) + position.y;
 }

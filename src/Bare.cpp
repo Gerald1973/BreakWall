@@ -3,43 +3,38 @@
 
 Bare::Bare()
 {
-   this->sound = NULL;
-   this->textureWithPosition= NULL;
+    this->sound = NULL;
+    this->textureWithPosition = NULL;
 }
 
 Bare::~Bare()
 {
-    delete(this->textureWithPosition);
+    delete (this->textureWithPosition);
 }
 
-void Bare::setTextureWithPosition(TextureWithPosition* textureWithPosition)
+void Bare::setTextureWithPosition(TextureWithPosition *textureWithPosition)
 {
     this->textureWithPosition = textureWithPosition;
     std::cout << "Position X :" << textureWithPosition->getAbsCenterX() << "\n";
     std::cout << "Position Y :" << textureWithPosition->getAbsCenterY() << "\n";
-
 }
 
-TextureWithPosition* Bare::getTextureWithPosition()
+TextureWithPosition *Bare::getTextureWithPosition()
 {
     return this->textureWithPosition;
 }
 
-void Bare::render(SDL_Renderer* renderer)
+void Bare::render(SDL_Renderer *renderer)
 {
-    SDL_RenderCopy(renderer,this->textureWithPosition->getTexture(),NULL,&(this->textureWithPosition->getPosition()));
+    SDL_RenderCopy(renderer, this->textureWithPosition->getTexture(), NULL, &(this->textureWithPosition->getPosition()));
 }
 
-Mix_Chunk* Bare::getSound()
+Mix_Chunk *Bare::getSound()
 {
-  return sound;
+    return sound;
 }
 
-void Bare::setSound(Mix_Chunk* sound)
+void Bare::setSound(Mix_Chunk *sound)
 {
-   this->sound = sound;
+    this->sound = sound;
 }
-
-
-
-

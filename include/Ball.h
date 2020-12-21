@@ -36,6 +36,7 @@ private:
 	Wall* wall;
 	ScoreSegments* scoreSegments;
 	float coeffX;
+	float coeffy;
 	float posX;
 	float posY;
 };
