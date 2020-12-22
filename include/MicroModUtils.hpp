@@ -18,6 +18,7 @@ public:
     }
 
      std::string getVersion();
+     long calculateNumChannels(unsigned char moduleHeader[]);
 
 private:
     static inline MicroModUtils *instance = NULL;
