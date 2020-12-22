@@ -45,6 +45,25 @@ vector<unsigned char> FileUtils::readFile(string fileName)
     return results;
 }
 
+vector<unsigned char> FileUtils::readFile(std::string fileName, unsigned int from, unsigned int length)
+{
+    vector<unsigned char> results;
+    ifstream infile(fileName, ios_base::binary);
+    if (infile)
+    {
+        infile.seekg(from);
+        for (unsigned int i = 0; i < length; i++)
+        {
+            results.push_back(infile.get());
+        }
+    }
+    else
+    {
+        cout << "Error: the file " << fileName << "doesn't exist." << endl;
+    }
+    return results;
+}
+
 FileUtils::FileUtils()
 {
     cout << "FileUtils singleton creation." << endl;

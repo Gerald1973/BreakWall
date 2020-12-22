@@ -19,6 +19,7 @@
 #include "../include/Background.h"
 #include "../include/GlobalConstants.h"
 #include "../include/FileUtils.hpp"
+#include "../include/MicroModUtils.hpp"
 
 Brick *wall[20][30];
 int dirX = 1;
@@ -192,9 +193,13 @@ int main(int argc, char **argv)
     Background *background = initBackground(renderer);
     bool loop = true;
     //Test amiga mod
+    std::vector<unsigned char> header = FileUtils::getInstance()->readFile("worldofw.mod",0,1084);
     std::vector<unsigned char> mf = FileUtils::getInstance()->readFile("worldofw.mod");
+    std::cout << "debug : readFromTO       :" << header.size() << std::endl;
     std::cout << "debug : mf.size = " << mf.size() << std::endl;
-    std::cout << "debug : mf.size = " << FileUtils::getInstance()->getSize("worldofw.mod") << std::endl;
+    std::cout << "debug : mf.size (needs to be equal to the previous value) = " << FileUtils::getInstance()->getSize("worldofw.mod") << std::endl;
+    std::cout << "debug : micromod version :" << MicroModUtils::getInstance()->getVersion() << std::endl;
+    
     // signed char *module;
     // module = (signed char *)calloc(lengthFile, 1);
     // ModPlayer::read_file("worldofw.mod", module, lengthFile);

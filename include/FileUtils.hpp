@@ -7,6 +7,8 @@ class FileUtils
 public:
     std::vector<unsigned char> readFile(std::string fileName);
 
+    std::vector<unsigned char> readFile(std::string fileName, unsigned int from, unsigned int length);
+
     int getSize(std::string fileName);
 
     static inline FileUtils *getInstance()
