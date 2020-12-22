@@ -46,6 +46,11 @@ long MicroModUtils::calculateNumPatterns(unsigned char moduleHeader[])
     return num_patterns;
 }
 
+long MicroModUtils::unsignedShortBigEndian(unsigned char buf[], long offset)
+{
+    return ((buf[offset] & 0xFF) << 8) | (buf[offset + 1] & 0xFF);
+}
+
 void MicroModUtils::updateFrequency(struct MicroModUtils::channel *chan)
 {
     long period, volume;
@@ -295,6 +300,223 @@ void MicroModUtils::channelRow(struct MicroModUtils::channel *chan)
         break;
     }
     updateFrequency(chan);
+}
+
+void MicroModUtils::channelTick(struct MicroModUtils::channel *chan)
+{
+    long effect, param, period;
+    effect = chan->note.effect;
+    param = chan->note.param;
+    chan->fx_count++;
+    switch (effect)
+    {
+    case 0x1: /* Portamento Up.*/
+        period = chan->period - param;
+        chan->period = period < 0 ? 0 : period;
+        break;
+    case 0x2: /* Portamento Down.*/
+        period = chan->period + param;
+        chan->period = period > 65535 ? 65535 : period;
+        break;
+    case 0x3: /* Tone Portamento.*/
+        tonePortamento(chan);
+        break;
+    case 0x4: /* Vibrato.*/
+        chan->vibrato_phase += chan->vibrato_speed;
+        vibrato(chan);
+        break;
+    case 0x5: /* Tone Porta + Volume Slide.*/
+        tonePortamento(chan);
+        volumeSlide(chan, param);
+        break;
+    case 0x6: /* Vibrato + Volume Slide.*/
+        chan->vibrato_phase += chan->vibrato_speed;
+        vibrato(chan);
+        volumeSlide(chan, param);
+        break;
+    case 0x7: /* Tremolo.*/
+        chan->tremolo_phase += chan->tremolo_speed;
+        tremolo(chan);
+        break;
+    case 0xA: /* Volume Slide.*/
+        volumeSlide(chan, param);
+        break;
+    case 0xE: /* Arpeggio.*/
+        if (chan->fx_count > 2)
+            chan->fx_count = 0;
+        if (chan->fx_count == 0)
+            chan->arpeggio_add = 0;
+        if (chan->fx_count == 1)
+            chan->arpeggio_add = param >> 4;
+        if (chan->fx_count == 2)
+            chan->arpeggio_add = param & 0xF;
+        break;
+    case 0x19: /* Retrig.*/
+        if (chan->fx_count >= param)
+        {
+            chan->fx_count = 0;
+            chan->sample_idx = 0;
+        }
+        break;
+    case 0x1C: /* Note Cut.*/
+        if (param == chan->fx_count)
+            chan->volume = 0;
+        break;
+    case 0x1D: /* Note Delay.*/
+        if (param == chan->fx_count)
+            trigger(chan);
+        break;
+    }
+    if (effect > 0)
+        updateFrequency(chan);
+}
+
+long MicroModUtils::sequenceRow()
+{
+    long song_end, chan_idx, pat_offset;
+    long effect, param;
+    struct note *note;
+    song_end = 0;
+    if (next_row < 0)
+    {
+        break_pattern = pattern + 1;
+        next_row = 0;
+    }
+    if (break_pattern >= 0)
+    {
+        if (break_pattern >= song_length)
+            break_pattern = next_row = 0;
+        if (break_pattern <= pattern)
+            song_end = 1;
+        pattern = break_pattern;
+        for (chan_idx = 0; chan_idx < num_channels; chan_idx++)
+            channels[chan_idx].pl_row = 0;
+        break_pattern = -1;
+    }
+    row = next_row;
+    next_row = row + 1;
+    if (next_row >= 64)
+        next_row = -1;
+    pat_offset = (sequence[pattern] * 64 + row) * num_channels * 4;
+    for (chan_idx = 0; chan_idx < num_channels; chan_idx++)
+    {
+        note = &channels[chan_idx].note;
+        note->key = (pattern_data[pat_offset] & 0xF) << 8;
+        note->key |= pattern_data[pat_offset + 1];
+        note->instrument = pattern_data[pat_offset + 2] >> 4;
+        note->instrument |= pattern_data[pat_offset] & 0x10;
+        effect = pattern_data[pat_offset + 2] & 0xF;
+        param = pattern_data[pat_offset + 3];
+        pat_offset += 4;
+        if (effect == 0xE)
+        {
+            effect = 0x10 | (param >> 4);
+            param &= 0xF;
+        }
+        if (effect == 0 && param > 0)
+            effect = 0xE;
+        note->effect = effect;
+        note->param = param;
+        channelRow(&channels[chan_idx]);
+    }
+    return song_end;
+}
+long MicroModUtils::sequenceTick()
+{
+    long song_end, chan_idx;
+    song_end = 0;
+    if (--tick <= 0)
+    {
+        tick = speed;
+        song_end = sequenceRow();
+    }
+    else
+    {
+        for (chan_idx = 0; chan_idx < num_channels; chan_idx++)
+            channelTick(&channels[chan_idx]);
+    }
+    return song_end;
+}
+void MicroModUtils::resample(struct channel *chan, short *buf, long offset, long count)
+{
+    unsigned long epos;
+    unsigned long buf_idx = offset << 1;
+    unsigned long buf_end = (offset + count) << 1;
+    unsigned long sidx = chan->sample_idx;
+    unsigned long step = chan->step;
+    unsigned long llen = instruments[chan->instrument].loop_length;
+    unsigned long lep1 = instruments[chan->instrument].loop_start + llen;
+    signed char *sdat = instruments[chan->instrument].sample_data;
+    short ampl = buf && !chan->mute ? chan->ampl : 0;
+    short lamp = ampl * (127 - chan->panning) >> 5;
+    short ramp = ampl * chan->panning >> 5;
+    while (buf_idx < buf_end)
+    {
+        if (sidx >= lep1)
+        {
+            /* Handle loop. */
+            if (llen <= FP_ONE)
+            {
+                /* One-shot sample. */
+                sidx = lep1;
+                break;
+            }
+            /* Subtract loop-length until within loop points. */
+            while (sidx >= lep1)
+                sidx -= llen;
+        }
+        /* Calculate sample position at end. */
+        epos = sidx + ((buf_end - buf_idx) >> 1) * step;
+        /* Most of the cpu time is spent here. */
+        if (lamp || ramp)
+        {
+            /* Only mix to end of current loop. */
+            if (epos > lep1)
+                epos = lep1;
+            if (lamp && ramp)
+            {
+                /* Mix both channels. */
+                while (sidx < epos)
+                {
+                    ampl = sdat[sidx >> FP_SHIFT];
+                    buf[buf_idx++] += ampl * lamp >> 2;
+                    buf[buf_idx++] += ampl * ramp >> 2;
+                    sidx += step;
+                }
+            }
+            else
+            {
+                /* Only mix one channel. */
+                if (ramp)
+                    buf_idx++;
+                while (sidx < epos)
+                {
+                    buf[buf_idx] += sdat[sidx >> FP_SHIFT] * ampl;
+                    buf_idx += 2;
+                    sidx += step;
+                }
+                buf_idx &= -2;
+            }
+        }
+        else
+        {
+            /* No need to mix.*/
+            buf_idx = buf_end;
+            sidx = epos;
+        }
+    }
+    chan->sample_idx = sidx;
+}
+long MicroModUtils::calculateModFileLen(unsigned char moduleHeader[])
+{
+    long length, numchan, inst_idx;
+    numchan = calculateNumChannels(moduleHeader);
+    if (numchan >= 128)
+        return -1;
+    length = 1084 + 4 * numchan * 64 * calculateNumPatterns(moduleHeader);
+    for (inst_idx = 1; inst_idx < 32; inst_idx++)
+        length += unsignedShortBigEndian(moduleHeader, inst_idx * 30 + 12) * 2;
+    return length;
 }
 
 MicroModUtils::MicroModUtils()

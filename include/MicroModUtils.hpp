@@ -4,6 +4,7 @@
 
 #define __CHANNELS__ 16
 #define __FP_SHIFT__ 14
+#define __FP_ONE__ 16384
 
 class MicroModUtils
 {
@@ -36,6 +37,8 @@ public:
     static inline int MAX_CHANNELS = __CHANNELS__;
 
     static inline int FP_SHIFT = __FP_SHIFT__;
+
+    static inline unsigned long FP_ONE = __FP_ONE__;
 
     static inline unsigned short fine_tuning[] = {
         4340, 4308, 4277, 4247, 4216, 4186, 4156, 4126,
@@ -72,6 +75,7 @@ public:
     std::string getVersion();
     long calculateNumChannels(unsigned char moduleHeader[]);
     long calculateNumPatterns(unsigned char moduleHeader[]);
+    long unsignedShortBigEndian(unsigned char buf[], long offset);
     void setTempo(long tempo);
     void updateFrequency(struct channel *chan);
     void tonePortamento(struct channel *chan);
@@ -81,6 +85,11 @@ public:
     void tremolo(struct channel *chan);
     void trigger(struct channel *channel);
     void channelRow(struct channel *chan);
+    void channelTick(struct channel *chan);
+    long sequenceRow();
+    long sequenceTick();
+    void resample(struct channel *chan, short *buf, long offset, long count);
+    long calculateModFileLen(unsigned char moduleHeader[]);
 
 private:
     static inline MicroModUtils *instance = NULL;
