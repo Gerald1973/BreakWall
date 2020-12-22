@@ -2,6 +2,11 @@
     "files.associations": {
         "cstdlib": "cpp",
         "vector": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "string_view": "cpp",
+        "string": "cpp",
+        "iosfwd": "cpp",
+        "*.tcc": "cpp",
+        "fstream": "cpp"
     }
 }

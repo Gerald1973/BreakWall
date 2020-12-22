@@ -18,6 +18,7 @@
 #include <SDL2/SDL_image.h>
 #include "../include/Background.h"
 #include "../include/GlobalConstants.h"
+#include "../include/FileUtils.hpp"
 
 Brick *wall[20][30];
 int dirX = 1;
@@ -73,7 +74,7 @@ Bare *initBare(SDL_Renderer *renderer)
     Bare *result = new Bare();
     SDL_Rect position;
     TextureWithPosition *textureWithPosition = new TextureWithPosition(mapTextures["bare"], position);
-    textureWithPosition->setX((UtilConstants::getInstance()->gameZone.w - textureWithPosition->getPosition().w)/2);
+    textureWithPosition->setX((UtilConstants::getInstance()->gameZone.w - textureWithPosition->getPosition().w) / 2);
     textureWithPosition->setY(UtilConstants::getInstance()->gameZone.h - textureWithPosition->getPosition().h);
     result->setTextureWithPosition(textureWithPosition);
     result->setSound(mapSounds["bare"]);
@@ -179,7 +180,7 @@ int main(int argc, char **argv)
     }
     SDL_Renderer *renderer = SDL_CreateRenderer(pWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE /*| SDL_RENDERER_PRESENTVSYNC*/);
     SDL_Event event;
-    SDL_Texture *tmpTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_TARGET,GlobalConstants::SCREEN_WIDTH, GlobalConstants::SCREEN_HEIGHT);
+    SDL_Texture *tmpTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_TARGET, GlobalConstants::SCREEN_WIDTH, GlobalConstants::SCREEN_HEIGHT);
     initSoundMap();
     initTextureMap(renderer);
     Bare *bare = initBare(renderer);
@@ -190,6 +191,14 @@ int main(int argc, char **argv)
     ball->setScoreSegments(scoreSegments);
     Background *background = initBackground(renderer);
     bool loop = true;
+    //Test amiga mod
+    std::vector<unsigned char> mf = FileUtils::getInstance()->readFile("worldofw.mod");
+    std::cout << "debug : mf.size = " <<  mf.size() << std::endl; 
+    // signed char *module;
+    // module = (signed char *)calloc(lengthFile, 1);
+    // ModPlayer::read_file("worldofw.mod", module, lengthFile);
+    // ModPlayer::play_module(module);
+    //End test
     while (loop)
     {
         SDL_SetRenderTarget(renderer, tmpTexture);
