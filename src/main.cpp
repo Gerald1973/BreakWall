@@ -200,6 +200,7 @@ int main(int argc, char **argv)
     std::cout << "debug : mf.size (needs to be equal to the previous value) = " << FileUtils::getInstance()->getSize("worldofw.mod") << std::endl;
     std::cout << "debug : micromod version  :" << MicroModUtils::getInstance()->getVersion() << std::endl;
     std::cout << "debug : number of channel :" << MicroModUtils::getInstance()->calculateNumChannels(&moduleHeader[0]) << std::endl;
+    std::cout << "debug : number of patterns :" << MicroModUtils::getInstance()->calculateNumPatterns(&moduleHeader[0]) << std::endl;
     // signed char *module;
     // module = (signed char *)calloc(lengthFile, 1);
     // ModPlayer::read_file("worldofw.mod", module, lengthFile);
