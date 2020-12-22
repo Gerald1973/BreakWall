@@ -193,7 +193,8 @@ int main(int argc, char **argv)
     bool loop = true;
     //Test amiga mod
     std::vector<unsigned char> mf = FileUtils::getInstance()->readFile("worldofw.mod");
-    std::cout << "debug : mf.size = " <<  mf.size() << std::endl; 
+    std::cout << "debug : mf.size = " << mf.size() << std::endl;
+    std::cout << "debug : mf.size = " << FileUtils::getInstance()->getSize("worldofw.mod") << std::endl;
     // signed char *module;
     // module = (signed char *)calloc(lengthFile, 1);
     // ModPlayer::read_file("worldofw.mod", module, lengthFile);
