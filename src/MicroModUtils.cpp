@@ -446,7 +446,7 @@ void MicroModUtils::resample(struct channel *chan, short *buf, long offset, long
     unsigned long step = chan->step;
     unsigned long llen = instruments[chan->instrument].loop_length;
     unsigned long lep1 = instruments[chan->instrument].loop_start + llen;
-    signed char *sdat = instruments[chan->instrument].sample_data;
+    unsigned char *sdat = instruments[chan->instrument].sample_data;
     short ampl = buf && !chan->mute ? chan->ampl : 0;
     short lamp = ampl * (127 - chan->panning) >> 5;
     short ramp = ampl * chan->panning >> 5;
@@ -517,6 +517,188 @@ long MicroModUtils::calculateModFileLen(unsigned char moduleHeader[])
     for (inst_idx = 1; inst_idx < 32; inst_idx++)
         length += unsignedShortBigEndian(moduleHeader, inst_idx * 30 + 12) * 2;
     return length;
+}
+
+long MicroModUtils::initialise(unsigned char data[], long sampling_rate)
+{
+    struct MicroModUtils::instrument *inst;
+    long sample_data_offset, inst_idx;
+    long sample_length, volume, fine_tune, loop_start, loop_length;
+    num_channels = calculateNumChannels(data);
+    if (num_channels <= 0)
+    {
+        num_channels = 0;
+        return -1;
+    }
+    if (sampling_rate < 8000)
+        return -2;
+    MicroModUtils::module_data = &data[0];
+    sample_rate = sampling_rate;
+    song_length = module_data[950] & 0x7F;
+    restart = module_data[951] & 0x7F;
+    if (restart >= song_length)
+        restart = 0;
+    sequence = (unsigned char *)module_data + 952;
+    pattern_data = (unsigned char *)module_data + 1084;
+    num_patterns = calculateNumPatterns(MicroModUtils::module_data);
+    sample_data_offset = 1084 + num_patterns * 64 * num_channels * 4;
+    for (inst_idx = 1; inst_idx < 32; inst_idx++)
+    {
+        inst = &instruments[inst_idx];
+        sample_length = unsignedShortBigEndian(module_data, inst_idx * 30 + 12) * 2;
+        fine_tune = module_data[inst_idx * 30 + 14] & 0xF;
+        inst->fine_tune = (fine_tune & 0x7) - (fine_tune & 0x8) + 8;
+        volume = module_data[inst_idx * 30 + 15] & 0x7F;
+        inst->volume = volume > 64 ? 64 : volume;
+        loop_start = unsignedShortBigEndian(module_data, inst_idx * 30 + 16) * 2;
+        loop_length = unsignedShortBigEndian(module_data, inst_idx * 30 + 18) * 2;
+        if (loop_start + loop_length > sample_length)
+        {
+            if (loop_start / 2 + loop_length <= sample_length)
+            {
+                /* Some old modules have loop start in bytes. */
+                loop_start = loop_start / 2;
+            }
+            else
+            {
+                loop_length = sample_length - loop_start;
+            }
+        }
+        if (loop_length < 4)
+        {
+            loop_start = sample_length;
+            loop_length = 0;
+        }
+        inst->loop_start = loop_start << FP_SHIFT;
+        inst->loop_length = loop_length << FP_SHIFT;
+        inst->sample_data = module_data + sample_data_offset;
+        sample_data_offset += sample_length;
+    }
+    c2_rate = (num_channels > 4) ? 8363 : 8287;
+    gain = (num_channels > 4) ? 32 : 64;
+    muteChannel(-1);
+    setPosition(0);
+    return 0;
+}
+void MicroModUtils::getString(long instrument, string string)
+{
+    long index, offset, length, character;
+    if (num_channels <= 0)
+    {
+        string[0] = 0;
+        return;
+    }
+    offset = 0;
+    length = 20;
+    if (instrument > 0 && instrument < 32)
+    {
+        offset = (instrument - 1) * 30 + 20;
+        length = 22;
+    }
+    for (index = 0; index < length; index++)
+    {
+        character = module_data[offset + index];
+        if (character < 32 || character > 126)
+            character = ' ';
+        string[index] = character;
+    }
+    string[length] = 0;
+}
+long MicroModUtils::calculateSongDuration(void)
+{
+    long duration, song_end;
+    duration = 0;
+    if (num_channels > 0)
+    {
+        setPosition(0);
+        song_end = 0;
+        while (!song_end)
+        {
+            duration += tick_len;
+            song_end = sequenceTick();
+        }
+        setPosition(0);
+    }
+    return duration;
+}
+void MicroModUtils::setPosition(long pos)
+{
+    long chan_idx;
+    struct MicroModUtils::channel *chan;
+    if (num_channels <= 0)
+        return;
+    if (pos >= song_length)
+        pos = 0;
+    break_pattern = pos;
+    next_row = 0;
+    tick = 1;
+    speed = 6;
+    setTempo(125);
+    pl_count = pl_channel = -1;
+    random_seed = 0xABCDEF;
+    for (chan_idx = 0; chan_idx < num_channels; chan_idx++)
+    {
+        chan = &MicroModUtils::channels[chan_idx];
+        chan->id = chan_idx;
+        chan->instrument = chan->assigned = 0;
+        chan->volume = 0;
+        switch (chan_idx & 0x3)
+        {
+        case 0:
+        case 3:
+            chan->panning = 0;
+            break;
+        case 1:
+        case 2:
+            chan->panning = 127;
+            break;
+        }
+    }
+    sequenceTick();
+    tick_offset = 0;
+}
+long MicroModUtils::muteChannel(long channel)
+{
+    long chan_idx;
+    if (channel < 0)
+    {
+        for (chan_idx = 0; chan_idx < num_channels; chan_idx++)
+        {
+            channels[chan_idx].mute = 0;
+        }
+    }
+    else if (channel < num_channels)
+    {
+        channels[channel].mute = 1;
+    }
+    return num_channels;
+}
+void MicroModUtils::setGain(long value) { gain = value; }
+
+void MicroModUtils::getAudio(short outputBuffer[], long count)
+{
+    long offset, remain, chan_idx;
+    if (num_channels <= 0)
+        return;
+    offset = 0;
+    while (count > 0)
+    {
+        remain = tick_len - tick_offset;
+        if (remain > count)
+            remain = count;
+        for (chan_idx = 0; chan_idx < num_channels; chan_idx++)
+        {
+            resample(&channels[chan_idx], &outputBuffer[0], offset, remain);
+        }
+        tick_offset += remain;
+        if (tick_offset == tick_len)
+        {
+            sequenceTick();
+            tick_offset = 0;
+        }
+        offset += remain;
+        count -= remain;
+    }
 }
 
 MicroModUtils::MicroModUtils()

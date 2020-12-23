@@ -19,7 +19,7 @@ public:
     {
         unsigned char volume, fine_tune;
         unsigned long loop_start, loop_length;
-        signed char *sample_data;
+        unsigned char *sample_data;
     };
 
     struct channel
@@ -52,7 +52,7 @@ public:
         0, 24, 49, 74, 97, 120, 141, 161, 180, 197, 212, 224, 235, 244, 250, 253,
         255, 253, 250, 244, 235, 224, 212, 197, 180, 161, 141, 120, 97, 74, 49, 24};
 
-    static inline signed char *module_data;
+    static inline unsigned char *module_data;
     static inline unsigned char *pattern_data, *sequence;
     static inline long song_length, restart, num_patterns, num_channels;
     static inline struct instrument instruments[32];
@@ -90,6 +90,13 @@ public:
     long sequenceTick();
     void resample(struct channel *chan, short *buf, long offset, long count);
     long calculateModFileLen(unsigned char moduleHeader[]);
+    long initialise(unsigned char data[], long sampling_rate);
+    void getString(long instrument, std::string string);
+    long calculateSongDuration(void);
+    void setPosition(long pos);
+    long muteChannel(long channel);
+    void setGain(long value);
+    void getAudio(short outputBuffer[], long count);
 
 private:
     static inline MicroModUtils *instance = NULL;
