@@ -19,7 +19,7 @@ public:
     {
         unsigned char volume, fine_tune;
         unsigned long loop_start, loop_length;
-        unsigned char *sample_data;
+        signed char *sample_data;
     };
 
     struct channel

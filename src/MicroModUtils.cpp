@@ -1,5 +1,6 @@
 #include "../include/MicroModUtils.hpp"
 #include <string>
+#include <iostream>
 using namespace std;
 
 string MicroModUtils::getVersion()
@@ -446,7 +447,7 @@ void MicroModUtils::resample(struct channel *chan, short *buf, long offset, long
     unsigned long step = chan->step;
     unsigned long llen = instruments[chan->instrument].loop_length;
     unsigned long lep1 = instruments[chan->instrument].loop_start + llen;
-    unsigned char *sdat = instruments[chan->instrument].sample_data;
+    signed char *sdat = instruments[chan->instrument].sample_data;
     short ampl = buf && !chan->mute ? chan->ampl : 0;
     short lamp = ampl * (127 - chan->panning) >> 5;
     short ramp = ampl * chan->panning >> 5;
@@ -507,6 +508,7 @@ void MicroModUtils::resample(struct channel *chan, short *buf, long offset, long
     }
     chan->sample_idx = sidx;
 }
+
 long MicroModUtils::calculateModFileLen(unsigned char moduleHeader[])
 {
     long length, numchan, inst_idx;
@@ -571,7 +573,8 @@ long MicroModUtils::initialise(unsigned char data[], long sampling_rate)
         }
         inst->loop_start = loop_start << FP_SHIFT;
         inst->loop_length = loop_length << FP_SHIFT;
-        inst->sample_data = module_data + sample_data_offset;
+        inst->sample_data = (signed char*) module_data + sample_data_offset;
+        cout << "Debug Instrument offset : " << sample_data_offset << endl;
         sample_data_offset += sample_length;
     }
     c2_rate = (num_channels > 4) ? 8363 : 8287;
