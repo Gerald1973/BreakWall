@@ -1,5 +1,9 @@
 #include "../include/MicroModSDLPlayer.hpp"
 #include "../include/MicroModUtils.hpp"
+#include <string>
+#include <iostream>
+
+using namespace std;
 
 /*
 	2:1 downsampling with simple but effective anti-aliasing.
@@ -95,13 +99,13 @@ void MicroModSDLPlayer::terminationHandler(int signum)
 void MicroModSDLPlayer::printModuleInfo()
 {
     int inst;
-    char string[23];
+    string tmp = "";
     for (inst = 0; inst < 16; inst++)
     {
-        MicroModUtils::getInstance()->getString(inst, string);
-        printf("%02i - %-22s ", inst, string);
-        MicroModUtils::getInstance()->getString(inst + 16, string);
-        printf("%02i - %-22s\n", inst + 16, string);
+        tmp = MicroModUtils::getInstance()->getString(inst);
+        cout << inst << ":" << tmp << " ";
+        tmp = MicroModUtils::getInstance()->getString(inst + 16);
+        cout << inst + 16 << ":" << tmp << endl;
     }
 }
 

@@ -580,29 +580,37 @@ long MicroModUtils::initialise(unsigned char data[], long sampling_rate)
     setPosition(0);
     return 0;
 }
-void MicroModUtils::getString(long instrument, string string)
+
+/*
+	Obtains song and instrument names from the module.
+	The song name is returned as instrument 0.
+	The name is copied into the location pointed to by string,
+	and is at most 23 characters long, including the trailing null.
+*/
+string MicroModUtils::getString(long instrument)
 {
     long index, offset, length, character;
-    if (num_channels <= 0)
+    string result = "";
+    if (num_channels > 0)
     {
-        string[0] = 0;
-        return;
+        offset = 0;
+        length = 20;
+        if (instrument > 0 && instrument < 32)
+        {
+            offset = (instrument - 1) * 30 + 20;
+            length = 22;
+        }
+        for (index = 0; index < length; index++)
+        {
+            character = module_data[offset + index];
+            if (character < 32 || character > 126)
+            {
+                character = ' ';
+            }
+            result = result + (char)character;
+        }
     }
-    offset = 0;
-    length = 20;
-    if (instrument > 0 && instrument < 32)
-    {
-        offset = (instrument - 1) * 30 + 20;
-        length = 22;
-    }
-    for (index = 0; index < length; index++)
-    {
-        character = module_data[offset + index];
-        if (character < 32 || character > 126)
-            character = ' ';
-        string[index] = character;
-    }
-    string[length] = 0;
+    return result;
 }
 long MicroModUtils::calculateSongDuration(void)
 {

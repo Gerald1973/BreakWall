@@ -91,7 +91,7 @@ public:
     void resample(struct channel *chan, short *buf, long offset, long count);
     long calculateModFileLen(unsigned char moduleHeader[]);
     long initialise(unsigned char data[], long sampling_rate);
-    void getString(long instrument, std::string string);
+    std::string getString(long instrument);
     long calculateSongDuration(void);
     void setPosition(long pos);
     long muteChannel(long channel);

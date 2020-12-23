@@ -20,6 +20,7 @@
 #include "../include/GlobalConstants.h"
 #include "../include/FileUtils.hpp"
 #include "../include/MicroModUtils.hpp"
+#include "../include/MicroModSDLPlayer.hpp"
 
 Brick *wall[20][30];
 int dirX = 1;
@@ -201,10 +202,7 @@ int main(int argc, char **argv)
     std::cout << "debug : micromod version  :" << MicroModUtils::getInstance()->getVersion() << std::endl;
     std::cout << "debug : number of channel :" << MicroModUtils::getInstance()->calculateNumChannels(&moduleHeader[0]) << std::endl;
     std::cout << "debug : number of patterns :" << MicroModUtils::getInstance()->calculateNumPatterns(&moduleHeader[0]) << std::endl;
-    // signed char *module;
-    // module = (signed char *)calloc(lengthFile, 1);
-    // ModPlayer::read_file("worldofw.mod", module, lengthFile);
-    // ModPlayer::play_module(module);
+    MicroModSDLPlayer::getInstance()->playModule(&mf[0]);
     //End test
     while (loop)
     {

@@ -42,7 +42,7 @@ private:
     ~MicroModSDLPlayer();
 };
 
-void audioCallback(void *udata, Uint8 *stream, int len)
+void inline audioCallback(void *udata, Uint8 *stream, int len)
 {
     MicroModSDLPlayer *ptr = (MicroModSDLPlayer *) udata;
     ptr->callback(stream, len);
