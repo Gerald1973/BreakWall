@@ -109,12 +109,11 @@ void MicroModSDLPlayer::printModuleInfo()
     }
 }
 
-long MicroModSDLPlayer::playModule(unsigned char module[])
+long MicroModSDLPlayer::initialise(unsigned char module[])
 {
-    long result;
     SDL_AudioSpec audiospec;
     /* Initialise replay.*/
-    result = MicroModUtils::getInstance()->initialise(module, MicroModSDLPlayer::SAMPLING_FREQ * OVERSAMPLE);
+    long result = MicroModUtils::getInstance()->initialise(module, MicroModSDLPlayer::SAMPLING_FREQ * OVERSAMPLE);
     if (result == 0)
     {
         printModuleInfo();
@@ -134,36 +133,32 @@ long MicroModSDLPlayer::playModule(unsigned char module[])
         result = SDL_Init(SDL_INIT_AUDIO);
         if (result == 0)
         {
-            /* Open the audio device. */
             result = SDL_OpenAudio(&audiospec, NULL);
-            if (result == 0)
-            {
-                /* Begin playback. */
-                SDL_PauseAudio(0);
-                /* Wait for playback to finish. */
-                semaphore = SDL_CreateSemaphore(0);
-                result = SDL_SemWait(semaphore);
-                if (result != 0)
-                {
-                    fprintf(stderr, "SDL_SemWait() failed.\n");
-                }
-                /* Close audio device and shut down SDL. */
-                SDL_CloseAudio();
-                SDL_Quit();
-            }
-            else
-            {
-                fprintf(stderr, "Unable to open audio device: %s\n", SDL_GetError());
-            }
         }
         else
         {
-            fprintf(stderr, "Unable to initialise SDL: %s\n", SDL_GetError());
+            fprintf(stderr, "Unable to open audio device: %s\n", SDL_GetError());
         }
     }
-    else
+    return result;
+}
+
+long MicroModSDLPlayer::playModule(unsigned char module[])
+{
+    long result = this->initialise(module);
+    if (result == 0)
     {
-        fprintf(stderr, "Unable to initialise replay.\n");
+        /* Begin playback. */
+        SDL_PauseAudio(0);
+        /* Wait for playback to finish. */
+        semaphore = SDL_CreateSemaphore(0);
+        result = SDL_SemWait(semaphore);
+        if (result != 0)
+        {
+            fprintf(stderr, "SDL_SemWait() failed.\n");
+        }
+        /* Close audio device and shut down SDL. */
+        SDL_CloseAudio();
     }
     return result;
 }

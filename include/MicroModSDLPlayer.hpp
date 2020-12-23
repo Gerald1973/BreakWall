@@ -34,6 +34,7 @@ public:
     void callback(Uint8 *stream, int len);
     void terminationHandler(int signum);
     void printModuleInfo();
+    long initialise(unsigned char module[]);
     long playModule(unsigned char module[]);
 
 private:
