@@ -202,7 +202,7 @@ int main(int argc, char **argv)
     std::cout << "debug : micromod version  :" << MicroModUtils::getInstance()->getVersion() << std::endl;
     std::cout << "debug : number of channel :" << MicroModUtils::getInstance()->calculateNumChannels(&moduleHeader[0]) << std::endl;
     std::cout << "debug : number of patterns :" << MicroModUtils::getInstance()->calculateNumPatterns(&moduleHeader[0]) << std::endl;
-    MicroModSDLPlayer::getInstance()->playModule(&mf[0]);
+    //MicroModSDLPlayer::getInstance()->playModule(&mf[0]);
     //End test
     while (loop)
     {
