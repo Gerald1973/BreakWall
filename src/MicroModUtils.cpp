@@ -715,6 +715,7 @@ void MicroModUtils::getAudio(short outputBuffer[], long count)
 MicroModUtils::MicroModUtils()
 {
     cout << "MicroModUtils creation." << endl;
+    
 }
 
 MicroModUtils::~MicroModUtils()

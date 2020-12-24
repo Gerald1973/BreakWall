@@ -65,7 +65,7 @@ public:
 
     static inline MicroModUtils *getInstance()
     {
-        if (instance)
+        if (!instance)
         {
             instance = new MicroModUtils();
         }

@@ -11,22 +11,22 @@ class MicroModSDLPlayer
 public:
     static inline MicroModSDLPlayer *getInstance()
     {
-        if (instance)
+        if (!instance)
         {
             instance = new MicroModSDLPlayer();
         }
         return instance;
     }
 
-    static inline int OVERSAMPLE = __OVERSAMPLE__;
-    static inline int NUM_CHANNELS = __NUM_CHANNELS__;
-    static inline int SAMPLING_FREQ = __SAMPLING_FREQ__;
-    static inline int BUFFER_SAMPLES = __BUFFER_SAMPLES__;
-    static inline SDL_sem *semaphore;
-    static inline long samplesRemaining;
-    static inline short reverbBuffer[__REVERB_BUF_LEN__];
-    static inline short mixBuffer[__BUFFER_SAMPLES__ * __NUM_CHANNELS__ * __OVERSAMPLE__];
-    static inline long reverbLen, reverbIdx, filtL, filtR;
+    int OVERSAMPLE;
+    int NUM_CHANNELS;
+    int SAMPLING_FREQ;
+    int BUFFER_SAMPLES;
+    SDL_sem *semaphore;
+    long samplesRemaining;
+    short reverbBuffer[__REVERB_BUF_LEN__];
+    short mixBuffer[__BUFFER_SAMPLES__ * __NUM_CHANNELS__ * __OVERSAMPLE__];
+    long reverbLen, reverbIdx, filtL, filtR;
 
     void downSample(short *input, short *output, long count);
     void reverb(short *buffer, long count);
@@ -45,6 +45,6 @@ private:
 
 void inline audioCallback(void *udata, Uint8 *stream, int len)
 {
-    MicroModSDLPlayer *ptr = (MicroModSDLPlayer *) udata;
+    MicroModSDLPlayer *ptr = MicroModSDLPlayer::getInstance();
     ptr->callback(stream, len);
 }

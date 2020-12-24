@@ -16,12 +16,12 @@ void MicroModSDLPlayer::downSample(short *input, short *output, long count)
     in_idx = out_idx = 0;
     while (out_idx < count)
     {
-        out_l = MicroModSDLPlayer::filtL + (input[in_idx++] >> 1);
-        out_r = MicroModSDLPlayer::filtR + (input[in_idx++] >> 1);
-        MicroModSDLPlayer::filtL = input[in_idx++] >> 2;
-        MicroModSDLPlayer::filtR = input[in_idx++] >> 2;
-        output[out_idx++] = out_l + MicroModSDLPlayer::filtL;
-        output[out_idx++] = out_r + MicroModSDLPlayer::filtR;
+        out_l = filtL + (input[in_idx++] >> 1);
+        out_r = filtR + (input[in_idx++] >> 1);
+        filtL = input[in_idx++] >> 2;
+        filtR = input[in_idx++] >> 2;
+        output[out_idx++] = out_l + filtL;
+        output[out_idx++] = out_r + filtR;
     }
 }
 
@@ -29,22 +29,22 @@ void MicroModSDLPlayer::downSample(short *input, short *output, long count)
 void MicroModSDLPlayer::reverb(short *buffer, long count)
 {
     long buffer_idx, buffer_end;
-    if (MicroModSDLPlayer::reverbLen > 2)
+    if (reverbLen > 2)
     {
         buffer_idx = 0;
         buffer_end = buffer_idx + (count << 1);
         while (buffer_idx < buffer_end)
         {
-            buffer[buffer_idx] = (buffer[buffer_idx] * 3 + MicroModSDLPlayer::reverbBuffer[MicroModSDLPlayer::reverbIdx + 1]) >> 2;
-            buffer[buffer_idx + 1] = (buffer[buffer_idx + 1] * 3 + MicroModSDLPlayer::reverbBuffer[MicroModSDLPlayer::reverbIdx]) >> 2;
-            MicroModSDLPlayer::reverbBuffer[MicroModSDLPlayer::reverbIdx] = buffer[MicroModSDLPlayer::reverbIdx];
-            MicroModSDLPlayer::reverbBuffer[MicroModSDLPlayer::reverbIdx + 1] = buffer[MicroModSDLPlayer::reverbIdx + 1];
-            MicroModSDLPlayer::reverbIdx += 2;
-            if (MicroModSDLPlayer::reverbIdx >= MicroModSDLPlayer::reverbLen)
+            buffer[buffer_idx] = (buffer[buffer_idx] * 3 + reverbBuffer[reverbIdx + 1]) >> 2;
+            buffer[buffer_idx + 1] = (buffer[buffer_idx + 1] * 3 + reverbBuffer[reverbIdx]) >> 2;
+            reverbBuffer[reverbIdx] = buffer[reverbIdx];
+            reverbBuffer[reverbIdx + 1] = buffer[reverbIdx + 1];
+            reverbIdx += 2;
+            if (reverbIdx >= reverbLen)
             {
-                MicroModSDLPlayer::reverbIdx = 0;
+                reverbIdx = 0;
             }
-            MicroModSDLPlayer::reverbIdx += 2;
+            reverbIdx += 2;
         }
     }
 }
@@ -65,8 +65,8 @@ void MicroModSDLPlayer::crossfeed(short *audio, int count)
 void MicroModSDLPlayer::callback(Uint8 *stream, int len)
 {
     long count;
-    count = len * MicroModSDLPlayer::OVERSAMPLE / 4;
-    if (MicroModSDLPlayer::samplesRemaining < count)
+    count = len * OVERSAMPLE / 4;
+    if (samplesRemaining < count)
     {
         /* Clear output.*/
         memset(stream, 0, len);
@@ -75,12 +75,12 @@ void MicroModSDLPlayer::callback(Uint8 *stream, int len)
     if (count > 0)
     {
         /* Get audio from replay.*/
-        memset(MicroModSDLPlayer::mixBuffer, 0, count * NUM_CHANNELS * sizeof(short));
-        MicroModUtils::getInstance()->getAudio(MicroModSDLPlayer::mixBuffer, count);
-        downSample(MicroModSDLPlayer::mixBuffer, (short *)stream, count);
-        crossfeed((short *)stream, count / MicroModSDLPlayer::OVERSAMPLE);
-        reverb((short *)stream, count / MicroModSDLPlayer::OVERSAMPLE);
-        MicroModSDLPlayer::samplesRemaining -= count;
+        memset(mixBuffer, 0, count * NUM_CHANNELS * sizeof(short));
+        MicroModUtils::getInstance()->getAudio(mixBuffer, count);
+        downSample(mixBuffer, (short *)stream, count);
+        crossfeed((short *)stream, count / OVERSAMPLE);
+        reverb((short *)stream, count / OVERSAMPLE);
+        samplesRemaining -= count;
     }
     else
     {
@@ -124,13 +124,14 @@ long MicroModSDLPlayer::initialise(unsigned char module[])
 {
     SDL_AudioSpec audiospec;
     /* Initialise replay.*/
-    long result = MicroModUtils::getInstance()->initialise(module, MicroModSDLPlayer::SAMPLING_FREQ * OVERSAMPLE);
+    cout << "DEBUG : " << SAMPLING_FREQ << endl;
+    long result = MicroModUtils::getInstance()->initialise(module, SAMPLING_FREQ * OVERSAMPLE);
     if (result == 0)
     {
         printModuleInfo();
         /* Calculate song length. */
-        MicroModSDLPlayer::samplesRemaining = MicroModUtils::getInstance()->calculateSongDuration();
-        printf("Song Duration: %li seconds.\n", MicroModSDLPlayer::samplesRemaining / (SAMPLING_FREQ * OVERSAMPLE));
+        samplesRemaining = MicroModUtils::getInstance()->calculateSongDuration();
+        printf("Song Duration: %li seconds.\n", samplesRemaining / (SAMPLING_FREQ * OVERSAMPLE));
         fflush(NULL);
         /* Initialise SDL_AudioSpec Structure. */
         memset(&audiospec, 0, sizeof(SDL_AudioSpec));
@@ -174,6 +175,12 @@ long MicroModSDLPlayer::playModule(unsigned char module[])
     return result;
 }
 
-MicroModSDLPlayer::MicroModSDLPlayer() {}
+MicroModSDLPlayer::MicroModSDLPlayer()
+{
+    OVERSAMPLE = __OVERSAMPLE__;
+    NUM_CHANNELS = __NUM_CHANNELS__;
+    SAMPLING_FREQ = __SAMPLING_FREQ__;
+    BUFFER_SAMPLES = __BUFFER_SAMPLES__;
+}
 
 MicroModSDLPlayer::~MicroModSDLPlayer() {}
