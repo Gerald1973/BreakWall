@@ -194,11 +194,12 @@ int main(int argc, char **argv)
     Background *background = initBackground(renderer);
     bool loop = true;
     //Test amiga mod
-    std::vector<unsigned char> moduleHeader = FileUtils::getInstance()->readFile("worldofw.mod",0,1084);
-    std::vector<unsigned char> mf = FileUtils::getInstance()->readFile("worldofw.mod");
+    std::string song = "christ_1.mod";
+    std::vector<unsigned char> moduleHeader = FileUtils::getInstance()->readFile(song,0,1084);
+    std::vector<unsigned char> mf = FileUtils::getInstance()->readFile(song);
     std::cout << "debug : readFromTO       :" << moduleHeader.size() << std::endl;
     std::cout << "debug : mf.size = " << mf.size() << std::endl;
-    std::cout << "debug : mf.size (needs to be equal to the previous value) = " << FileUtils::getInstance()->getSize("worldofw.mod") << std::endl;
+    std::cout << "debug : mf.size (needs to be equal to the previous value) = " << FileUtils::getInstance()->getSize(song) << std::endl;
     std::cout << "debug : micromod version  :" << MicroModUtils::getInstance()->getVersion() << std::endl;
     std::cout << "debug : number of channel :" << MicroModUtils::getInstance()->calculateNumChannels(&moduleHeader[0]) << std::endl;
     std::cout << "debug : number of patterns :" << MicroModUtils::getInstance()->calculateNumPatterns(&moduleHeader[0]) << std::endl;
@@ -222,6 +223,16 @@ int main(int argc, char **argv)
                 break;
             case SDL_MOUSEMOTION:
                 bare->getTextureWithPosition()->setX(bare->getTextureWithPosition()->getX() + event.motion.xrel);
+                break;
+            case SDL_USEREVENT:
+                if (event.user.code == 2) {
+                    std::string message = (char*) event.user.data1;
+                    std::cout << message << std::endl;
+                    SDL_PauseAudio(1);
+                    MicroModSDLPlayer::getInstance()->initialise(&mf[0]);
+                    SDL_PauseAudio(0);
+                }
+                break;
             }
         }
         if (keys[SDL_SCANCODE_ESCAPE])
