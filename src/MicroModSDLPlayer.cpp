@@ -128,7 +128,7 @@ long MicroModSDLPlayer::initialise(unsigned char module[])
     long result = MicroModUtils::getInstance()->initialise(module, SAMPLING_FREQ * OVERSAMPLE);
     if (result == 0)
     {
-        printModuleInfo();
+        //printModuleInfo();
         /* Calculate song length. */
         samplesRemaining = MicroModUtils::getInstance()->calculateSongDuration();
         printf("Song Duration: %li seconds.\n", samplesRemaining / (SAMPLING_FREQ * OVERSAMPLE));

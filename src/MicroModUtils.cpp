@@ -147,8 +147,11 @@ void MicroModUtils::trigger(struct channel *channel)
         channel->sample_offset = 0;
         channel->fine_tune = instruments[ins].fine_tune;
         channel->volume = instruments[ins].volume;
-        if (instruments[ins].loop_length > 0 && channel->instrument > 0)
+        //if (instruments[ins].loop_length > 0 && channel->instrument > 0)
+        if (instruments[ins].loop_length > 0)
+        {
             channel->instrument = ins;
+        }
     }
     if (channel->note.effect == 0x09)
     {
@@ -422,6 +425,7 @@ long MicroModUtils::sequenceRow()
     }
     return song_end;
 }
+
 long MicroModUtils::sequenceTick()
 {
     long song_end, chan_idx;
@@ -438,7 +442,7 @@ long MicroModUtils::sequenceTick()
     }
     return song_end;
 }
-void MicroModUtils::resample(struct channel *chan, short *buf, long offset, long count)
+void MicroModUtils::resample(channel *chan, short *buf, long offset, long count)
 {
     unsigned long epos;
     unsigned long buf_idx = offset << 1;
@@ -534,7 +538,7 @@ long MicroModUtils::initialise(unsigned char data[], long sampling_rate)
     }
     if (sampling_rate < 8000)
         return -2;
-    MicroModUtils::module_data = &data[0];
+    module_data = &data[0];
     sample_rate = sampling_rate;
     song_length = module_data[950] & 0x7F;
     restart = module_data[951] & 0x7F;
@@ -542,7 +546,7 @@ long MicroModUtils::initialise(unsigned char data[], long sampling_rate)
         restart = 0;
     sequence = (unsigned char *)module_data + 952;
     pattern_data = (unsigned char *)module_data + 1084;
-    num_patterns = calculateNumPatterns(MicroModUtils::module_data);
+    num_patterns = calculateNumPatterns(module_data);
     sample_data_offset = 1084 + num_patterns * 64 * num_channels * 4;
     for (inst_idx = 1; inst_idx < 32; inst_idx++)
     {
@@ -573,8 +577,15 @@ long MicroModUtils::initialise(unsigned char data[], long sampling_rate)
         }
         inst->loop_start = loop_start << FP_SHIFT;
         inst->loop_length = loop_length << FP_SHIFT;
-        inst->sample_data = (signed char*) module_data + sample_data_offset;
-        cout << "Debug Instrument offset : " << sample_data_offset << endl;
+        inst->sample_data = (signed char *)module_data + sample_data_offset;
+        cout << "DEBUG Instrument idx        : " << inst_idx << endl;
+        cout << "DEBUG ptrInstrument         : " << inst << endl;
+        cout << "DEBUG Instrument data       : " << inst->sample_data << endl;
+        cout << "DEBUG Instrument loop start : " << inst->loop_start << endl;
+        cout << "DEBUG Instrument loop length: " << inst->loop_length << endl;
+        cout << "DEBUG Instrument offset     : " << sample_data_offset << endl;
+        cout << "DEBUG Instrument length     : " << sample_length << endl;
+        cout << endl;
         sample_data_offset += sample_length;
     }
     c2_rate = (num_channels > 4) ? 8363 : 8287;
@@ -715,7 +726,6 @@ void MicroModUtils::getAudio(short outputBuffer[], long count)
 MicroModUtils::MicroModUtils()
 {
     cout << "MicroModUtils creation." << endl;
-    
 }
 
 MicroModUtils::~MicroModUtils()

@@ -172,7 +172,7 @@ int main(int argc, char **argv)
 
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
-    SDL_SetRelativeMouseMode(SDL_TRUE);
+    //SDL_SetRelativeMouseMode(SDL_TRUE);
     const Uint8 *keys = SDL_GetKeyboardState(NULL);
     std::map<int, bool> mapKbd;
     SDL_Window *pWindow = SDL_CreateWindow("BreakWall", 0, 0, GlobalConstants::SCREEN_WIDTH, GlobalConstants::SCREEN_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
@@ -194,7 +194,7 @@ int main(int argc, char **argv)
     Background *background = initBackground(renderer);
     bool loop = true;
     //Test amiga mod
-    std::string song = "christ_1.mod";
+    std::string song = "worldofw.mod";
     std::vector<unsigned char> moduleHeader = FileUtils::getInstance()->readFile(song,0,1084);
     std::vector<unsigned char> mf = FileUtils::getInstance()->readFile(song);
     std::cout << "debug : readFromTO       :" << moduleHeader.size() << std::endl;
