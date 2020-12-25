@@ -52,16 +52,6 @@ public:
         0, 24, 49, 74, 97, 120, 141, 161, 180, 197, 212, 224, 235, 244, 250, 253,
         255, 253, 250, 244, 235, 224, 212, 197, 180, 161, 141, 120, 97, 74, 49, 24};
 
-    static inline unsigned char *pattern_data, *sequence;
-    static inline long song_length, restart, num_patterns, num_channels;
-    instrument instruments[32];
-
-    static inline long sample_rate, gain, c2_rate, tick_len, tick_offset;
-    static inline long pattern, break_pattern, row, next_row, tick;
-    static inline long speed, pl_count, pl_channel, random_seed;
-
-    static inline struct channel channels[__CHANNELS__];
-
     static inline MicroModUtils *getInstance()
     {
         if (!instance)
@@ -100,6 +90,15 @@ public:
 private:
     static inline MicroModUtils *instance = NULL;
     unsigned char *module_data;
+    unsigned char *pattern_data, *sequence;
+    long song_length, restart, num_patterns, num_channels;
+    instrument instruments[32];
+
+    long sample_rate, gain, c2_rate, tick_len, tick_offset;
+    long pattern, break_pattern, row, next_row, tick;
+    long speed, pl_count, pl_channel, random_seed;
+
+    channel channels[__CHANNELS__];
     static inline std::string MICROMOD_VERSION = "Based on: Micromod Protracker replay 20180625 (c)mumart@gmail.com";
     MicroModUtils();
     ~MicroModUtils();
