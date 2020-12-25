@@ -1,5 +1,6 @@
 #include "../include/MicroModSDLPlayer.hpp"
 #include "../include/MicroModUtils.hpp"
+#include "../include/CustomEventUtils.hpp"
 #include <string>
 #include <iostream>
 
@@ -84,18 +85,7 @@ void MicroModSDLPlayer::callback(Uint8 *stream, int len)
     }
     else
     {
-        Uint32 myEventType = SDL_RegisterEvents(1);
-        if (myEventType != ((Uint32)-1))
-        {
-            SDL_Event event;
-            event.type = SDL_USEREVENT;
-            event.user.code = 2;
-            event.user.data1 = (void *)&"Sound finish."[0];
-            event.user.data2 = NULL;
-            event.user.data2 = 0;
-            SDL_PushEvent(&event);
-        }
-        /* Notify the main thread to stop playback.*/
+        CustomEventUtils::getInstance()->postEventSongStop(new string("Title of the song"));
         SDL_SemPost(semaphore);
     }
 }
