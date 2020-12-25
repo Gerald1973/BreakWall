@@ -129,15 +129,15 @@ long MicroModUtils::waveform(long phase, long type)
     }
     return amplitude;
 }
-void MicroModUtils::vibrato(struct channel *chan)
+void MicroModUtils::vibrato(channel *chan)
 {
     chan->vibrato_add = waveform(chan->vibrato_phase, chan->vibrato_type) * chan->vibrato_depth >> 7;
 }
-void MicroModUtils::tremolo(struct channel *chan)
+void MicroModUtils::tremolo(channel *chan)
 {
     chan->tremolo_add = waveform(chan->tremolo_phase, chan->tremolo_type) * chan->tremolo_depth >> 6;
 }
-void MicroModUtils::trigger(struct channel *channel)
+void MicroModUtils::trigger(channel *channel)
 {
     long period, ins;
     ins = channel->note.instrument;
@@ -147,7 +147,6 @@ void MicroModUtils::trigger(struct channel *channel)
         channel->sample_offset = 0;
         channel->fine_tune = instruments[ins].fine_tune;
         channel->volume = instruments[ins].volume;
-        //if (instruments[ins].loop_length > 0 && channel->instrument > 0)
         if (instruments[ins].loop_length > 0)
         {
             channel->instrument = ins;
@@ -527,7 +526,7 @@ long MicroModUtils::calculateModFileLen(unsigned char moduleHeader[])
 
 long MicroModUtils::initialise(unsigned char data[], long sampling_rate)
 {
-    struct MicroModUtils::instrument *inst;
+    instrument *inst;
     long sample_data_offset, inst_idx;
     long sample_length, volume, fine_tune, loop_start, loop_length;
     num_channels = calculateNumChannels(data);
@@ -601,7 +600,7 @@ long MicroModUtils::initialise(unsigned char data[], long sampling_rate)
 	The name is copied into the location pointed to by string,
 	and is at most 23 characters long, including the trailing null.
 */
-string MicroModUtils::getString(long instrument)
+string MicroModUtils::getInstrumentName(long instrument)
 {
     long index, offset, length, character;
     string result = "";

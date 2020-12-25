@@ -113,9 +113,9 @@ void MicroModSDLPlayer::printModuleInfo()
     string tmp = "";
     for (inst = 0; inst < 16; inst++)
     {
-        tmp = MicroModUtils::getInstance()->getString(inst);
+        tmp = MicroModUtils::getInstance()->getInstrumentName(inst);
         cout << inst << ":" << tmp << " ";
-        tmp = MicroModUtils::getInstance()->getString(inst + 16);
+        tmp = MicroModUtils::getInstance()->getInstrumentName(inst + 16);
         cout << inst + 16 << ":" << tmp << endl;
     }
 }
