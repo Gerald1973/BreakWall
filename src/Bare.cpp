@@ -15,8 +15,6 @@ Bare::~Bare()
 void Bare::setTextureWithPosition(TextureWithPosition *textureWithPosition)
 {
     this->textureWithPosition = textureWithPosition;
-    std::cout << "Position X :" << textureWithPosition->getAbsCenterX() << "\n";
-    std::cout << "Position Y :" << textureWithPosition->getAbsCenterY() << "\n";
 }
 
 TextureWithPosition *Bare::getTextureWithPosition()

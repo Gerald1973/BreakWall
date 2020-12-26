@@ -112,13 +112,11 @@ bool Ball::bouncesOnBrick(Brick *brick)
 		}
 		if (getTextureWithPosition()->getAbsCenterY() < brick->getTextureWithPosition()->getY())
 		{
-			//std::cout << "haut " << "brick y2 = " << getTextureWithPosition()->getY2() << "bal posY = " << posY << "\n";
 			dirY = -dirY;
 			posY = brick->getTextureWithPosition()->getY() - getTextureWithPosition()->getPosition().h + dirY;
 		}
 		else if (getTextureWithPosition()->getAbsCenterY() > brick->getTextureWithPosition()->getY2())
 		{
-			//std::cout << "bas " << "brick y2 = " << getTextureWithPosition()->getY2() << "bal posY = " << posY << "\n";
 			dirY = -dirY;
 			posY = brick->getTextureWithPosition()->getY2() + dirY;
 		}
@@ -184,8 +182,8 @@ bool Ball::bouncesOnBare(Bare *bare)
 		float deltaCenter = centerBall - centerBare;
 		coeffX = deltaCenter / halfWidht;
 		coeffy = sqrt(1 - coeffX * coeffX);
-		std::cout << "Coefficient X = " << coeffX << "\n";
-		std::cout << "Coefficient Y = " << coeffy << "\n";
+		std::cout << "DEBUG Coefficient X = " << coeffX << "\n";
+		std::cout << "DEBUG Coefficient Y = " << coeffy << "\n";
 		result = true;
 		dirX =  coeffX * speed;
 		dirY = -coeffy * speed;

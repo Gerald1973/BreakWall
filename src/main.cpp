@@ -194,15 +194,13 @@ int main(int argc, char **argv)
     Background *background = initBackground(renderer);
     bool loop = true;
     //Test amiga mod
-    std::string song = "christ_1.mod";
+    std::string song = "twinkle_by_fred_j.mod";
     std::vector<unsigned char> moduleHeader = FileUtils::getInstance()->readFile(song,0,1084);
     std::vector<unsigned char> mf = FileUtils::getInstance()->readFile(song);
-    std::cout << "debug : readFromTO       :" << moduleHeader.size() << std::endl;
-    std::cout << "debug : mf.size = " << mf.size() << std::endl;
-    std::cout << "debug : mf.size (needs to be equal to the previous value) = " << FileUtils::getInstance()->getSize(song) << std::endl;
-    std::cout << "debug : micromod version  :" << MicroModUtils::getInstance()->getVersion() << std::endl;
-    std::cout << "debug : number of channel :" << MicroModUtils::getInstance()->calculateNumChannels(&moduleHeader[0]) << std::endl;
-    std::cout << "debug : number of patterns :" << MicroModUtils::getInstance()->calculateNumPatterns(&moduleHeader[0]) << std::endl;
+    std::cout << "DEBUG : readFromTO         :" << moduleHeader.size() << std::endl;
+    std::cout << "DEBUG : micromod version   :" << MicroModUtils::getInstance()->getVersion() << std::endl;
+    std::cout << "DEBUG : number of channel  :" << MicroModUtils::getInstance()->calculateNumChannels(&moduleHeader[0]) << std::endl;
+    std::cout << "DEBUG : number of patterns :" << MicroModUtils::getInstance()->calculateNumPatterns(&moduleHeader[0]) << std::endl;
     MicroModSDLPlayer::getInstance()->initialise(&mf[0]);
     SDL_PauseAudio(0);
     //End test
@@ -226,16 +224,12 @@ int main(int argc, char **argv)
                 break;
             case SDL_USEREVENT:
                 if (event.user.code == CustomEventUtils::Code::SONG_STOP) {
-                    std::string *message = (std::string*) event.user.data1;
-                    std::cout << *message << std::endl;
                     SDL_PauseAudio(1);
                     MicroModSDLPlayer::getInstance()->initialise(&mf[0]);
                     SDL_PauseAudio(0);
                 } else if (event.user.code == CustomEventUtils::Code::BRICK_TOUCHED){
                     Brick* brick = (Brick*) event.user.data1;
                     scoreSegments->addScore(brick->getValue());
-                    std::cout << brick->getTextureWithPosition()->getX() << std::endl;
-                    std::cout << brick->getTextureWithPosition()->getY() << std::endl;
                 }
                 break;
             }

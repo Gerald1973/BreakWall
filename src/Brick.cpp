@@ -66,7 +66,6 @@ void Brick::playDestroy(SDL_Renderer *renderer)
 	int h = getTextureWithPosition()->getPosition().h;
 	if (y < GlobalConstants::BALL_ZONE_Y + GlobalConstants::BALL_ZONE_HEIGHT - h)
 	{
-		SDL_Rect target = getTextureWithPosition()->getPosition();
 		if (h == 0 || h == getTextureWithPosition()->getOriginRect().h)
 		{
 			deadDirection = -deadDirection;

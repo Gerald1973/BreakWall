@@ -86,14 +86,13 @@ void MicroModSDLPlayer::callback(Uint8 *stream, int len)
     else
     {
         CustomEventUtils::getInstance()->postEventSongStop(new string("Title of the song"));
-        SDL_SemPost(semaphore);
+       
     }
 }
 
 /* Notify the main thread to stop playback. */
 void MicroModSDLPlayer::terminationHandler(int signum)
 {
-    SDL_SemPost(semaphore);
     fprintf(stderr, "\nTerminated!\n");
 }
 
