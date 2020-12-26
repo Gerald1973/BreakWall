@@ -26,6 +26,7 @@ class Brick
         bool destroyed;
         TextureWithPosition* textureWithPosition;
         Mix_Chunk* sound;
+        int deadDirection;
 
 };
 

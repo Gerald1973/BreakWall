@@ -8,6 +8,7 @@ Brick::Brick()
 	this->sound = NULL;
 	this->destroyed = false;
 	this->textureWithPosition = NULL;
+	this->deadDirection = 1;
 }
 void Brick::setValue(int value)
 {
@@ -60,13 +61,18 @@ void Brick::render(SDL_Renderer *renderer)
 
 void Brick::playDestroy(SDL_Renderer *renderer)
 {
+
 	int y = getTextureWithPosition()->getY();
 	int h = getTextureWithPosition()->getPosition().h;
-	SDL_Rect target = getTextureWithPosition()->getPosition();
 	if (y < GlobalConstants::BALL_ZONE_Y + GlobalConstants::BALL_ZONE_HEIGHT - h)
 	{
+		SDL_Rect target = getTextureWithPosition()->getPosition();
+		if (h == 0 || h == getTextureWithPosition()->getOriginRect().h)
+		{
+			deadDirection = -deadDirection;
+		}
 		y = y + 2;
-		h--;
+		h = h + deadDirection;
 		getTextureWithPosition()->setY(y);
 		getTextureWithPosition()->setH(h);
 		SDL_RenderCopy(renderer, getTextureWithPosition()->getTexture(), NULL,
