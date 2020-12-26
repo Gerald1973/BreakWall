@@ -194,7 +194,7 @@ int main(int argc, char **argv)
     Background *background = initBackground(renderer);
     bool loop = true;
     //Test amiga mod
-    std::string song = "twinkle_by_fred_j.mod";
+    std::string song = "worldofw.mod";
     std::vector<unsigned char> moduleHeader = FileUtils::getInstance()->readFile(song,0,1084);
     std::vector<unsigned char> mf = FileUtils::getInstance()->readFile(song);
     std::cout << "DEBUG : readFromTO         :" << moduleHeader.size() << std::endl;

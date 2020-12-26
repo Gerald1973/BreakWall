@@ -16,7 +16,6 @@ public:
     static inline int BALL_ZONE_Y=0;
     static inline int BALL_ZONE_WIDTH=960;
     static inline int BALL_ZONE_HEIGHT=476;
-
 protected:
 private:
 };

@@ -20,9 +20,10 @@ public:
 	void setTextureWithPosition(TextureWithPosition* textureWithPosition);
 	float getSpeed();
 	void setSpeed(float speed);
-	bool bouncesOnBrick(Brick* brick);
+	bool isBrickTouched(Brick* brick);
 	bool bouncesOnBare(Bare* bare);
 	bool bouncesOnScreen();
+	void bouncesOnBrick(Brick* brick);
 protected:
 private:
 	TextureWithPosition* textureWithPosition;

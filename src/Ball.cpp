@@ -34,20 +34,24 @@ void Ball::moveBall()
 	//2 the wall
 	std::vector<std::vector<Brick *>> bricks = getWall()->getBricks();
 	bool brickTouched = false;
+	Brick *touchedBrick = NULL;
 	for (unsigned int j = 0; j < bricks.size(); j++)
 	{
 		for (unsigned int i = 0; i < bricks[j].size(); i++)
 		{
-			if (bouncesOnBrick(bricks[j][i]))
+			if (isBrickTouched(bricks[j][i]))
 			{
-				brickTouched = true;
-				break;
+				if (!touchedBrick) {
+					touchedBrick = bricks[j][i];
+				}
+				CustomEventUtils::getInstance()->postEventBrickTouched(bricks[j][i]);
+				bricks[j][i]->setDestroyed(true);
 			}
 		}
-		if (brickTouched)
-		{
-			break;
-		}
+	}
+	//3 bouncing if any
+	if (touchedBrick){
+		this->bouncesOnBrick(touchedBrick);
 	}
 	//4 Move
 	posX = posX + dirX;
@@ -88,39 +92,41 @@ void Ball::setWall(Wall *wall)
 	this->wall = wall;
 }
 
-bool Ball::bouncesOnBrick(Brick *brick)
+void Ball::bouncesOnBrick(Brick* brick){
+	Mix_PlayChannel(-1, brick->getSound(), 0);
+	int x = this->getTextureWithPosition()->getAbsCenterX();
+	int y = this->getTextureWithPosition()->getAbsCenterY();
+	int halfBallSize = this->getTextureWithPosition()->getPosition().w / 2;
+	if ( x >= brick->getTextureWithPosition()->getX()-halfBallSize && x < brick->getTextureWithPosition()->getX2() + halfBallSize){
+		if (
+			(y >= brick->getTextureWithPosition()->getY()-halfBallSize && y <= brick->getTextureWithPosition()->getY()) ||
+			(y >= brick->getTextureWithPosition()->getY2() && y <= brick->getTextureWithPosition()->getY2() + halfBallSize)
+		){
+			dirY = -dirY;
+		}
+	}
+	if ( y >= brick->getTextureWithPosition()->getY()-halfBallSize && y <= brick->getTextureWithPosition()->getY2() + halfBallSize){
+		if ( 
+			(x >= brick->getTextureWithPosition()->getX() - halfBallSize && x <= brick->getTextureWithPosition()->getX()) ||
+			(x >= brick->getTextureWithPosition()->getX2() && x <= brick->getTextureWithPosition() -> getX2() + halfBallSize)
+		){
+			dirX = -dirX;
+		}
+	}
+}
+
+bool Ball::isBrickTouched(Brick *brick)
 {
 	bool result = false;
-	if (!brick->isDestroyed() && getTextureWithPosition()->getX2() >= brick->getTextureWithPosition()->getX() && getTextureWithPosition()->getX() <= brick->getTextureWithPosition()->getX2() && getTextureWithPosition()->getY() <= brick->getTextureWithPosition()->getY2() && getTextureWithPosition()->getY2() >= brick->getTextureWithPosition()->getY())
+	if (!brick->isDestroyed())
 	{
-		//Destroy the brick and update the score.
-		brick->setDestroyed(true);
-		Mix_PlayChannel(-1, brick->getSound(), 0);
-		CustomEventUtils::getInstance()->postEventBrickTouched(brick);
-		//...
-
-		
-		if (getTextureWithPosition()->getAbsCenterX() < brick->getTextureWithPosition()->getX())
-		{
-			dirX = -dirX;
-			posX = brick->getTextureWithPosition()->getX() - getTextureWithPosition()->getPosition().w + dirX;
-		}
-		else if (getTextureWithPosition()->getAbsCenterX() > brick->getTextureWithPosition()->getX2())
-		{
-			dirX = -dirX;
-			posX = brick->getTextureWithPosition()->getX2() + dirX;
-		}
-		if (getTextureWithPosition()->getAbsCenterY() < brick->getTextureWithPosition()->getY())
-		{
-			dirY = -dirY;
-			posY = brick->getTextureWithPosition()->getY() - getTextureWithPosition()->getPosition().h + dirY;
-		}
-		else if (getTextureWithPosition()->getAbsCenterY() > brick->getTextureWithPosition()->getY2())
-		{
-			dirY = -dirY;
-			posY = brick->getTextureWithPosition()->getY2() + dirY;
-		}
-		result = true;
+		int x = this->getTextureWithPosition()->getAbsCenterX();
+		int y = this->getTextureWithPosition()->getAbsCenterY();
+		int halfBallSize = this->getTextureWithPosition()->getPosition().w / 2;
+		result =  x >= brick->getTextureWithPosition()->getX() - halfBallSize 
+		       && x <= brick->getTextureWithPosition()->getX2() + halfBallSize
+			   && y >= brick->getTextureWithPosition()->getY() - halfBallSize
+			   && y <=  brick->getTextureWithPosition()->getY2() + halfBallSize;
 	}
 	return result;
 }
@@ -169,25 +175,22 @@ bool Ball::bouncesOnBare(Bare *bare)
 {
 	bool result = false;
 	if (
-		   getTextureWithPosition()->getX2() >= bare->getTextureWithPosition()->getX() && getTextureWithPosition()->getX() <= bare->getTextureWithPosition()->getX2() 
-		&& getTextureWithPosition()->getY2() >= bare->getTextureWithPosition()->getY() && getTextureWithPosition()->getY() <= bare->getTextureWithPosition()->getY2()
-	)
+		getTextureWithPosition()->getX2() >= bare->getTextureWithPosition()->getX() && getTextureWithPosition()->getX() <= bare->getTextureWithPosition()->getX2() && getTextureWithPosition()->getY2() >= bare->getTextureWithPosition()->getY() && getTextureWithPosition()->getY() <= bare->getTextureWithPosition()->getY2())
 	{
 		Mix_PlayChannel(-1, bare->getSound(), 0);
 		dirY = -dirY;
 		//calcul coeffX
-		float centerBare =  (float)(bare->getTextureWithPosition()->getAbsCenterX());
-		float centerBall =  (float) (getTextureWithPosition()->getAbsCenterX());
-		float halfWidht  =  (float) ((bare->getTextureWithPosition()->getPosition().w + getTextureWithPosition()->getPosition().w)/2);
+		float centerBare = (float)(bare->getTextureWithPosition()->getAbsCenterX());
+		float centerBall = (float)(getTextureWithPosition()->getAbsCenterX());
+		float halfWidht = (float)((bare->getTextureWithPosition()->getPosition().w + getTextureWithPosition()->getPosition().w) / 2);
 		float deltaCenter = centerBall - centerBare;
 		coeffX = deltaCenter / halfWidht;
 		coeffy = sqrt(1 - coeffX * coeffX);
 		std::cout << "DEBUG Coefficient X = " << coeffX << "\n";
 		std::cout << "DEBUG Coefficient Y = " << coeffy << "\n";
 		result = true;
-		dirX =  coeffX * speed;
+		dirX = coeffX * speed;
 		dirY = -coeffy * speed;
-		
 	}
 	return result;
 }
