@@ -1,13 +1,14 @@
 #include "../include/Ball.h"
 #include <SDL2/SDL_mixer.h>
 #include "../include/CustomEventUtils.hpp"
+#include <cmath> 
 
 Ball::Ball()
 {
 	this->dirX = 0;
-	this->dirY = 2;
-	this->speed = 5;
-	this->coeffX = 1;
+	this->speed = 8;
+	this->dirY = 8;
+	this->coeffy = 1;
 	this->coeffX = 0;
 	this->wall = NULL;
 	this->textureWithPosition = NULL;
@@ -56,8 +57,8 @@ void Ball::moveBall()
 	//4 Move
 	posX = posX + dirX;
 	posY = posY + dirY;
-	getTextureWithPosition()->setX(posX);
-	getTextureWithPosition()->setY(posY);
+	getTextureWithPosition()->setX(round(posX));
+	getTextureWithPosition()->setY(round(posY));
 }
 
 Bare *Ball::getBare()
@@ -94,9 +95,9 @@ void Ball::setWall(Wall *wall)
 
 void Ball::bouncesOnBrick(Brick* brick){
 	Mix_PlayChannel(-1, brick->getSound(), 0);
+	int halfBallSize = this->getTextureWithPosition()->getPosition().w / 2;
 	int x = this->getTextureWithPosition()->getAbsCenterX();
 	int y = this->getTextureWithPosition()->getAbsCenterY();
-	int halfBallSize = this->getTextureWithPosition()->getPosition().w / 2;
 	if ( x >= brick->getTextureWithPosition()->getX()-halfBallSize && x < brick->getTextureWithPosition()->getX2() + halfBallSize){
 		if (
 			(y >= brick->getTextureWithPosition()->getY()-halfBallSize && y <= brick->getTextureWithPosition()->getY()) ||
@@ -144,28 +145,32 @@ void Ball::setSpeed(float speed)
 bool Ball::bouncesOnScreen()
 {
 	bool result = false;
-	if (posX <= UtilConstants::getInstance()->gameZone.x)
-	{
-		dirX = -dirX;
-		posX = UtilConstants::getInstance()->gameZone.x;
-		result = true;
-	}
-	if (posX + getTextureWithPosition()->getPosition().w >= UtilConstants::getInstance()->gameZone.x + UtilConstants::getInstance()->gameZone.w)
-	{
-		dirX = -dirX;
-		posX = posX - this->getTextureWithPosition()->getPosition().w;
-		result = true;
-	}
-	if (posY <= UtilConstants::getInstance()->gameZone.y)
+	int x = this->getTextureWithPosition()->getAbsCenterX();
+	int y = this->getTextureWithPosition()->getAbsCenterY();
+	int halfBallSize = this->getTextureWithPosition()->getPosition().w / 2;
+	//top
+	if (y <= UtilConstants::getInstance() -> gameZone.y + halfBallSize)
 	{
 		dirY = -dirY;
-		posY = UtilConstants::getInstance()->gameZone.y;
 		result = true;
 	}
-	if (posY + getTextureWithPosition()->getPosition().h >= UtilConstants::getInstance()->gameZone.y + UtilConstants::getInstance()->gameZone.h)
+	//right
+	if (x >= UtilConstants::getInstance() -> gameZone.x + UtilConstants::getInstance() -> gameZone.w - halfBallSize)
+	{
+		dirX = -abs(dirX);
+		result = true;
+	}
+	//bottom
+	if (y >= UtilConstants::getInstance() -> gameZone.y + UtilConstants::getInstance() -> gameZone.h - halfBallSize)
 	{
 		dirY = -dirY;
-		posY = posY - this->getTextureWithPosition()->getPosition().h;
+		result = true;
+		
+	}
+	//left
+	if (x <= UtilConstants::getInstance() -> gameZone.x + halfBallSize)
+	{
+		dirX = abs(dirX);
 		result = true;
 	}
 	return result;

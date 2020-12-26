@@ -4,7 +4,6 @@
 #include "TextureWithPosition.h"
 #include "Bare.h"
 #include "Wall.hpp"
-#include <math.h>
 
 class Ball {
 public:
