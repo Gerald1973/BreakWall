@@ -3,13 +3,13 @@
 #include <SDL2/SDL.h>
 #include "../include/UtilConstants.h"
 
-TextureWithPosition::TextureWithPosition(SDL_Texture* texture, SDL_Rect position)
+TextureWithPosition::TextureWithPosition(SDL_Texture *texture, SDL_Rect position)
 {
-    this->position=position;
-    this->texture=texture;
+    this->position = position;
+    this->texture = texture;
     int width = 0;
     int height = 0;
-    SDL_QueryTexture(this->getTexture(),NULL,NULL,&width,&height);
+    SDL_QueryTexture(this->getTexture(), NULL, NULL, &width, &height);
     this->originRect.w = width;
     this->originRect.h = height;
     this->originRect.x = 0;
@@ -18,14 +18,14 @@ TextureWithPosition::TextureWithPosition(SDL_Texture* texture, SDL_Rect position
     this->position.h = height;
 }
 
-TextureWithPosition::TextureWithPosition(SDL_Texture* texture,int x, int y, int width, int height)
+TextureWithPosition::TextureWithPosition(SDL_Texture *texture, int x, int y, int width, int height)
 {
     SDL_Rect position;
-    this->position=position;
-    this->texture=texture;
+    this->position = position;
+    this->texture = texture;
     int _width = 0;
     int _height = 0;
-    SDL_QueryTexture(this->getTexture(),NULL,NULL,&_width,&_height);
+    SDL_QueryTexture(this->getTexture(), NULL, NULL, &_width, &_height);
     this->originRect.w = _width;
     this->originRect.h = _height;
     this->originRect.x = 0;
@@ -36,18 +36,18 @@ TextureWithPosition::TextureWithPosition(SDL_Texture* texture,int x, int y, int 
     this->position.h = height;
 }
 
-
 TextureWithPosition::~TextureWithPosition()
 {
     SDL_DestroyTexture(this->texture);
 }
 
-const SDL_Rect & TextureWithPosition::getPosition()
+const SDL_Rect &TextureWithPosition::getPosition()
 {
     return this->position;
 }
 
-const SDL_Rect & TextureWithPosition::getOriginRect(){
+const SDL_Rect &TextureWithPosition::getOriginRect()
+{
     return this->originRect;
 }
 
@@ -67,14 +67,14 @@ void TextureWithPosition::setX(int x)
 void TextureWithPosition::setY(int y)
 {
     position.y = y;
-    if (position.y < UtilConstants::getInstance()->gameZone.y)
-    {
-        position.y = UtilConstants::getInstance()->gameZone.y;
-    }
-    else if (position.y > UtilConstants::getInstance()->gameZone.h)
-    {
-        position.y = UtilConstants::getInstance()->gameZone.h - position.h;
-    }
+    // if (position.y < UtilConstants::getInstance()->gameZone.y)
+    // {
+    //     position.y = UtilConstants::getInstance()->gameZone.y;
+    // }
+    // else if (position.y > UtilConstants::getInstance()->gameZone.h)
+    // {
+    //     position.y = UtilConstants::getInstance()->gameZone.h - position.h;
+    // }
 }
 
 int TextureWithPosition::getX()
@@ -101,7 +101,8 @@ int TextureWithPosition::getY2()
  * 
  * @return int the position of the center of the elements in the main panel on the x axis.
  */
-int TextureWithPosition::getAbsCenterX(){
+int TextureWithPosition::getAbsCenterX()
+{
     return (position.w / 2) + position.x;
 }
 
@@ -110,19 +111,26 @@ int TextureWithPosition::getAbsCenterX(){
  * 
  * @return int int the position of the center of the elements in the main panel on the y axis.
  */
-int TextureWithPosition::getAbsCenterY(){
+int TextureWithPosition::getAbsCenterY()
+{
     return (position.h / 2) + position.y;
 }
 
-
-
-SDL_Texture* TextureWithPosition::getTexture()
+SDL_Texture *TextureWithPosition::getTexture()
 {
 
     return texture;
 }
 
-void TextureWithPosition::setTexture(SDL_Texture* sdlTexture)
+void TextureWithPosition::setTexture(SDL_Texture *sdlTexture)
 {
     texture = sdlTexture;
 }
+
+void TextureWithPosition::setW(int w){
+    this->position.w = w;
+};
+
+void TextureWithPosition::setH(int h){
+    this->position.h = h;
+};

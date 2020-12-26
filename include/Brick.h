@@ -19,6 +19,7 @@ class Brick
         void render(SDL_Renderer* render);
         Mix_Chunk* getSound();
         void setSound(Mix_Chunk* sound);
+        void playDestroy(SDL_Renderer* renderer);
     protected:
     private:
         int value;

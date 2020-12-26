@@ -16,6 +16,8 @@ class TextureWithPosition
         void setTexture(SDL_Texture* sdlTexture);
         void setX(int x);
         void setY(int y);
+        void setW(int w);
+        void setH(int h);
         int getX();
         int getY();
         int getX2();

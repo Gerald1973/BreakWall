@@ -1,5 +1,6 @@
 #include "../include/Ball.h"
 #include <SDL2/SDL_mixer.h>
+#include "../include/CustomEventUtils.hpp"
 
 Ball::Ball()
 {
@@ -13,7 +14,6 @@ Ball::Ball()
 	this->posX = 0;
 	this->posY = 0;
 	this->bare = NULL;
-	this->scoreSegments = NULL;
 }
 
 Ball::~Ball()
@@ -95,10 +95,11 @@ bool Ball::bouncesOnBrick(Brick *brick)
 	{
 		//Destroy the brick and update the score.
 		brick->setDestroyed(true);
-		getScoreSegments()->addScore(brick->getValue());
-		//....
-
 		Mix_PlayChannel(-1, brick->getSound(), 0);
+		CustomEventUtils::getInstance()->postEventBrickTouched(brick);
+		//...
+
+		
 		if (getTextureWithPosition()->getAbsCenterX() < brick->getTextureWithPosition()->getX())
 		{
 			dirX = -dirX;
@@ -191,14 +192,4 @@ bool Ball::bouncesOnBare(Bare *bare)
 		
 	}
 	return result;
-}
-
-ScoreSegments *Ball::getScoreSegments()
-{
-	return this->scoreSegments;
-}
-
-void Ball::setScoreSegments(ScoreSegments *scoreSegments)
-{
-	this->scoreSegments = scoreSegments;
 }

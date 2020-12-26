@@ -1,4 +1,4 @@
-#include "../include/Wall.h"
+#include "../include/Wall.hpp"
 #include <SDL2/SDL.h>
 #include "../include/Brick.h"
 #include "../include/UtilConstants.h"

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include "../include/Brick.h"
 
 #define __CHANNELS__ 16
 #define __FP_SHIFT__ 14
@@ -13,10 +14,12 @@ public:
     {
         SONG_START = 0,
         SONG_STOP = 2,
-        LEVEL_FINISHED = 3
+        LEVEL_FINISHED = 3,
+        BRICK_TOUCHED=40
     };
 
     void postEventSongStop(std::string *message);
+    void postEventBrickTouched(Brick* brick);
 
     static inline CustomEventUtils *getInstance()
     {

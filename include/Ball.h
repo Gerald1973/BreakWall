@@ -1,10 +1,9 @@
 #ifndef BALL_H
 #define BALL_H
 #include <SDL2/SDL.h>
-#include "ScoreSegments.h"
 #include "TextureWithPosition.h"
 #include "Bare.h"
-#include "Wall.h"
+#include "Wall.hpp"
 #include <math.h>
 
 class Ball {
@@ -24,8 +23,6 @@ public:
 	bool bouncesOnBrick(Brick* brick);
 	bool bouncesOnBare(Bare* bare);
 	bool bouncesOnScreen();
-	ScoreSegments* getScoreSegments();
-	void setScoreSegments(ScoreSegments* scoreSegments);
 protected:
 private:
 	TextureWithPosition* textureWithPosition;
@@ -34,7 +31,6 @@ private:
 	float speed;
 	Bare* bare;
 	Wall* wall;
-	ScoreSegments* scoreSegments;
 	float coeffX;
 	float coeffy;
 	float posX;

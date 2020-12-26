@@ -10,7 +10,7 @@
 #include "../include/UtilConstants.h"
 #include "../include/Brick.h"
 #include "../include/Bare.h"
-#include "../include/Wall.h"
+#include "../include/Wall.hpp"
 #include "../include/Ball.h"
 #include "../include/ScoreSegments.h"
 #include <vector>
@@ -173,7 +173,7 @@ int main(int argc, char **argv)
 
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
-    //SDL_SetRelativeMouseMode(SDL_TRUE);
+    SDL_SetRelativeMouseMode(SDL_TRUE);
     const Uint8 *keys = SDL_GetKeyboardState(NULL);
     std::map<int, bool> mapKbd;
     SDL_Window *pWindow = SDL_CreateWindow("BreakWall", 0, 0, GlobalConstants::SCREEN_WIDTH, GlobalConstants::SCREEN_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
@@ -191,7 +191,6 @@ int main(int argc, char **argv)
     wall->build();
     ScoreSegments *scoreSegments = initScoreSegments(renderer);
     Ball *ball = initBall(renderer, wall, bare);
-    ball->setScoreSegments(scoreSegments);
     Background *background = initBackground(renderer);
     bool loop = true;
     //Test amiga mod
@@ -232,6 +231,11 @@ int main(int argc, char **argv)
                     SDL_PauseAudio(1);
                     MicroModSDLPlayer::getInstance()->initialise(&mf[0]);
                     SDL_PauseAudio(0);
+                } else if (event.user.code == CustomEventUtils::Code::BRICK_TOUCHED){
+                    Brick* brick = (Brick*) event.user.data1;
+                    scoreSegments->addScore(brick->getValue());
+                    std::cout << brick->getTextureWithPosition()->getX() << std::endl;
+                    std::cout << brick->getTextureWithPosition()->getY() << std::endl;
                 }
                 break;
             }
