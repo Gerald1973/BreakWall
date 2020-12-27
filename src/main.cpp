@@ -7,6 +7,7 @@
 #include <SDL2/SDL.h>
 #include <iostream>
 #include <map>
+#include <string>
 #include "../include/UtilConstants.h"
 #include "../include/Brick.h"
 #include "../include/Bare.h"
@@ -35,13 +36,13 @@ void displayErrorMessage()
     std::cout << SDL_GetError() << "\n";
 }
 
-SDL_Texture *loadTexture(const char *fileName, SDL_Renderer *renderer)
+SDL_Texture *loadTexture(std::string fileName, SDL_Renderer *renderer)
 {
     SDL_Texture *result = NULL;
-    result = IMG_LoadTexture(renderer, fileName);
+    result = IMG_LoadTexture(renderer, fileName.c_str());
     if (result == NULL)
     {
-        std::cout << "Impossible to load : " << *fileName << " error:" << SDL_GetError() << std::endl;
+        std::cout << "Impossible to load : " << fileName << " error:" << SDL_GetError() << std::endl;
     }
     return result;
 }

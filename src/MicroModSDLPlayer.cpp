@@ -2,6 +2,7 @@
 #include "../include/MicroModUtils.hpp"
 #include "../include/CustomEventUtils.hpp"
 #include <string>
+#include <cstring>
 #include <iostream>
 
 using namespace std;
@@ -170,6 +171,10 @@ MicroModSDLPlayer::MicroModSDLPlayer()
     NUM_CHANNELS = __NUM_CHANNELS__;
     SAMPLING_FREQ = __SAMPLING_FREQ__;
     BUFFER_SAMPLES = __BUFFER_SAMPLES__;
+    filtL = 0;
+    filtR = 0;
+    reverbLen=0;
+    reverbIdx=0;
 }
 
 MicroModSDLPlayer::~MicroModSDLPlayer() {}
