@@ -17,7 +17,7 @@ LIBRARY_PATHS = -LD:\programmation\tools\c\mingw\SDL2\i686-w64-mingw32\lib -LD:\
 #COMPILER_FLAGS specifies the additional compilation options we're using
 # -w suppresses all warnings
 # -Wl,-subsystem,windows gets rid of the console window
-COMPILER_FLAGS = -Wall -Wuninitialized -std=c++17
+COMPILER_FLAGS = -Wall -Wuninitialized -std=c++17 -g
 
 #LINKER_FLAGS specifies the libraries we're linking against
 LINKER_FLAGS = -lmingw32 -lSDL2main -lSDL2 -lSDL2_mixer -lSDL2_image

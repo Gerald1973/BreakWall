@@ -23,7 +23,4 @@ TextureWithPosition* Background::getTextureWithPosition() {
 
 void Background::setTextureWithPosition(TextureWithPosition* textureWithPosition) {
 	this->textureWithPosition = textureWithPosition;
-    
-    //this->textureWithPosition = new TextureWithPosition(
-
 }

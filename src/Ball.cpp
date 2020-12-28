@@ -34,7 +34,6 @@ void Ball::moveBall()
 	bouncesOnBare(getBare());
 	//2 the wall
 	std::vector<std::vector<Brick *>> bricks = getWall()->getBricks();
-	bool brickTouched = false;
 	Brick *touchedBrick = NULL;
 	for (unsigned int j = 0; j < bricks.size(); j++)
 	{

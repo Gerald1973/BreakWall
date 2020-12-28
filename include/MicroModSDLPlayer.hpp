@@ -22,7 +22,6 @@ public:
     int NUM_CHANNELS;
     int SAMPLING_FREQ;
     int BUFFER_SAMPLES;
-    SDL_sem *semaphore;
     long samplesRemaining;
     short reverbBuffer[__REVERB_BUF_LEN__];
     short mixBuffer[__BUFFER_SAMPLES__ * __NUM_CHANNELS__ * __OVERSAMPLE__];

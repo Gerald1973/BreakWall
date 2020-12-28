@@ -114,16 +114,16 @@ long MicroModSDLPlayer::initialise(unsigned char module[])
 {
     SDL_AudioSpec audiospec;
     /* Initialise replay.*/
-    cout << "DEBUG : " << SAMPLING_FREQ << endl;
+    cout << "DEBUG: " << SAMPLING_FREQ << endl;
     long result = MicroModUtils::getInstance()->initialise(module, SAMPLING_FREQ * OVERSAMPLE);
     if (result == 0)
     {
-        //printModuleInfo();
-        /* Calculate song length. */
-        samplesRemaining = MicroModUtils::getInstance()->calculateSongDuration();
-        printf("Song Duration: %li seconds.\n", samplesRemaining / (SAMPLING_FREQ * OVERSAMPLE));
-        fflush(NULL);
-        /* Initialise SDL_AudioSpec Structure. */
+       samplesRemaining = MicroModUtils::getInstance()->calculateSongDuration();
+       long duration = samplesRemaining / (SAMPLING_FREQ * OVERSAMPLE);
+       cout << "DEBUG: samples remaining  : " << samplesRemaining << endl;
+       cout << "Song Duration             : " << duration << endl;
+       fflush(NULL);
+       /* Initialise SDL_AudioSpec Structure. */
         memset(&audiospec, 0, sizeof(SDL_AudioSpec));
         audiospec.freq = SAMPLING_FREQ;
         audiospec.format = AUDIO_S16SYS;
@@ -152,15 +152,6 @@ long MicroModSDLPlayer::playModule(unsigned char module[])
     {
         /* Begin playback. */
         SDL_PauseAudio(0);
-        /* Wait for playback to finish. */
-        semaphore = SDL_CreateSemaphore(0);
-        result = SDL_SemWait(semaphore);
-        if (result != 0)
-        {
-            fprintf(stderr, "SDL_SemWait() failed.\n");
-        }
-        /* Close audio device and shut down SDL. */
-        SDL_CloseAudio();
     }
     return result;
 }
@@ -175,6 +166,7 @@ MicroModSDLPlayer::MicroModSDLPlayer()
     filtR = 0;
     reverbLen=0;
     reverbIdx=0;
+    samplesRemaining=0;
 }
 
 MicroModSDLPlayer::~MicroModSDLPlayer() {}

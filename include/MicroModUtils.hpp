@@ -81,7 +81,7 @@ public:
     long calculateModFileLen(unsigned char moduleHeader[]);
     long initialise(unsigned char data[], long sampling_rate);
     std::string getInstrumentName(long instrument);
-    long calculateSongDuration(void);
+    long calculateSongDuration();
     void setPosition(long pos);
     long muteChannel(long channel);
     void setGain(long value);

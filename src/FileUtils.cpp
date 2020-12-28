@@ -10,7 +10,8 @@ using namespace std;
 int FileUtils::getSize(std::string fileName)
 {
     unsigned int result = 0;
-    ifstream infile(fileName, std::ifstream::binary);
+    ifstream infile;
+    infile.open(fileName.c_str(), ios::in | ios::binary);
     if (infile)
     {
         infile.seekg(0, ios_base::end);
@@ -21,13 +22,15 @@ int FileUtils::getSize(std::string fileName)
         cout << "Error: the file " << fileName << "doesn't exist." << endl;
         result = -1;
     }
+    infile.close();
     return result;
 }
 
 vector<unsigned char> FileUtils::readFile(string fileName)
 {
     vector<unsigned char> results;
-    ifstream infile(fileName);
+    ifstream infile;
+    infile.open(fileName.c_str(), ios::in | ios::binary);
     if (infile)
     {
         unsigned char tmp = infile.get();
@@ -36,12 +39,13 @@ vector<unsigned char> FileUtils::readFile(string fileName)
             results.push_back(tmp);
             tmp = infile.get();
         } while (!infile.eof());
+
     }
     else
     {
         cout << "Error: the file " << fileName << "doesn't exist." << endl;
     }
-
+    infile.close();
     return results;
 }
 
@@ -61,6 +65,7 @@ vector<unsigned char> FileUtils::readFile(std::string fileName, unsigned int fro
     {
         cout << "Error: the file " << fileName << "doesn't exist." << endl;
     }
+    infile.close();
     return results;
 }
 

@@ -198,6 +198,7 @@ int main(int argc, char **argv)
     std::string song = "worldofw.mod";
     std::vector<unsigned char> moduleHeader = FileUtils::getInstance()->readFile(song,0,1084);
     std::vector<unsigned char> mf = FileUtils::getInstance()->readFile(song);
+    std::cout << "DEBUG : file size          :" << mf.size() << std::endl;
     std::cout << "DEBUG : readFromTO         :" << moduleHeader.size() << std::endl;
     std::cout << "DEBUG : micromod version   :" << MicroModUtils::getInstance()->getVersion() << std::endl;
     std::cout << "DEBUG : number of channel  :" << MicroModUtils::getInstance()->calculateNumChannels(&moduleHeader[0]) << std::endl;
