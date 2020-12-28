@@ -13,3 +13,6 @@ breakwall
 /libvorbis-0.dll
 /libvorbisfile-3.dll
 /libwebp-7.dll
+/SDL2_image.dll
+/SDL2_mixer.dll
+/SDL2.dll
