@@ -1,4 +1,5 @@
 #include "../include/Bare.h"
+
 #include <iostream>
 
 Bare::Bare()

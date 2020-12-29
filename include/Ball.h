@@ -1,8 +1,9 @@
 #ifndef BALL_H
 #define BALL_H
 #include <SDL2/SDL.h>
-#include "TextureWithPosition.h"
+
 #include "Bare.h"
+#include "TextureWithPosition.h"
 #include "Wall.hpp"
 
 class Ball {

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
-#include "../include/Brick.h"
+
+#include "Brick.h"
 
 #define __CHANNELS__ 16
 #define __FP_SHIFT__ 14

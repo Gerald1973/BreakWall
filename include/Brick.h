@@ -1,9 +1,9 @@
 #ifndef BRICK_H
 #define BRICK_H
-#include "TextureWithPosition.h"
 #include <iostream>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
+#include "TextureWithPosition.h"
 
 class Brick
 {

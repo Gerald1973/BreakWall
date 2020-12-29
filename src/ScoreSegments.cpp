@@ -5,9 +5,10 @@
  *      Author: Papa
  */
 
-#include "../include/ScoreSegments.h"
-#include "../include/GlobalConstants.h"
+#include "../include/ScoreSegments.hpp"
+
 #include <math.h>
+#include "../include/GlobalConstants.h"
 
 ScoreSegments::ScoreSegments()
 {

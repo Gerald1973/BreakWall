@@ -1,7 +1,8 @@
 #include "../include/Ball.h"
+
 #include <SDL2/SDL_mixer.h>
-#include "../include/CustomEventUtils.hpp"
 #include <cmath> 
+#include "../include/CustomEventUtils.hpp"
 
 Ball::Ball()
 {

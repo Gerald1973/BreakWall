@@ -1,9 +1,10 @@
 #include "../include/MicroModSDLPlayer.hpp"
-#include "../include/MicroModUtils.hpp"
-#include "../include/CustomEventUtils.hpp"
+
 #include <string>
 #include <cstring>
 #include <iostream>
+#include "../include/CustomEventUtils.hpp"
+#include "../include/MicroModUtils.hpp"
 
 using namespace std;
 

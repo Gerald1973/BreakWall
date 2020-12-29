@@ -1,5 +1,7 @@
 #include "../include/Brick.h"
+
 #include "SDL2/SDL.h"
+
 #include "../include/GlobalConstants.h"
 
 Brick::Brick()

@@ -1,5 +1,4 @@
-#include "../include/Background.h"
-#include "../include/TextureWithPosition.h"
+#include "../include/Background.hpp"
 
 Background::Background()
 {

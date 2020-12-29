@@ -1,4 +1,5 @@
 #include "../include/UtilConstants.h"
+
 #include "../include/GlobalConstants.h"
 
 UtilConstants *UtilConstants::instance = NULL;

@@ -5,7 +5,8 @@
  *      Author: Papa
  */
 #include <SDL2/SDL.h>
-#include "TextureWithPosition.h"
+
+#include "../include/TextureWithPosition.h"
 
 class Background
 {

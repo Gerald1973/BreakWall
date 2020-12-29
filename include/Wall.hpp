@@ -1,10 +1,10 @@
 #ifndef WALL_H
 #define WALL_H
-#include "Brick.h"
 #include <SDL2/SDL.h>
-#include "UtilConstants.h"
-#include "GlobalConstants.h"
 #include <vector>
+#include "Brick.h"
+#include "GlobalConstants.h"
+#include "UtilConstants.h"
 
 class Wall
 {

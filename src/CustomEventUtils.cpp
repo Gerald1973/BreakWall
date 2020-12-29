@@ -1,4 +1,5 @@
 #include "../include/CustomEventUtils.hpp"
+
 #include <iostream>
 #include <string>
 #include <SDL2/SDL.h>

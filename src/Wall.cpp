@@ -1,8 +1,10 @@
 #include "../include/Wall.hpp"
+
 #include <SDL2/SDL.h>
+
 #include "../include/Brick.h"
-#include "../include/UtilConstants.h"
 #include "../include/GlobalConstants.h"
+#include "../include/UtilConstants.h"
 Wall::Wall()
 {
 }

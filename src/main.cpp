@@ -1,3 +1,4 @@
+
 #ifdef __cplusplus
 #include <cstdlib>
 #else
@@ -13,16 +14,17 @@
 #include "../include/Bare.h"
 #include "../include/Wall.hpp"
 #include "../include/Ball.h"
-#include "../include/ScoreSegments.h"
+#include "../include/ScoreSegments.hpp"
 #include <vector>
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_image.h>
-#include "../include/Background.h"
+#include "../include/Background.hpp"
 #include "../include/GlobalConstants.h"
 #include "../include/FileUtils.hpp"
 #include "../include/MicroModUtils.hpp"
 #include "../include/MicroModSDLPlayer.hpp"
 #include "../include/CustomEventUtils.hpp"
+#include "../include/Title.hpp"
 
 Brick *wall[20][30];
 int dirX = 1;
@@ -54,6 +56,7 @@ void initTextureMap(SDL_Renderer *renderer)
     mapTextures["brickRed"] = loadTexture("brickRed.bmp", renderer);
     mapTextures["segments"] = loadTexture("segments_48_64.png", renderer);
     mapTextures["background001"] = loadTexture("winter_01.jpg", renderer);
+    mapTextures["title"]=loadTexture("breakwall_title.png", renderer);
 }
 
 Mix_Chunk *loadSoundEffect(const char *fileName)
@@ -133,6 +136,19 @@ Background *initBackground(SDL_Renderer *renderer)
     return result;
 }
 
+Title *initTitle(SDL_Renderer *renderer)
+{
+	Title *result = new Title();
+    TextureWithPosition *textureWithPosition = new TextureWithPosition(
+        mapTextures["title"],
+        0,
+        0,
+		GlobalConstants::SCREEN_WIDTH,
+        GlobalConstants::SCREEN_HEIGHT);
+    result->setTextureWithPosition(textureWithPosition);
+    return result;
+}
+
 ScoreSegments *initScoreSegments(SDL_Renderer *renderer)
 {
     ScoreSegments *result = new ScoreSegments();
@@ -193,6 +209,7 @@ int main(int argc, char **argv)
     ScoreSegments *scoreSegments = initScoreSegments(renderer);
     Ball *ball = initBall(renderer, wall, bare);
     Background *background = initBackground(renderer);
+    Title *title = initTitle(renderer);
     bool loop = true;
     //Test amiga mod
     std::string song = "worldofw.mod";
@@ -246,7 +263,9 @@ int main(int argc, char **argv)
         wall->render(renderer);
         bare->render(renderer);
         ball->render(renderer);
+        title->render(renderer);
         scoreSegments->render(renderer);
+
         SDL_SetRenderTarget(renderer, NULL);
         SDL_RenderCopy(renderer, tmpTexture, NULL, NULL);
         SDL_RenderPresent(renderer);
