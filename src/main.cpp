@@ -150,20 +150,15 @@ void quit() {
 }
 
 int main(int argc, char **argv) {
-
 	InitUtils::getInstance()->initRenderer();
 	SDL_Renderer *renderer = InitUtils::getInstance()->getRenderer();
 	SDL_Window *pWindow = InitUtils::getInstance()->getPWindow();
-
+	SDL_Texture *tmpTexture = InitUtils::getInstance()->getBaseTexture();
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
 	std::map<int, bool> mapKbd;
-
-	//SDL_Renderer *renderer = SDL_CreateRenderer(pWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE | SDL_RENDERER_PRESENTVSYNC);
-
 	SDL_Event event;
-	SDL_Texture *tmpTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_TARGET, GlobalConstants::SCREEN_WIDTH,
-			GlobalConstants::SCREEN_HEIGHT);
+
 	initSoundMap();
 	initTextureMap(renderer);
 	Bare *bare = initBare(renderer);

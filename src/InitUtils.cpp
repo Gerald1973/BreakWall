@@ -14,6 +14,7 @@
 InitUtils::InitUtils() {
 	renderer = NULL;
 	pWindow = NULL;
+	baseTexture = NULL;
 }
 
 int InitUtils::initRenderer() {
@@ -35,6 +36,8 @@ int InitUtils::initRenderer() {
 		return 1;
 	}
 	renderer = SDL_CreateRenderer(pWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE | SDL_RENDERER_PRESENTVSYNC);
+	baseTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_TARGET, GlobalConstants::SCREEN_WIDTH,
+				GlobalConstants::SCREEN_HEIGHT);
 	return 0;
 }
 
@@ -44,6 +47,10 @@ SDL_Renderer* InitUtils::getRenderer() {
 
 SDL_Window* InitUtils::getPWindow() {
 	return pWindow;
+}
+
+SDL_Texture* InitUtils::getBaseTexture() {
+	return baseTexture;
 }
 
 InitUtils::~InitUtils() {

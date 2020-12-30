@@ -20,13 +20,14 @@ public:
 		}
 		return instance;
 	}
-
 	SDL_Renderer* getRenderer();
+	SDL_Texture* getBaseTexture();
 	SDL_Window* getPWindow();
 
 private:
 	SDL_Renderer *renderer;
 	SDL_Window *pWindow;
+	SDL_Texture *baseTexture;
 	inline static InitUtils *instance;
 	InitUtils();
 	virtual ~InitUtils();
