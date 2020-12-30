@@ -14,7 +14,7 @@ class Wall
         std::vector< std::vector<Brick*> > getBricks();
         void setBricks(std::vector<std::vector<Brick*> > bricks);
         void build();
-        void render(SDL_Renderer *renderer);
+        void render();
     protected:
     private:
         std::vector< std::vector<Brick*> > bricks;

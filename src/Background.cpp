@@ -1,4 +1,5 @@
 #include "../include/Background.hpp"
+#include "../include/InitUtils.hpp"
 
 Background::Background()
 {
@@ -10,9 +11,9 @@ Background::~Background()
     delete (textureWithPosition);
 }
 
-void Background::render(SDL_Renderer *renderer)
+void Background::render()
 {
-    SDL_RenderCopy(renderer, getTextureWithPosition()->getTexture(), NULL,
+    SDL_RenderCopy(InitUtils::getInstance()->getRenderer(), getTextureWithPosition()->getTexture(), NULL,
                    &(getTextureWithPosition()->getPosition()));
 }
 

@@ -16,10 +16,10 @@ class Brick
         void setDestroyed(bool destroyed);
         TextureWithPosition* getTextureWithPosition();
         void setTextureWithPosition(TextureWithPosition* textureWithPosition);
-        void render(SDL_Renderer* render);
+        void render();
         Mix_Chunk* getSound();
         void setSound(Mix_Chunk* sound);
-        void playDestroy(SDL_Renderer* renderer);
+        void playDestroy();
     protected:
     private:
         int value;

@@ -49,7 +49,7 @@ void initSoundMap() {
 	InitUtils::getInstance()->addSoundEffect("bare.wav", "brick");
 }
 
-Bare* initBare(SDL_Renderer *renderer) {
+Bare* initBare() {
 	Bare *result = new Bare();
 	SDL_Rect position;
 	TextureWithPosition *textureWithPosition = new TextureWithPosition(InitUtils::getInstance()->getMapTextures()["bare"], position);
@@ -60,7 +60,7 @@ Bare* initBare(SDL_Renderer *renderer) {
 	return result;
 }
 
-Wall* initWall(SDL_Renderer *renderer) {
+Wall* initWall() {
 	Wall *result = new Wall();
 	std::vector<std::vector<Brick*>> lines;
 	for (int y = 0; y < GlobalConstants::MAX_NUMBER_OF_BRICKS_ON_Y; y++) {
@@ -79,7 +79,7 @@ Wall* initWall(SDL_Renderer *renderer) {
 	return result;
 }
 
-Ball* initBall(SDL_Renderer *renderer, Wall *wall, Bare *bare) {
+Ball* initBall(Wall *wall, Bare *bare) {
 	SDL_Rect rect;
 	rect.x = UtilConstants::getInstance()->gameZone.w / 2 + UtilConstants::getInstance()->gameZone.x;
 	rect.y = (GlobalConstants::MAX_NUMBER_OF_BRICKS_ON_Y + 1) * GlobalConstants::BRICK_HEIGHT + UtilConstants::getInstance()->gameZone.y;
@@ -91,7 +91,7 @@ Ball* initBall(SDL_Renderer *renderer, Wall *wall, Bare *bare) {
 	return ball;
 }
 
-Background* initBackground(SDL_Renderer *renderer) {
+Background* initBackground() {
 	Background *result = new Background();
 	TextureWithPosition *textureWithPosition = new TextureWithPosition(InitUtils::getInstance()->getMapTextures()["background001"],
 			UtilConstants::getInstance()->gameZone.x, UtilConstants::getInstance()->gameZone.y, UtilConstants::getInstance()->gameZone.w,
@@ -100,7 +100,7 @@ Background* initBackground(SDL_Renderer *renderer) {
 	return result;
 }
 
-Title* initTitle(SDL_Renderer *renderer) {
+Title* initTitle() {
 	Title *result = new Title();
 	TextureWithPosition *textureWithPosition = new TextureWithPosition(InitUtils::getInstance()->getMapTextures()["title"], 0, 0, GlobalConstants::SCREEN_WIDTH,
 			GlobalConstants::SCREEN_HEIGHT);
@@ -108,18 +108,14 @@ Title* initTitle(SDL_Renderer *renderer) {
 	return result;
 }
 
-ScoreSegments* initScoreSegments(SDL_Renderer *renderer) {
+ScoreSegments* initScoreSegments() {
 	ScoreSegments *result = new ScoreSegments();
 	result->setTexture(InitUtils::getInstance()->getMapTextures()["segments"]);
 	return result;
 }
 
-void quit() {
-	InitUtils::getInstance()->destroy();
-}
 
 int main(int argc, char **argv) {
-	SDL_Renderer *renderer = InitUtils::getInstance()->getRenderer();
 	SDL_Window *pWindow = InitUtils::getInstance()->getPWindow();
 	SDL_Texture *tmpTexture = InitUtils::getInstance()->getBaseTexture();
 	SDL_SetRelativeMouseMode(SDL_TRUE);
@@ -129,13 +125,13 @@ int main(int argc, char **argv) {
 
 	initSoundMap();
 	initTextureMap();
-	Bare *bare = initBare(renderer);
-	Wall *wall = initWall(renderer);
+	Bare *bare = initBare();
+	Wall *wall = initWall();
 	wall->build();
-	ScoreSegments *scoreSegments = initScoreSegments(renderer);
-	Ball *ball = initBall(renderer, wall, bare);
-	Background *background = initBackground(renderer);
-	Title *title = initTitle(renderer);
+	ScoreSegments *scoreSegments = initScoreSegments();
+	Ball *ball = initBall(wall, bare);
+	Background *background = initBackground();
+	Title *title = initTitle();
 	bool loop = true;
 	//Test amiga mod
 	InitUtils::getInstance()->addMod("worldofw.mod","mod_001");
@@ -144,8 +140,8 @@ int main(int argc, char **argv) {
 	SDL_PauseAudio(0);
 	//End test
 	while (loop) {
-		SDL_SetRenderTarget(renderer, tmpTexture);
-		SDL_RenderClear(renderer);
+		SDL_SetRenderTarget(InitUtils::getInstance()->getRenderer(), tmpTexture);
+		SDL_RenderClear(InitUtils::getInstance()->getRenderer());
 		ball->moveBall();
 		while (SDL_PollEvent(&event)) {
 			switch (event.type) {
@@ -175,18 +171,18 @@ int main(int argc, char **argv) {
 		if (keys[SDL_SCANCODE_ESCAPE]) {
 			loop = false;
 		}
-		background->render(renderer);
-		wall->render(renderer);
-		bare->render(renderer);
-		ball->render(renderer);
-		title->render(renderer);
-		scoreSegments->render(renderer);
+		background->render();
+		wall->render();
+		bare->render();
+		ball->render();
+		title->render();
+		scoreSegments->render();
 
-		SDL_SetRenderTarget(renderer, NULL);
-		SDL_RenderCopy(renderer, tmpTexture, NULL, NULL);
-		SDL_RenderPresent(renderer);
+		SDL_SetRenderTarget(InitUtils::getInstance()->getRenderer(), NULL);
+		SDL_RenderCopy(InitUtils::getInstance()->getRenderer(), tmpTexture, NULL, NULL);
+		SDL_RenderPresent(InitUtils::getInstance()->getRenderer());
 	}
 	SDL_DestroyWindow(pWindow);
-	quit();
+	InitUtils::getInstance()->destroy();
 	return 0;
 }

@@ -6,6 +6,7 @@
  */
 
 #include "../include/Title.hpp"
+#include "../include/InitUtils.hpp"
 
 Title::Title() {
 	this->textureWithPosition = NULL;
@@ -15,13 +16,11 @@ Title::~Title() {
 	delete (textureWithPosition);
 }
 
-void Title::render(SDL_Renderer *renderer) {
-	SDL_RenderCopy(renderer, getTextureWithPosition()->getTexture(), NULL,
+void Title::render() {
+	SDL_RenderCopy(InitUtils::getInstance()->getRenderer(), getTextureWithPosition()->getTexture(), NULL,
 			&(getTextureWithPosition()->getPosition()));
 }
 
-void Title::render(SDL_Renderer *renderer, int score) {
-}
 TextureWithPosition* Title::getTextureWithPosition() {
 	return this->textureWithPosition;
 }

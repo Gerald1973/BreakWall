@@ -1,7 +1,6 @@
 #include "../include/Brick.h"
-
 #include "SDL2/SDL.h"
-
+#include "../include/InitUtils.hpp"
 #include "../include/GlobalConstants.h"
 
 Brick::Brick()
@@ -48,20 +47,20 @@ void Brick::setDestroyed(bool destroyed)
 	this->destroyed = destroyed;
 }
 
-void Brick::render(SDL_Renderer *renderer)
+void Brick::render()
 {
 	if (!isDestroyed())
 	{
-		SDL_RenderCopy(renderer, getTextureWithPosition()->getTexture(), NULL,
+		SDL_RenderCopy(InitUtils::getInstance()->getRenderer(), getTextureWithPosition()->getTexture(), NULL,
 					   &(getTextureWithPosition()->getPosition()));
 	}
 	else
 	{
-		playDestroy(renderer);
+		playDestroy();
 	}
 }
 
-void Brick::playDestroy(SDL_Renderer *renderer)
+void Brick::playDestroy()
 {
 
 	int y = getTextureWithPosition()->getY();
@@ -76,7 +75,7 @@ void Brick::playDestroy(SDL_Renderer *renderer)
 		h = h + deadDirection;
 		getTextureWithPosition()->setY(y);
 		getTextureWithPosition()->setH(h);
-		SDL_RenderCopy(renderer, getTextureWithPosition()->getTexture(), NULL,
+		SDL_RenderCopy(InitUtils::getInstance()->getRenderer(), getTextureWithPosition()->getTexture(), NULL,
 					   &(getTextureWithPosition()->getPosition()));
 	}
 }

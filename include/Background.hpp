@@ -13,8 +13,7 @@ class Background
 public:
 	Background();
 	virtual ~Background();
-	void render(SDL_Renderer *renderer);
-	void render(SDL_Renderer *renderer, int score);
+	void render();
 	TextureWithPosition *getTextureWithPosition();
 	void setTextureWithPosition(TextureWithPosition *textureWithPosition);
 

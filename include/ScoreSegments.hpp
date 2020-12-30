@@ -13,8 +13,8 @@ class ScoreSegments {
 public:
 	ScoreSegments();
 	virtual ~ScoreSegments();
-	void render(SDL_Renderer* renderer);
-	void render(SDL_Renderer* renderer,int score);
+	void render();
+	void render(int score);
 	void setTexture(SDL_Texture* sdlTexture);
 	SDL_Rect calculateSrcRect(int figure );
 	void addScore(int value);

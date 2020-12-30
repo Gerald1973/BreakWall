@@ -3,6 +3,7 @@
 #include <SDL2/SDL_mixer.h>
 #include <cmath> 
 #include "../include/CustomEventUtils.hpp"
+#include "../include/InitUtils.hpp"
 
 Ball::Ball()
 {
@@ -23,9 +24,9 @@ Ball::~Ball()
 	delete (textureWithPosition);
 }
 
-void Ball::render(SDL_Renderer *renderer)
+void Ball::render()
 {
-	SDL_RenderCopy(renderer, getTextureWithPosition()->getTexture(), NULL,
+	SDL_RenderCopy(InitUtils::getInstance()->getRenderer(), getTextureWithPosition()->getTexture(), NULL,
 				   &(getTextureWithPosition()->getPosition()));
 }
 

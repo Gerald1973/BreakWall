@@ -6,12 +6,11 @@
  */
 
 #include "../include/ScoreSegments.hpp"
-
 #include <math.h>
 #include "../include/GlobalConstants.h"
+#include "../include/InitUtils.hpp"
 
-ScoreSegments::ScoreSegments()
-{
+ScoreSegments::ScoreSegments() {
 	this->posX = 0;
 	this->posY = GlobalConstants::SCREEN_HEIGHT - GlobalConstants::SEVEN_SEGMENT_HEIGHT;
 	this->sdlTexture = NULL;
@@ -19,31 +18,23 @@ ScoreSegments::ScoreSegments()
 	this->score = 0;
 }
 
-ScoreSegments::~ScoreSegments()
-{
+ScoreSegments::~ScoreSegments() {
 	// TODO Auto-generated destructor stub
 }
 
-void ScoreSegments::render(SDL_Renderer *renderer)
-{
-
-	render(renderer, this->score);
+void ScoreSegments::render() {
+	render(this->score);
 }
 
-void ScoreSegments::render(SDL_Renderer *renderer, int score)
-{
+void ScoreSegments::render(int score) {
 	SDL_Rect srcRect;
 	SDL_Rect dstRect;
 	int tmp = score;
-	for (int i = numberOfDigit; i > 0; i--)
-	{
-		if (tmp > 0)
-		{
+	for (int i = numberOfDigit; i > 0; i--) {
+		if (tmp > 0) {
 			srcRect = calculateSrcRect(tmp % 10);
 			tmp = tmp / 10;
-		}
-		else
-		{
+		} else {
 			srcRect.x = 0;
 			srcRect.y = 0;
 			srcRect.h = GlobalConstants::SEVEN_SEGMENT_HEIGHT;
@@ -53,17 +44,15 @@ void ScoreSegments::render(SDL_Renderer *renderer, int score)
 		dstRect.y = GlobalConstants::SCREEN_HEIGHT - GlobalConstants::SEVEN_SEGMENT_HEIGHT;
 		dstRect.w = GlobalConstants::SEVEN_SEGMENT_WIDTH;
 		dstRect.h = GlobalConstants::SEVEN_SEGMENT_HEIGHT;
-		SDL_RenderCopy(renderer, this->sdlTexture, &srcRect, &dstRect);
+		SDL_RenderCopy(InitUtils::getInstance()->getRenderer(), this->sdlTexture, &srcRect, &dstRect);
 	}
 }
 
-void ScoreSegments::setTexture(SDL_Texture *sdlTexture)
-{
+void ScoreSegments::setTexture(SDL_Texture *sdlTexture) {
 	this->sdlTexture = sdlTexture;
 }
 
-SDL_Rect ScoreSegments::calculateSrcRect(int figure)
-{
+SDL_Rect ScoreSegments::calculateSrcRect(int figure) {
 	SDL_Rect result;
 	result.x = (figure + 1) * GlobalConstants::SEVEN_SEGMENT_WIDTH;
 	result.y = 0;
@@ -72,7 +61,6 @@ SDL_Rect ScoreSegments::calculateSrcRect(int figure)
 	return result;
 }
 
-void ScoreSegments::addScore(int value)
-{
+void ScoreSegments::addScore(int value) {
 	this->score = this->score + value;
 }

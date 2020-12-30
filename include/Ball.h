@@ -10,7 +10,7 @@ class Ball {
 public:
 	Ball();
 	virtual ~Ball();
-	void render(SDL_Renderer* renderer);
+	void render();
 	void moveBall();
 	Bare* getBare();
 	void setBare(Bare* bare);

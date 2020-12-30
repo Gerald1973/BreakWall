@@ -5,6 +5,8 @@
 #include "../include/Brick.h"
 #include "../include/GlobalConstants.h"
 #include "../include/UtilConstants.h"
+#include "../include/InitUtils.hpp"
+
 Wall::Wall()
 {
 }
@@ -23,11 +25,11 @@ void Wall::build()
     }
 }
 
-void Wall::render(SDL_Renderer *renderer)
+void Wall::render()
 {
     for (unsigned int j = 0; j < bricks.size(); j++){
         for (unsigned int i = 0; i < bricks[j].size(); i ++){
-            bricks[j][i]->render(renderer);
+            bricks[j][i]->render();
         }
     }
 }

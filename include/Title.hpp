@@ -16,8 +16,7 @@ class Title {
 public:
 	Title();
 	virtual ~Title();
-	void render(SDL_Renderer *renderer);
-	void render(SDL_Renderer *renderer, int score);
+	void render();
 	TextureWithPosition* getTextureWithPosition();
 	void setTextureWithPosition(TextureWithPosition *textureWithPosition);
 private:

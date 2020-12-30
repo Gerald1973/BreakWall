@@ -12,7 +12,7 @@ class Bare
         virtual ~Bare();
         void setTextureWithPosition(TextureWithPosition* textureWithPosition);
         TextureWithPosition* getTextureWithPosition();
-        void render(SDL_Renderer *renderer);
+        void render();
         Mix_Chunk* getSound();
         void setSound(Mix_Chunk* sound);
     protected:
