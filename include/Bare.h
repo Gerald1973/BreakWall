@@ -8,6 +8,7 @@
 class Bare
 {
     public:
+		static inline std::string TEXTURE_KEY = "bare";
         Bare();
         virtual ~Bare();
         void setTextureWithPosition(TextureWithPosition* textureWithPosition);

@@ -1,16 +1,3 @@
-#include "SDL2/SDL_audio.h"
-#include "SDL2/SDL_error.h"
-#include "SDL2/SDL_events.h"
-#include "SDL2/SDL_keyboard.h"
-#include "SDL2/SDL_main.h"
-#include "SDL2/SDL_mouse.h"
-#include "SDL2/SDL_rect.h"
-#include "SDL2/SDL_render.h"
-#include "SDL2/SDL_scancode.h"
-#include "SDL2/SDL_stdinc.h"
-#include "SDL2/SDL_video.h"
-#include "TextureWithPosition.h"
-
 #ifdef __cplusplus
 #include <cstdlib>
 #else
@@ -18,6 +5,7 @@
 #endif
 
 #include <SDL2/SDL.h>
+#include "../include/TextureWithPosition.h"
 #include <iostream>
 #include <map>
 #include <string>
@@ -49,12 +37,7 @@ void displayErrorMessage() {
 }
 
 void initTextureMap() {
-	InitUtils::getInstance()->addTexture("ball.png", "ball");
-	InitUtils::getInstance()->addTexture("bare.png", "bare");
-	InitUtils::getInstance()->addTexture("brickRed.bmp", "brickRed");
-	InitUtils::getInstance()->addTexture("segments_48_64.png", "segments");
-	InitUtils::getInstance()->addTexture("winter_01.jpg", "background001");
-	InitUtils::getInstance()->addTexture("breakwall_title.png", "title");
+
 }
 
 void initSoundMap() {
@@ -65,7 +48,7 @@ void initSoundMap() {
 Bare* initBare() {
 	Bare *result = new Bare();
 	SDL_Rect position;
-	TextureWithPosition *textureWithPosition = new TextureWithPosition(InitUtils::getInstance()->getMapTextures()["bare"], position);
+	TextureWithPosition *textureWithPosition = new TextureWithPosition(InitUtils::getInstance()->getMapTextures()[Bare::TEXTURE_KEY], position);
 	textureWithPosition->setX((UtilConstants::getInstance()->gameZone.w - textureWithPosition->getPosition().w) / 2);
 	textureWithPosition->setY(UtilConstants::getInstance()->gameZone.h - textureWithPosition->getPosition().h);
 	result->setTextureWithPosition(textureWithPosition);
@@ -82,7 +65,7 @@ Wall* initWall() {
 			Brick *brick = new Brick();
 			brick->setSound(InitUtils::getInstance()->getMapSounds()["brick"]);
 			SDL_Rect tmpRect;
-			TextureWithPosition *textureWithPosition = new TextureWithPosition(InitUtils::getInstance()->getMapTextures()["brickRed"], tmpRect);
+			TextureWithPosition *textureWithPosition = new TextureWithPosition(InitUtils::getInstance()->getMapTextures()[Brick::TEXTURE_KEY], tmpRect);
 			brick->setTextureWithPosition(textureWithPosition);
 			columns.push_back(brick);
 		}
@@ -93,11 +76,11 @@ Wall* initWall() {
 }
 
 Ball* initBall(Wall *wall, Bare *bare) {
+	Ball *ball = new Ball();
 	SDL_Rect rect;
 	rect.x = UtilConstants::getInstance()->gameZone.w / 2 + UtilConstants::getInstance()->gameZone.x;
 	rect.y = (GlobalConstants::MAX_NUMBER_OF_BRICKS_ON_Y + 1) * GlobalConstants::BRICK_HEIGHT + UtilConstants::getInstance()->gameZone.y;
-	TextureWithPosition *textureWithPosition = new TextureWithPosition(InitUtils::getInstance()->getMapTextures()["ball"], rect);
-	Ball *ball = new Ball();
+	TextureWithPosition *textureWithPosition = new TextureWithPosition(InitUtils::getInstance()->getMapTextures()[Ball::TEXTURE_KEY], rect);
 	ball->setTextureWithPosition(textureWithPosition);
 	ball->setBare(bare);
 	ball->setWall(wall);
@@ -106,7 +89,7 @@ Ball* initBall(Wall *wall, Bare *bare) {
 
 Background* initBackground() {
 	Background *result = new Background();
-	TextureWithPosition *textureWithPosition = new TextureWithPosition(InitUtils::getInstance()->getMapTextures()["background001"],
+	TextureWithPosition *textureWithPosition = new TextureWithPosition(InitUtils::getInstance()->getMapTextures()[Background::TEXTURE_KEY],
 			UtilConstants::getInstance()->gameZone.x, UtilConstants::getInstance()->gameZone.y, UtilConstants::getInstance()->gameZone.w,
 			UtilConstants::getInstance()->gameZone.h);
 	result->setTextureWithPosition(textureWithPosition);
@@ -115,18 +98,17 @@ Background* initBackground() {
 
 Title* initTitle() {
 	Title *result = new Title();
-	TextureWithPosition *textureWithPosition = new TextureWithPosition(InitUtils::getInstance()->getMapTextures()["title"], 0, 0, GlobalConstants::SCREEN_WIDTH,
-			GlobalConstants::SCREEN_HEIGHT);
+	TextureWithPosition *textureWithPosition = new TextureWithPosition(InitUtils::getInstance()->getMapTextures()[Title::TEXTURE_KEY], 0, 0,
+			GlobalConstants::SCREEN_WIDTH, GlobalConstants::SCREEN_HEIGHT);
 	result->setTextureWithPosition(textureWithPosition);
 	return result;
 }
 
 ScoreSegments* initScoreSegments() {
 	ScoreSegments *result = new ScoreSegments();
-	result->setTexture(InitUtils::getInstance()->getMapTextures()["segments"]);
+	result->setTexture(InitUtils::getInstance()->getMapTextures()[ScoreSegments::TEXTURE_KEY]);
 	return result;
 }
-
 
 int main(int argc, char **argv) {
 	SDL_Window *pWindow = InitUtils::getInstance()->getPWindow();
@@ -146,8 +128,8 @@ int main(int argc, char **argv) {
 	Title *title = initTitle();
 	bool loop = true;
 	//Test amiga mod
-	InitUtils::getInstance()->addMod("worldofw.mod","mod_001");
-	std::vector<unsigned char> mf =  InitUtils::getInstance()->getMapMods()["mod_001"];
+	InitUtils::getInstance()->addMod("worldofw.mod", "mod_001");
+	std::vector<unsigned char> mf = InitUtils::getInstance()->getMapMods()["mod_001"];
 	MicroModSDLPlayer::getInstance()->initialise(&mf[0]);
 	SDL_PauseAudio(0);
 	//End test

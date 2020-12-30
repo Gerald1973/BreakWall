@@ -1,6 +1,7 @@
 #ifndef BALL_H
 #define BALL_H
 #include <SDL2/SDL.h>
+#include <string>
 
 #include "Bare.h"
 #include "TextureWithPosition.h"
@@ -8,6 +9,7 @@
 
 class Ball {
 public:
+	static inline std::string TEXTURE_KEY = "ball";
 	Ball();
 	virtual ~Ball();
 	void render();

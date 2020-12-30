@@ -5,12 +5,14 @@
  *      Author: Papa
  */
 #include <SDL2/SDL.h>
+#include <string>
 
 #include "../include/TextureWithPosition.h"
 
 class Background
 {
 public:
+	static inline std::string TEXTURE_KEY="background001";
 	Background();
 	virtual ~Background();
 	void render();

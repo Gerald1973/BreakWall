@@ -4,6 +4,7 @@
 Background::Background()
 {
     this->textureWithPosition = NULL;
+    InitUtils::getInstance()->addTexture("winter_01.jpg", TEXTURE_KEY);
 }
 
 Background::~Background()

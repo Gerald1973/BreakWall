@@ -7,6 +7,7 @@ Bare::Bare()
 {
     this->sound = NULL;
     this->textureWithPosition = NULL;
+    InitUtils::getInstance()->addTexture("bare.png",TEXTURE_KEY);
 }
 
 Bare::~Bare()

@@ -14,6 +14,7 @@
 
 class Title {
 public:
+	static inline std::string TEXTURE_KEY = "title";
 	Title();
 	virtual ~Title();
 	void render();

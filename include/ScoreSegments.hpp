@@ -8,9 +8,11 @@
 #ifndef SCORESEGMENTS_H_
 #define SCORESEGMENTS_H_
 #include <SDL2/SDL.h>
+#include <string>
 
 class ScoreSegments {
 public:
+	static inline std::string TEXTURE_KEY = "scoreSegment";
 	ScoreSegments();
 	virtual ~ScoreSegments();
 	void render();

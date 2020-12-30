@@ -17,6 +17,7 @@ Ball::Ball()
 	this->posX = 0;
 	this->posY = 0;
 	this->bare = NULL;
+	InitUtils::getInstance()->addTexture("ball.png",TEXTURE_KEY);
 }
 
 Ball::~Ball()

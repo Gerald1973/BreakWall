@@ -10,6 +10,7 @@ Brick::Brick()
 	this->destroyed = false;
 	this->textureWithPosition = NULL;
 	this->deadDirection = 1;
+	InitUtils::getInstance()->addTexture("brickRed.bmp",TEXTURE_KEY);
 }
 void Brick::setValue(int value)
 {
