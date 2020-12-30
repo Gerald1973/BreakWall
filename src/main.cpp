@@ -30,53 +30,33 @@ Brick *wall[20][30];
 int dirX = 1;
 int dirY = 1;
 bool success = true;
-std::map<std::string, Mix_Chunk*> mapSounds;
-std::map<std::string, SDL_Texture*> mapTextures;
 
 void displayErrorMessage() {
 	std::cout << SDL_GetError() << "\n";
 }
 
-SDL_Texture* loadTexture(std::string fileName, SDL_Renderer *renderer) {
-	SDL_Texture *result = NULL;
-	result = IMG_LoadTexture(renderer, fileName.c_str());
-	if (result == NULL) {
-		std::cout << "Impossible to load : " << fileName << " error:" << SDL_GetError() << std::endl;
-	}
-	return result;
-}
-
-void initTextureMap(SDL_Renderer *renderer) {
-	mapTextures["ball"] = loadTexture("ball.png", renderer);
-	mapTextures["bare"] = loadTexture("bare.png", renderer);
-	mapTextures["brickRed"] = loadTexture("brickRed.bmp", renderer);
-	mapTextures["segments"] = loadTexture("segments_48_64.png", renderer);
-	mapTextures["background001"] = loadTexture("winter_01.jpg", renderer);
-	mapTextures["title"] = loadTexture("breakwall_title.png", renderer);
-}
-
-Mix_Chunk* loadSoundEffect(const char *fileName) {
-	Mix_Chunk *result = NULL;
-	result = Mix_LoadWAV(fileName);
-	if (!result) {
-		std::cout << "Sound effect error : " << Mix_GetError() << std::endl;
-	}
-	return result;
+void initTextureMap() {
+	InitUtils::getInstance()->addTexture("ball.png", "ball");
+	InitUtils::getInstance()->addTexture("bare.png", "bare");
+	InitUtils::getInstance()->addTexture("brickRed.bmp", "brickRed");
+	InitUtils::getInstance()->addTexture("segments_48_64.png", "segments");
+	InitUtils::getInstance()->addTexture("winter_01.jpg", "background001");
+	InitUtils::getInstance()->addTexture("breakwall_title.png", "title");
 }
 
 void initSoundMap() {
-	mapSounds["brick"] = loadSoundEffect("metal.wav");
-	mapSounds["bare"] = loadSoundEffect("bare.wav");
+	InitUtils::getInstance()->addSoundEffect("metal.wav", "brick");
+	InitUtils::getInstance()->addSoundEffect("bare.wav", "brick");
 }
 
 Bare* initBare(SDL_Renderer *renderer) {
 	Bare *result = new Bare();
 	SDL_Rect position;
-	TextureWithPosition *textureWithPosition = new TextureWithPosition(mapTextures["bare"], position);
+	TextureWithPosition *textureWithPosition = new TextureWithPosition(InitUtils::getInstance()->getMapTextures()["bare"], position);
 	textureWithPosition->setX((UtilConstants::getInstance()->gameZone.w - textureWithPosition->getPosition().w) / 2);
 	textureWithPosition->setY(UtilConstants::getInstance()->gameZone.h - textureWithPosition->getPosition().h);
 	result->setTextureWithPosition(textureWithPosition);
-	result->setSound(mapSounds["bare"]);
+	result->setSound(InitUtils::getInstance()->getMapSounds()["bare"]);
 	return result;
 }
 
@@ -87,9 +67,9 @@ Wall* initWall(SDL_Renderer *renderer) {
 		std::vector<Brick*> columns;
 		for (int x = 0; x < GlobalConstants::MAX_NUMBER_OF_BRICKS_ON_X; x++) {
 			Brick *brick = new Brick();
-			brick->setSound(mapSounds["brick"]);
+			brick->setSound(InitUtils::getInstance()->getMapSounds()["brick"]);
 			SDL_Rect tmpRect;
-			TextureWithPosition *textureWithPosition = new TextureWithPosition(mapTextures["brickRed"], tmpRect);
+			TextureWithPosition *textureWithPosition = new TextureWithPosition(InitUtils::getInstance()->getMapTextures()["brickRed"], tmpRect);
 			brick->setTextureWithPosition(textureWithPosition);
 			columns.push_back(brick);
 		}
@@ -103,7 +83,7 @@ Ball* initBall(SDL_Renderer *renderer, Wall *wall, Bare *bare) {
 	SDL_Rect rect;
 	rect.x = UtilConstants::getInstance()->gameZone.w / 2 + UtilConstants::getInstance()->gameZone.x;
 	rect.y = (GlobalConstants::MAX_NUMBER_OF_BRICKS_ON_Y + 1) * GlobalConstants::BRICK_HEIGHT + UtilConstants::getInstance()->gameZone.y;
-	TextureWithPosition *textureWithPosition = new TextureWithPosition(mapTextures["ball"], rect);
+	TextureWithPosition *textureWithPosition = new TextureWithPosition(InitUtils::getInstance()->getMapTextures()["ball"], rect);
 	Ball *ball = new Ball();
 	ball->setTextureWithPosition(textureWithPosition);
 	ball->setBare(bare);
@@ -113,15 +93,16 @@ Ball* initBall(SDL_Renderer *renderer, Wall *wall, Bare *bare) {
 
 Background* initBackground(SDL_Renderer *renderer) {
 	Background *result = new Background();
-	TextureWithPosition *textureWithPosition = new TextureWithPosition(mapTextures["background001"], UtilConstants::getInstance()->gameZone.x,
-			UtilConstants::getInstance()->gameZone.y, UtilConstants::getInstance()->gameZone.w, UtilConstants::getInstance()->gameZone.h);
+	TextureWithPosition *textureWithPosition = new TextureWithPosition(InitUtils::getInstance()->getMapTextures()["background001"],
+			UtilConstants::getInstance()->gameZone.x, UtilConstants::getInstance()->gameZone.y, UtilConstants::getInstance()->gameZone.w,
+			UtilConstants::getInstance()->gameZone.h);
 	result->setTextureWithPosition(textureWithPosition);
 	return result;
 }
 
 Title* initTitle(SDL_Renderer *renderer) {
 	Title *result = new Title();
-	TextureWithPosition *textureWithPosition = new TextureWithPosition(mapTextures["title"], 0, 0, GlobalConstants::SCREEN_WIDTH,
+	TextureWithPosition *textureWithPosition = new TextureWithPosition(InitUtils::getInstance()->getMapTextures()["title"], 0, 0, GlobalConstants::SCREEN_WIDTH,
 			GlobalConstants::SCREEN_HEIGHT);
 	result->setTextureWithPosition(textureWithPosition);
 	return result;
@@ -129,28 +110,15 @@ Title* initTitle(SDL_Renderer *renderer) {
 
 ScoreSegments* initScoreSegments(SDL_Renderer *renderer) {
 	ScoreSegments *result = new ScoreSegments();
-	result->setTexture(mapTextures["segments"]);
+	result->setTexture(InitUtils::getInstance()->getMapTextures()["segments"]);
 	return result;
 }
 
 void quit() {
-	std::map<std::string, Mix_Chunk*>::iterator mapSoundsIterator;
-	for (mapSoundsIterator = mapSounds.begin(); mapSoundsIterator != mapSounds.end(); mapSoundsIterator++) {
-		std::cout << "Remove :" << mapSoundsIterator->first << "\n";
-		Mix_FreeChunk(mapSoundsIterator->second);
-	}
-	std::map<std::string, SDL_Texture*>::iterator mapTexturesIterator;
-	for (mapTexturesIterator = mapTextures.begin(); mapTexturesIterator != mapTextures.end(); mapTexturesIterator++) {
-		std::cout << "Remove :" << mapTexturesIterator->first << "\n";
-		SDL_DestroyTexture(mapTexturesIterator->second);
-	}
-	Mix_Quit();
-	IMG_Quit();
-	SDL_Quit();
+	InitUtils::getInstance()->destroy();
 }
 
 int main(int argc, char **argv) {
-	InitUtils::getInstance()->initRenderer();
 	SDL_Renderer *renderer = InitUtils::getInstance()->getRenderer();
 	SDL_Window *pWindow = InitUtils::getInstance()->getPWindow();
 	SDL_Texture *tmpTexture = InitUtils::getInstance()->getBaseTexture();
@@ -160,7 +128,7 @@ int main(int argc, char **argv) {
 	SDL_Event event;
 
 	initSoundMap();
-	initTextureMap(renderer);
+	initTextureMap();
 	Bare *bare = initBare(renderer);
 	Wall *wall = initWall(renderer);
 	wall->build();
@@ -170,14 +138,8 @@ int main(int argc, char **argv) {
 	Title *title = initTitle(renderer);
 	bool loop = true;
 	//Test amiga mod
-	std::string song = "worldofw.mod";
-	std::vector<unsigned char> moduleHeader = FileUtils::getInstance()->readFile(song, 0, 1084);
-	std::vector<unsigned char> mf = FileUtils::getInstance()->readFile(song);
-	std::cout << "DEBUG : file size          :" << mf.size() << std::endl;
-	std::cout << "DEBUG : readFromTO         :" << moduleHeader.size() << std::endl;
-	std::cout << "DEBUG : micromod version   :" << MicroModUtils::getInstance()->getVersion() << std::endl;
-	std::cout << "DEBUG : number of channel  :" << MicroModUtils::getInstance()->calculateNumChannels(&moduleHeader[0]) << std::endl;
-	std::cout << "DEBUG : number of patterns :" << MicroModUtils::getInstance()->calculateNumPatterns(&moduleHeader[0]) << std::endl;
+	InitUtils::getInstance()->addMod("worldofw.mod","mod_001");
+	std::vector<unsigned char> mf =  InitUtils::getInstance()->getMapMods()["mod_001"];
 	MicroModSDLPlayer::getInstance()->initialise(&mf[0]);
 	SDL_PauseAudio(0);
 	//End test

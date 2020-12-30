@@ -47,6 +47,7 @@ vector<unsigned char> FileUtils::readFile(string fileName)
         cout << "Error: the file " << fileName << "doesn't exist." << endl;
     }
     infile.close();
+    std::cout << "DEBUG : file size :" << results.size() << std::endl;
     return results;
 }
 

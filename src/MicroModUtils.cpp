@@ -467,7 +467,7 @@ long MicroModUtils::calculateModFileLen(unsigned char moduleHeader[]) {
 	return length;
 }
 
-long MicroModUtils::initialise(unsigned char data[], long sampling_rate) {
+long MicroModUtils::initialise(unsigned char* data, long sampling_rate) {
 	instrument *inst;
 	long sample_data_offset, inst_idx;
 	long sample_length, volume, fine_tune, loop_start, loop_length;

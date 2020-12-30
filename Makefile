@@ -30,10 +30,13 @@ compile:
 	@echo "Target       : $@"
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -o $(EXE) $(SRC)
 	
-all_windows:
+all_windows: clean_windows
 	@echo "File sources : $(SRC)"
 	@echo "Target       : $@"
 	$(CXX) $(SRC) $(INCLUDE_PATHS) $(LIBRARY_PATHS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(EXE).exe
+
+clean_windows:
+	rm -f $(EXE).exe
 
 dist:
 	@echo "File sources : $(SRC)"

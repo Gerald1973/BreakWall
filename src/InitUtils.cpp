@@ -7,14 +7,18 @@
 
 #include "../include/InitUtils.hpp"
 #include <iostream>
+#include <vector>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
 #include "../include/GlobalConstants.h"
+#include "../include/FileUtils.hpp"
 
 InitUtils::InitUtils() {
 	renderer = NULL;
 	pWindow = NULL;
 	baseTexture = NULL;
+	initRenderer();
 }
 
 int InitUtils::initRenderer() {
@@ -37,7 +41,7 @@ int InitUtils::initRenderer() {
 	}
 	renderer = SDL_CreateRenderer(pWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE | SDL_RENDERER_PRESENTVSYNC);
 	baseTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_TARGET, GlobalConstants::SCREEN_WIDTH,
-				GlobalConstants::SCREEN_HEIGHT);
+			GlobalConstants::SCREEN_HEIGHT);
 	return 0;
 }
 
@@ -53,7 +57,56 @@ SDL_Texture* InitUtils::getBaseTexture() {
 	return baseTexture;
 }
 
+std::map<std::string, Mix_Chunk*> InitUtils::getMapSounds() {
+	return mapSounds;
+}
+
+std::map<std::string, SDL_Texture*> InitUtils::getMapTextures() {
+	return mapTextures;
+}
+
+void InitUtils::addMod(std::string fileName, std::string key) {
+	std::vector<unsigned char> results = FileUtils::getInstance()->readFile(fileName);
+	mapMods[key] = results;
+}
+
+void InitUtils::addSoundEffect(std::string fileName, std::string key) {
+	Mix_Chunk *result = Mix_LoadWAV(fileName.c_str());
+	if (!result) {
+		std::cout << "Sound effect error : " << Mix_GetError() << std::endl;
+	} else {
+		mapSounds[key] = result;
+	}
+}
+
+void InitUtils::addTexture(std::string fileName, std::string key) {
+	SDL_Texture *result = NULL;
+	result = IMG_LoadTexture(renderer, fileName.c_str());
+	if (result == NULL) {
+		std::cout << "Impossible to load : " << fileName << " error:" << SDL_GetError() << std::endl;
+	} else {
+		mapTextures[key] = result;
+	}
+}
+
+std::map<std::string, std::vector<unsigned char>> InitUtils::getMapMods() {
+	return mapMods;
+}
+
 InitUtils::~InitUtils() {
 	renderer = NULL;
+	std::map<std::string, Mix_Chunk*>::iterator mapSoundsIterator;
+	for (mapSoundsIterator = mapSounds.begin(); mapSoundsIterator != mapSounds.end(); mapSoundsIterator++) {
+		std::cout << "Remove sound:" << mapSoundsIterator->first << "\n";
+		Mix_FreeChunk(mapSoundsIterator->second);
+	}
+	std::map<std::string, SDL_Texture*>::iterator mapTexturesIterator;
+	for (mapTexturesIterator = mapTextures.begin(); mapTexturesIterator != mapTextures.end(); mapTexturesIterator++) {
+		std::cout << "Remove texture:" << mapTexturesIterator->first << "\n";
+		SDL_DestroyTexture(mapTexturesIterator->second);
+	}
+	Mix_Quit();
+	IMG_Quit();
+	SDL_Quit();
 }
 
