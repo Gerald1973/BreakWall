@@ -1,3 +1,16 @@
+#include "SDL2/SDL_audio.h"
+#include "SDL2/SDL_error.h"
+#include "SDL2/SDL_events.h"
+#include "SDL2/SDL_keyboard.h"
+#include "SDL2/SDL_main.h"
+#include "SDL2/SDL_mouse.h"
+#include "SDL2/SDL_rect.h"
+#include "SDL2/SDL_render.h"
+#include "SDL2/SDL_scancode.h"
+#include "SDL2/SDL_stdinc.h"
+#include "SDL2/SDL_video.h"
+#include "TextureWithPosition.h"
+
 #ifdef __cplusplus
 #include <cstdlib>
 #else
@@ -117,12 +130,11 @@ ScoreSegments* initScoreSegments() {
 
 int main(int argc, char **argv) {
 	SDL_Window *pWindow = InitUtils::getInstance()->getPWindow();
-	SDL_Texture *tmpTexture = InitUtils::getInstance()->getBaseTexture();
+	SDL_Texture *baseTexture = InitUtils::getInstance()->getBaseTexture();
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
 	std::map<int, bool> mapKbd;
 	SDL_Event event;
-
 	initSoundMap();
 	initTextureMap();
 	Bare *bare = initBare();
@@ -140,7 +152,7 @@ int main(int argc, char **argv) {
 	SDL_PauseAudio(0);
 	//End test
 	while (loop) {
-		SDL_SetRenderTarget(InitUtils::getInstance()->getRenderer(), tmpTexture);
+		SDL_SetRenderTarget(InitUtils::getInstance()->getRenderer(), baseTexture);
 		SDL_RenderClear(InitUtils::getInstance()->getRenderer());
 		ball->moveBall();
 		while (SDL_PollEvent(&event)) {
@@ -177,9 +189,8 @@ int main(int argc, char **argv) {
 		ball->render();
 		title->render();
 		scoreSegments->render();
-
 		SDL_SetRenderTarget(InitUtils::getInstance()->getRenderer(), NULL);
-		SDL_RenderCopy(InitUtils::getInstance()->getRenderer(), tmpTexture, NULL, NULL);
+		SDL_RenderCopy(InitUtils::getInstance()->getRenderer(), baseTexture, NULL, NULL);
 		SDL_RenderPresent(InitUtils::getInstance()->getRenderer());
 	}
 	SDL_DestroyWindow(pWindow);
