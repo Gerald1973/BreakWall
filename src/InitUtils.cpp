@@ -108,5 +108,6 @@ InitUtils::~InitUtils() {
 	Mix_Quit();
 	IMG_Quit();
 	SDL_Quit();
+	SDL_DestroyWindow(pWindow);
 }
 

@@ -26,6 +26,7 @@ public:
 	bool bouncesOnBare(Bare* bare);
 	bool bouncesOnScreen();
 	void bouncesOnBrick(Brick* brick);
+	void init(Wall *wall, Bare *bare);
 protected:
 private:
 	TextureWithPosition* textureWithPosition;

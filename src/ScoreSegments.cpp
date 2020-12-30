@@ -65,3 +65,7 @@ SDL_Rect ScoreSegments::calculateSrcRect(int figure) {
 void ScoreSegments::addScore(int value) {
 	this->score = this->score + value;
 }
+
+void ScoreSegments::init() {
+	setTexture(InitUtils::getInstance()->getMapTextures()[ScoreSegments::TEXTURE_KEY]);
+}

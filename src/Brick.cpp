@@ -11,6 +11,7 @@ Brick::Brick()
 	this->textureWithPosition = NULL;
 	this->deadDirection = 1;
 	InitUtils::getInstance()->addTexture("brickRed.bmp",TEXTURE_KEY);
+	InitUtils::getInstance()->addSoundEffect("metal.wav",SOUND_KEY);
 }
 void Brick::setValue(int value)
 {
@@ -89,4 +90,11 @@ Mix_Chunk *Brick::getSound()
 void Brick::setSound(Mix_Chunk *sound)
 {
 	this->sound = sound;
+}
+
+void Brick::init() {
+	setSound(InitUtils::getInstance()->getMapSounds()[Brick::SOUND_KEY]);
+	SDL_Rect tmpRect;
+	TextureWithPosition *textureWithPosition = new TextureWithPosition(InitUtils::getInstance()->getMapTextures()[Brick::TEXTURE_KEY], tmpRect);
+	setTextureWithPosition(textureWithPosition);
 }

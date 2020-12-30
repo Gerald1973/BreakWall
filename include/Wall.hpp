@@ -15,6 +15,7 @@ class Wall
         void setBricks(std::vector<std::vector<Brick*> > bricks);
         void build();
         void render();
+        void init();
     protected:
     private:
         std::vector< std::vector<Brick*> > bricks;

@@ -18,6 +18,7 @@ public:
 	Title();
 	virtual ~Title();
 	void render();
+	void init();
 	TextureWithPosition* getTextureWithPosition();
 	void setTextureWithPosition(TextureWithPosition *textureWithPosition);
 private:

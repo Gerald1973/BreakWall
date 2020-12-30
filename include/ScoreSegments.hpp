@@ -20,6 +20,7 @@ public:
 	void setTexture(SDL_Texture* sdlTexture);
 	SDL_Rect calculateSrcRect(int figure );
 	void addScore(int value);
+	void init();
 private:
 	int posX;
 	int posY;

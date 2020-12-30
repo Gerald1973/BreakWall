@@ -16,6 +16,7 @@ public:
 	Background();
 	virtual ~Background();
 	void render();
+	void init();
 	TextureWithPosition *getTextureWithPosition();
 	void setTextureWithPosition(TextureWithPosition *textureWithPosition);
 

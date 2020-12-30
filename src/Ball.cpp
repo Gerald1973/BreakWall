@@ -22,7 +22,9 @@ Ball::Ball()
 
 Ball::~Ball()
 {
-	delete (textureWithPosition);
+	delete textureWithPosition;
+	delete wall;
+	delete bare;
 }
 
 void Ball::render()
@@ -200,4 +202,14 @@ bool Ball::bouncesOnBare(Bare *bare)
 		dirY = -coeffy * speed;
 	}
 	return result;
+}
+
+void Ball::init(Wall *wall, Bare *bare) {
+	SDL_Rect rect;
+	rect.x = UtilConstants::getInstance()->gameZone.w / 2 + UtilConstants::getInstance()->gameZone.x;
+	rect.y = (GlobalConstants::MAX_NUMBER_OF_BRICKS_ON_Y + 1) * GlobalConstants::BRICK_HEIGHT + UtilConstants::getInstance()->gameZone.y;
+	TextureWithPosition *textureWithPosition = new TextureWithPosition(InitUtils::getInstance()->getMapTextures()[Ball::TEXTURE_KEY], rect);
+	setTextureWithPosition(textureWithPosition);
+	setBare(bare);
+	setWall(wall);
 }

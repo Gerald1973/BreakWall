@@ -9,8 +9,10 @@ class Bare
 {
     public:
 		static inline std::string TEXTURE_KEY = "bare";
+		static inline std::string SOUND_KEY= "bare";
         Bare();
         virtual ~Bare();
+        void init();
         void setTextureWithPosition(TextureWithPosition* textureWithPosition);
         TextureWithPosition* getTextureWithPosition();
         void render();
