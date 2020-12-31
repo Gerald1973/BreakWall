@@ -59,7 +59,9 @@ int main(int argc, char **argv) {
 				keys = SDL_GetKeyboardState(NULL);
 				break;
 			case SDL_MOUSEMOTION:
-				bare->getTextureWithPosition()->setX(bare->getTextureWithPosition()->getX() + event.motion.xrel);
+				if (GameStates::getInstance()->isStarted()) {
+					bare->getTextureWithPosition()->setX(bare->getTextureWithPosition()->getX() + event.motion.xrel);
+				}
 				break;
 			case SDL_MOUSEBUTTONUP:
 				std::cout << "Mouse up..." << std::endl;
@@ -96,12 +98,28 @@ int main(int argc, char **argv) {
 			loop = false;
 		}
 
+		if (!GameStates::getInstance()->isStarted()) {
+			int halfBarSize = bare->getTextureWithPosition()->getOriginRect().w/2;
+			int barePosY = bare->getTextureWithPosition()->getY();
+			int ballPosX = ball->getTextureWithPosition()->getAbsCenterX();
+			int ballPosY = ball->getTextureWithPosition()->getAbsCenterY();
+			int posRand = rand() % (halfBarSize-1);
+			int posOrNeg = rand() % 2;
+			if (posOrNeg == 0) {
+				posRand  = -posRand;
+			}
+			if (ballPosY < (barePosY - halfBarSize)){
+				posRand = 0;
+			}
+			int barePosX = ballPosX - halfBarSize + posRand;
+			bare->getTextureWithPosition()->setX(barePosX);
+		}
 
 		background->render();
 		wall->render();
 		bare->render();
 		ball->render();
-		if (!GameStates::getInstance()->isStarted()){
+		if (!GameStates::getInstance()->isStarted()) {
 			title->render();
 		}
 		scoreSegments->render(GameStates::getInstance()->getScore());
