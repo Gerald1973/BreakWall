@@ -58,6 +58,18 @@ void CustomEventUtils::postEventLiveFinished() {
 	}
 }
 
+void CustomEventUtils::postEventBareTouched() {
+	Uint32 myEventType = SDL_RegisterEvents(1);
+	if (myEventType != ((Uint32) -1)) {
+		SDL_Event event;
+		event.type = SDL_USEREVENT;
+		event.user.code = BARE_TOUCHED;
+		event.user.data1 = NULL;
+		event.user.data2 = NULL;
+		SDL_PushEvent(&event);
+	}
+}
+
 CustomEventUtils::~CustomEventUtils() {
 	cout << "DEBUG CustomEventUtils destruction." << endl;
 	this->instance = NULL;

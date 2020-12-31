@@ -201,6 +201,7 @@ bool Ball::bouncesOnBare(Bare *bare)
 		result = true;
 		dirX = coeffX * speed;
 		dirY = -coeffy * speed;
+		CustomEventUtils::getInstance()->postEventBareTouched();
 	}
 	return result;
 }

@@ -1,6 +1,7 @@
 #include "../include/Bare.h"
 #include "../include/InitUtils.hpp"
 #include "../include/UtilConstants.h"
+#include "../include/CustomEventUtils.hpp"
 
 #include <iostream>
 

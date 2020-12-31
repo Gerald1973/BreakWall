@@ -21,13 +21,15 @@ public:
         BORDER_RIGHT_TOUCHED=51,
         BORDER_BOTTOM_TOUCHED=52,
         BORDER_LEFT_BOTTOM_TOUCHED=53,
-		LIVE_FINISHED=60
+		LIVE_FINISHED=60,
+		BARE_TOUCHED=70
     };
 
     void postEventSongStop(std::string *message);
     void postEventBrickTouched(Brick* brick);
     void postEventBorderTouched(Code code);
     void postEventLiveFinished();
+    void postEventBareTouched();
 
     static inline CustomEventUtils *getInstance()
     {

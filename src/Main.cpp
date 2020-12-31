@@ -22,6 +22,7 @@
 #endif
 
 int main(int argc, char **argv) {
+	int posRand = 0;
 	SDL_Texture *baseTexture = InitUtils::getInstance()->getBaseTexture();
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
@@ -90,6 +91,15 @@ int main(int argc, char **argv) {
 					GameStates::getInstance()->setPaused(false);
 					GameStates::getInstance()->setRemainingLives(5);
 					GameStates::getInstance()->setStarted(false);
+				} else if (event.user.code == CustomEventUtils::Code::BARE_TOUCHED) {
+					if (!GameStates::getInstance()->isStarted()) {
+						int halfBarSize = bare->getTextureWithPosition()->getOriginRect().w / 2;
+						posRand = rand() % (halfBarSize - 1);
+						int posOrNeg = rand() % 2;
+						if (posOrNeg == 0) {
+							posRand = -posRand;
+						}
+					}
 				}
 				break;
 			}
@@ -99,18 +109,8 @@ int main(int argc, char **argv) {
 		}
 
 		if (!GameStates::getInstance()->isStarted()) {
-			int halfBarSize = bare->getTextureWithPosition()->getOriginRect().w/2;
-			int barePosY = bare->getTextureWithPosition()->getY();
+			int halfBarSize = bare->getTextureWithPosition()->getOriginRect().w / 2;
 			int ballPosX = ball->getTextureWithPosition()->getAbsCenterX();
-			int ballPosY = ball->getTextureWithPosition()->getAbsCenterY();
-			int posRand = rand() % (halfBarSize-1);
-			int posOrNeg = rand() % 2;
-			if (posOrNeg == 0) {
-				posRand  = -posRand;
-			}
-			if (ballPosY < (barePosY - halfBarSize)){
-				posRand = 0;
-			}
 			int barePosX = ballPosX - halfBarSize + posRand;
 			bare->getTextureWithPosition()->setX(barePosX);
 		}
