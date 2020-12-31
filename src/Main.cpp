@@ -14,13 +14,12 @@
 #include "../include/TextureWithPosition.h"
 #include "../include/Title.hpp"
 #include "../include/Wall.hpp"
-
+#include "../include/GameState.hpp"
 #ifdef __cplusplus
 #include <cstdlib>
 #else
 #include <stdlib.h>
 #endif
-
 
 int main(int argc, char **argv) {
 	SDL_Texture *baseTexture = InitUtils::getInstance()->getBaseTexture();
@@ -32,7 +31,7 @@ int main(int argc, char **argv) {
 	bare->init();
 	Wall *wall = new Wall();
 	wall->init();
-	ScoreSegments *scoreSegments =new ScoreSegments();
+	ScoreSegments *scoreSegments = new ScoreSegments();
 	scoreSegments->init();
 	Ball *ball = new Ball();
 	ball->init(wall, bare);
@@ -62,6 +61,18 @@ int main(int argc, char **argv) {
 			case SDL_MOUSEMOTION:
 				bare->getTextureWithPosition()->setX(bare->getTextureWithPosition()->getX() + event.motion.xrel);
 				break;
+			case SDL_MOUSEBUTTONUP:
+				std::cout << "Mouse up..." << std::endl;
+				if (event.button.button == SDL_BUTTON_LEFT) {
+					if (!GameStates::getInstance()->isStarted()) {
+						GameStates::getInstance()->setCurrentLevel(1);
+						GameStates::getInstance()->setPaused(false);
+						GameStates::getInstance()->setRemainingLives(5);
+						GameStates::getInstance()->setStarted(true);
+						GameStates::getInstance()->setScore(0);
+					}
+				}
+				break;
 			case SDL_USEREVENT:
 				if (event.user.code == CustomEventUtils::Code::SONG_STOP) {
 					SDL_PauseAudio(1);
@@ -69,9 +80,14 @@ int main(int argc, char **argv) {
 					SDL_PauseAudio(0);
 				} else if (event.user.code == CustomEventUtils::Code::BRICK_TOUCHED) {
 					Brick *brick = (Brick*) event.user.data1;
-					scoreSegments->addScore(brick->getValue());
+					GameStates::getInstance()->addScore(brick->getValue());
 				} else if (event.user.code == CustomEventUtils::Code::BORDER_BOTTOM_TOUCHED) {
-					std::cout << "Todo one live less." << std::endl;
+					GameStates::getInstance()->decreaseRemainingLive(1);
+				} else if (event.user.code == CustomEventUtils::Code::LIVE_FINISHED) {
+					GameStates::getInstance()->setCurrentLevel(1);
+					GameStates::getInstance()->setPaused(false);
+					GameStates::getInstance()->setRemainingLives(5);
+					GameStates::getInstance()->setStarted(false);
 				}
 				break;
 			}
@@ -79,12 +95,16 @@ int main(int argc, char **argv) {
 		if (keys[SDL_SCANCODE_ESCAPE]) {
 			loop = false;
 		}
+
+
 		background->render();
 		wall->render();
 		bare->render();
 		ball->render();
-		title->render();
-		scoreSegments->render();
+		if (!GameStates::getInstance()->isStarted()){
+			title->render();
+		}
+		scoreSegments->render(GameStates::getInstance()->getScore());
 		SDL_SetRenderTarget(InitUtils::getInstance()->getRenderer(), NULL);
 		SDL_RenderCopy(InitUtils::getInstance()->getRenderer(), baseTexture, NULL, NULL);
 		SDL_RenderPresent(InitUtils::getInstance()->getRenderer());

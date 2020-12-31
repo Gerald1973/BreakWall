@@ -169,6 +169,7 @@ bool Ball::bouncesOnScreen()
 	{
 		dirY = -dirY;
 		result = true;
+		CustomEventUtils::getInstance()->postEventBorderTouched(CustomEventUtils::Code::BORDER_BOTTOM_TOUCHED);
 		
 	}
 	//left
