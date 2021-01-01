@@ -116,8 +116,9 @@ void Brick::init() {
 void Brick::performEvent(SDL_Event &event) {
 	if (event.user.code == CustomEventUtils::Code::BALL_MOVED) {
 		Ball *ball = (Ball*) event.user.data1;
-		if (this->isTouchedByBall(ball)){
-			bounces(ball);
+		if (this->isTouchedByBall(ball)) {
+			this->bounces(ball);
+			this->setDestroyed(true);
 			CustomEventUtils::getInstance()->postEventBrickTouched(this);
 		}
 	}

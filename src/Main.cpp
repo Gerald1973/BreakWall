@@ -101,7 +101,6 @@ int main(int argc, char **argv) {
 						}
 					}
 				} else if (event.user.code == CustomEventUtils::Code::BALL_MOVED) {
-					std::cout << "BAL MOVED" << std::endl;
 					wall->performEvent(event);
 				}
 				break;

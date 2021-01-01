@@ -41,10 +41,13 @@ void Wall::setBricks(std::vector<std::vector<Brick*> > bricks) {
 
 void Wall::performEvent(SDL_Event &event) {
 	if (event.user.code == CustomEventUtils::Code::BALL_MOVED) {
-		std::cout << "Distribute the event to the bricks" << std::endl;
 		for (unsigned int j = 0; j < this->bricks.size(); j++) {
 			for (unsigned int i = 0; i < this->bricks[j].size(); i++) {
-				this->bricks[j][i]->performEvent(event);
+				Ball *ball = (Ball*) event.user.data1;
+				if (this->bricks[j][i]->isTouchedByBall(ball)) {
+					this->bricks[j][i]->performEvent(event);
+					break;
+				}
 			}
 		}
 	}
