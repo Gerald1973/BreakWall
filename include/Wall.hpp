@@ -11,15 +11,16 @@ class Wall
     public:
         Wall();
         virtual ~Wall();
-        std::vector< std::vector<Brick*> > getBricks();
-        void setBricks(std::vector<std::vector<Brick*> > bricks);
+        std::vector<Brick*> getBricks();
+        void setBricks(std::vector<Brick*> bricks);
         void performEvent(SDL_Event &event);
+        int findIndex(Brick* bricks);
         void build();
         void render();
         void init();
     protected:
     private:
-        std::vector< std::vector<Brick*> > bricks;
+        std::vector<Brick*> bricks;
 };
 
 #endif // WALL_H

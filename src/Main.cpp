@@ -102,6 +102,8 @@ int main(int argc, char **argv) {
 					}
 				} else if (event.user.code == CustomEventUtils::Code::BALL_MOVED) {
 					wall->performEvent(event);
+				}  else if (event.user.code == CustomEventUtils::Code::BRICK_REMOVED) {
+					wall->performEvent(event);
 				}
 				break;
 			}

@@ -31,8 +31,9 @@ void Brick::setTextureWithPosition(TextureWithPosition *textureWithPosition) {
 }
 
 Brick::~Brick() {
-	this->setDestroyed(false);
-	delete this->textureWithPosition;
+	std::cout << "DEBUG: Brick destruction." << std::endl;
+	this->setTextureWithPosition(NULL);
+	this->setDestroyed(true);
 }
 
 bool Brick::isDestroyed() {
@@ -52,7 +53,6 @@ void Brick::render() {
 }
 
 void Brick::playDestroy() {
-
 	int y = getTextureWithPosition()->getY();
 	int h = getTextureWithPosition()->getPosition().h;
 	if (y < GlobalConstants::BALL_ZONE_Y + GlobalConstants::BALL_ZONE_HEIGHT - h) {
@@ -64,6 +64,8 @@ void Brick::playDestroy() {
 		getTextureWithPosition()->setY(y);
 		getTextureWithPosition()->setH(h);
 		SDL_RenderCopy(InitUtils::getInstance()->getRenderer(), getTextureWithPosition()->getTexture(), NULL, &(getTextureWithPosition()->getPosition()));
+	} else {
+		CustomEventUtils::getInstance()->postEventBrickRemoved(this);
 	}
 }
 

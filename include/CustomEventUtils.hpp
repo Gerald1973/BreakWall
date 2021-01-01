@@ -18,6 +18,7 @@ public:
         SONG_STOP = 2,
         LEVEL_FINISHED = 3,
         BRICK_TOUCHED=40,
+		BRICK_REMOVED=41,
         BORDER_TOP_TOUCHED=50,
         BORDER_RIGHT_TOUCHED=51,
         BORDER_BOTTOM_TOUCHED=52,
@@ -28,6 +29,7 @@ public:
     };
 
     void postEventSongStop(std::string *message);
+    void postEventBrickRemoved(Brick* brick);
     void postEventBrickTouched(Brick* brick);
     void postEventBorderTouched(Code code);
     void postEventLiveFinished();

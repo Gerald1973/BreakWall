@@ -15,55 +15,66 @@ Wall::~Wall() {
 }
 
 void Wall::build() {
-	for (unsigned int j = 0; j < this->bricks.size(); j++) {
-		for (unsigned int i = 0; i < this->bricks[j].size(); i++) {
-			this->bricks[j][i]->getTextureWithPosition()->setX(i * this->bricks[j][i]->getTextureWithPosition()->getPosition().w);
-			this->bricks[j][i]->getTextureWithPosition()->setY(j * this->bricks[j][i]->getTextureWithPosition()->getPosition().h);
-		}
-	}
 }
 
 void Wall::render() {
-	for (unsigned int j = 0; j < bricks.size(); j++) {
-		for (unsigned int i = 0; i < bricks[j].size(); i++) {
-			bricks[j][i]->render();
-		}
+	for (unsigned int i = 0; i < bricks.size(); i++) {
+		bricks[i]->render();
 	}
 }
 
-std::vector<std::vector<Brick*> > Wall::getBricks() {
+std::vector<Brick*> Wall::getBricks() {
 	return this->bricks;
 }
 
-void Wall::setBricks(std::vector<std::vector<Brick*> > bricks) {
+void Wall::setBricks(std::vector<Brick*> bricks) {
 	this->bricks = bricks;
 }
 
+
+
 void Wall::performEvent(SDL_Event &event) {
 	if (event.user.code == CustomEventUtils::Code::BALL_MOVED) {
-		for (unsigned int j = 0; j < this->bricks.size(); j++) {
-			for (unsigned int i = 0; i < this->bricks[j].size(); i++) {
-				Ball *ball = (Ball*) event.user.data1;
-				if (this->bricks[j][i]->isTouchedByBall(ball)) {
-					this->bricks[j][i]->performEvent(event);
-					break;
-				}
+		for (unsigned int i = 0; i < this->bricks.size(); i++) {
+			Ball *ball = (Ball*) event.user.data1;
+			if (this->bricks[i]->isTouchedByBall(ball)) {
+				this->bricks[i]->performEvent(event);
+				break;
 			}
 		}
+	}else if (event.user.code == CustomEventUtils::Code::BRICK_REMOVED) {
+		Brick *brick = (Brick*) event.user.data1;
+		int index = this->findIndex(brick);
+		this->bricks.erase(bricks.begin() + index);
+		delete brick;
 	}
 }
 
+int Wall::findIndex(Brick *brick) {
+	int result = -1;
+	if (this->bricks.size() > 0){
+		int size = (int) bricks.size();
+		for (int i = 0; i < size; i++){
+			if (bricks[i] == brick){
+				result = i;
+				break;
+			}
+		}
+	}
+	return result;
+}
+
 void Wall::init() {
-	std::vector<std::vector<Brick*>> lines;
+	std::vector<Brick*> bricks;
 	for (int y = 0; y < GlobalConstants::MAX_NUMBER_OF_BRICKS_ON_Y; y++) {
-		std::vector<Brick*> columns;
 		for (int x = 0; x < GlobalConstants::MAX_NUMBER_OF_BRICKS_ON_X; x++) {
 			Brick *brick = new Brick();
 			brick->init();
-			columns.push_back(brick);
+			brick->getTextureWithPosition()->setX(x * brick->getTextureWithPosition()->getPosition().w);
+			brick->getTextureWithPosition()->setY(y * brick->getTextureWithPosition()->getPosition().h);
+			bricks.push_back(brick);
 		}
-		lines.push_back(columns);
 	}
-	setBricks(lines);
+	setBricks(bricks);
 	build();
 }
