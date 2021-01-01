@@ -5,7 +5,6 @@
 
 #include "Bare.h"
 #include "TextureWithPosition.h"
-#include "Wall.hpp"
 
 class Ball {
 public:
@@ -16,17 +15,17 @@ public:
 	void moveBall();
 	Bare* getBare();
 	void setBare(Bare* bare);
-	Wall* getWall();
-	void setWall(Wall *wall);
 	TextureWithPosition* getTextureWithPosition();
 	void setTextureWithPosition(TextureWithPosition* textureWithPosition);
 	float getSpeed();
 	void setSpeed(float speed);
-	bool isBrickTouched(Brick* brick);
 	bool bouncesOnBare(Bare* bare);
 	bool bouncesOnScreen();
-	void bouncesOnBrick(Brick* brick);
-	void init(Wall *wall, Bare *bare);
+	void setDirX(float dirX);
+	float getDirX();
+	void setDirY(float dirY);
+	float getDirY();
+	void init(Bare *bare);
 protected:
 private:
 	TextureWithPosition* textureWithPosition;
@@ -34,7 +33,6 @@ private:
 	float dirY;
 	float speed;
 	Bare* bare;
-	Wall* wall;
 	float coeffX;
 	float coeffy;
 	float posX;

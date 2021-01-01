@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
 	ScoreSegments *scoreSegments = new ScoreSegments();
 	scoreSegments->init();
 	Ball *ball = new Ball();
-	ball->init(wall, bare);
+	ball->init(bare);
 	Background *background = new Background();
 	background->init();
 	Title *title = new Title();
@@ -100,6 +100,8 @@ int main(int argc, char **argv) {
 							posRand = -posRand;
 						}
 					}
+				} else if (event.user.code == CustomEventUtils::Code::BALL_MOVED) {
+					wall->performEvent(event);
 				}
 				break;
 			}

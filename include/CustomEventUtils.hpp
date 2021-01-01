@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include "Ball.h"
 
 #include "Brick.h"
 
@@ -22,7 +23,8 @@ public:
         BORDER_BOTTOM_TOUCHED=52,
         BORDER_LEFT_BOTTOM_TOUCHED=53,
 		LIVE_FINISHED=60,
-		BARE_TOUCHED=70
+		BARE_TOUCHED=70,
+		BALL_MOVED=100
     };
 
     void postEventSongStop(std::string *message);
@@ -30,6 +32,7 @@ public:
     void postEventBorderTouched(Code code);
     void postEventLiveFinished();
     void postEventBareTouched();
+    void postEventBallMoved(Ball* ball);
 
     static inline CustomEventUtils *getInstance()
     {

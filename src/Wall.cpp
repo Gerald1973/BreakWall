@@ -6,6 +6,7 @@
 #include "../include/GlobalConstants.h"
 #include "../include/UtilConstants.h"
 #include "../include/InitUtils.hpp"
+#include "../include/CustomEventUtils.hpp"
 
 Wall::Wall() {
 }
@@ -36,6 +37,20 @@ std::vector<std::vector<Brick*> > Wall::getBricks() {
 
 void Wall::setBricks(std::vector<std::vector<Brick*> > bricks) {
 	this->bricks = bricks;
+}
+
+void Wall::performEvent(SDL_Event &event) {
+	if (event.user.code == CustomEventUtils::Code::BALL_MOVED) {
+		for (unsigned int j = 0; j < this->bricks.size(); j++) {
+			for (unsigned int i = 0; i < this->bricks[j].size(); i++) {
+				Ball *ball = (Ball*) event.user.data1;
+				if (this->bricks[j][i]->isTouchedByBall(ball)) {
+					this->bricks[j][i]->performEvent(event);
+					break;
+				}
+			}
+		}
+	}
 }
 
 void Wall::init() {

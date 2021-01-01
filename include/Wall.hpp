@@ -13,6 +13,7 @@ class Wall
         virtual ~Wall();
         std::vector< std::vector<Brick*> > getBricks();
         void setBricks(std::vector<std::vector<Brick*> > bricks);
+        void performEvent(SDL_Event &event);
         void build();
         void render();
         void init();
