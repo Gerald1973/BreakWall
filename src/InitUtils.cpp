@@ -66,26 +66,38 @@ std::map<std::string, SDL_Texture*> InitUtils::getMapTextures() {
 }
 
 void InitUtils::addMod(std::string fileName, std::string key) {
-	std::vector<unsigned char> results = FileUtils::getInstance()->readFile(fileName);
-	mapMods[key] = results;
+	if (mapMods.find(key) != mapMods.end()) {
+		std::cout << "WARNING: The following key " << key << " is already presents in the map mods." << std::endl;
+	} else {
+		std::vector<unsigned char> results = FileUtils::getInstance()->readFile(fileName);
+		mapMods[key] = results;
+	}
 }
 
 void InitUtils::addSoundEffect(std::string fileName, std::string key) {
-	Mix_Chunk *result = Mix_LoadWAV(fileName.c_str());
-	if (!result) {
-		std::cout << "Sound effect error : " << Mix_GetError() << std::endl;
+	if (mapSounds.find(key) != mapSounds.end()) {
+		std::cout << "WARNING: The following key " << key << " is already present in the sound map." << std::endl;
 	} else {
-		mapSounds[key] = result;
+		Mix_Chunk *sound = Mix_LoadWAV(fileName.c_str());
+		if (!sound) {
+			std::cout << "Sound effect error : " << Mix_GetError() << std::endl;
+		} else {
+			mapSounds[key] = sound;
+		}
 	}
 }
 
 void InitUtils::addTexture(std::string fileName, std::string key) {
-	SDL_Texture *result = NULL;
-	result = IMG_LoadTexture(renderer, fileName.c_str());
-	if (result == NULL) {
-		std::cout << "Impossible to load : " << fileName << " error:" << SDL_GetError() << std::endl;
+	if (mapTextures.find(key) != mapTextures.end()) {
+		std::cout << "WARNING: The following key " << key << " is already present in the texture map." << std::endl;
 	} else {
-		mapTextures[key] = result;
+		SDL_Texture *result = NULL;
+		result = IMG_LoadTexture(renderer, fileName.c_str());
+		if (result == NULL) {
+			std::cout << "Impossible to load : " << fileName << " error:" << SDL_GetError() << std::endl;
+		} else {
+			mapTextures[key] = result;
+		}
 	}
 }
 
