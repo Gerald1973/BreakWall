@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
 #include "TextureWithPosition.h"
+#include "../include/Ball.h"
 
 class Brick {
 public:
@@ -15,6 +16,8 @@ public:
 	void performEvent(SDL_Event &event);
 	int getValue();
 	bool isDestroyed();
+	bool isTouchedByBall(Ball* ball);
+	void bounces(Ball* ball);
 	void setDestroyed(bool destroyed);
 	TextureWithPosition* getTextureWithPosition();
 	void setTextureWithPosition(TextureWithPosition *textureWithPosition);

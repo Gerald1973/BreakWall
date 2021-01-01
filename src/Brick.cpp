@@ -3,6 +3,7 @@
 #include "../include/InitUtils.hpp"
 #include "../include/CustomEventUtils.hpp"
 #include "../include/GlobalConstants.h"
+#include <SDL2/SDL_mixer.h>
 
 Brick::Brick() {
 	this->value = 20;
@@ -74,6 +75,37 @@ void Brick::setSound(Mix_Chunk *sound) {
 	this->sound = sound;
 }
 
+bool Brick::isTouchedByBall(Ball *ball) {
+	bool result = false;
+	if (!isDestroyed()) {
+		int x = ball->getTextureWithPosition()->getAbsCenterX();
+		int y = ball->getTextureWithPosition()->getAbsCenterY();
+		int halfBallSize = ball->getTextureWithPosition()->getPosition().w / 2;
+		result = x >= this->getTextureWithPosition()->getX() - halfBallSize && x <= this->getTextureWithPosition()->getX2() + halfBallSize
+				&& y >= this->getTextureWithPosition()->getY() - halfBallSize && y <= this->getTextureWithPosition()->getY2() + halfBallSize;
+	}
+	return result;
+}
+
+void Brick::bounces(Ball *ball) {
+	Mix_PlayChannel(-1, getSound(), 0);
+	int halfBallSize = this->getTextureWithPosition()->getPosition().w / 2;
+	int x = ball->getTextureWithPosition()->getAbsCenterX();
+	int y = ball->getTextureWithPosition()->getAbsCenterY();
+	if (x >= getTextureWithPosition()->getX() - halfBallSize && x < getTextureWithPosition()->getX2() + halfBallSize) {
+		if ((y >= getTextureWithPosition()->getY() - halfBallSize && y <= getTextureWithPosition()->getY())
+				|| (y >= getTextureWithPosition()->getY2() && y <= getTextureWithPosition()->getY2() + halfBallSize)) {
+			ball->setDirY(-ball->getDirY());
+		}
+	}
+	if (y >= getTextureWithPosition()->getY() - halfBallSize && y <= getTextureWithPosition()->getY2() + halfBallSize) {
+		if ((x >= getTextureWithPosition()->getX() - halfBallSize && x <= getTextureWithPosition()->getX())
+				|| (x >= getTextureWithPosition()->getX2() && x <= getTextureWithPosition()->getX2() + halfBallSize)) {
+			ball->setDirX(-ball->getDirX());
+		}
+	}
+}
+
 void Brick::init() {
 	setSound(InitUtils::getInstance()->getMapSounds()[Brick::SOUND_KEY]);
 	SDL_Rect tmpRect;
@@ -83,6 +115,10 @@ void Brick::init() {
 
 void Brick::performEvent(SDL_Event &event) {
 	if (event.user.code == CustomEventUtils::Code::BALL_MOVED) {
-		std::cout << "To do act her..." << std::endl;
+		Ball *ball = (Ball*) event.user.data1;
+		if (this->isTouchedByBall(ball)){
+			bounces(ball);
+			CustomEventUtils::getInstance()->postEventBrickTouched(this);
+		}
 	}
 }

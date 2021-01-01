@@ -4,6 +4,8 @@
 #include <cmath> 
 #include "../include/CustomEventUtils.hpp"
 #include "../include/InitUtils.hpp"
+#include "../include/UtilConstants.h"
+#include "../include/GlobalConstants.h"
 
 Ball::Ball()
 {
@@ -12,7 +14,6 @@ Ball::Ball()
 	this->dirY = 8;
 	this->coeffy = 1;
 	this->coeffX = 0;
-	this->wall = NULL;
 	this->textureWithPosition = NULL;
 	this->posX = 0;
 	this->posY = 0;
@@ -23,7 +24,6 @@ Ball::Ball()
 Ball::~Ball()
 {
 	delete textureWithPosition;
-	delete wall;
 	delete bare;
 }
 
@@ -37,27 +37,6 @@ void Ball::moveBall()
 {
 	bouncesOnScreen();
 	bouncesOnBare(getBare());
-	//2 the wall
-	std::vector<std::vector<Brick *>> bricks = getWall()->getBricks();
-	Brick *touchedBrick = NULL;
-	for (unsigned int j = 0; j < bricks.size(); j++)
-	{
-		for (unsigned int i = 0; i < bricks[j].size(); i++)
-		{
-			if (isBrickTouched(bricks[j][i]))
-			{
-				if (!touchedBrick) {
-					touchedBrick = bricks[j][i];
-				}
-				CustomEventUtils::getInstance()->postEventBrickTouched(bricks[j][i]);
-				bricks[j][i]->setDestroyed(true);
-			}
-		}
-	}
-	//3 bouncing if any
-	if (touchedBrick){
-		this->bouncesOnBrick(touchedBrick);
-	}
 	//4 Move
 	posX = posX + dirX;
 	posY = posY + dirY;
@@ -86,55 +65,6 @@ void Ball::setTextureWithPosition(TextureWithPosition *textureWithPosition)
 	this->textureWithPosition = textureWithPosition;
 	posX = textureWithPosition->getX();
 	posY = textureWithPosition->getY();
-}
-
-Wall *Ball::getWall()
-{
-	return wall;
-}
-
-void Ball::setWall(Wall *wall)
-{
-	this->wall = wall;
-}
-
-void Ball::bouncesOnBrick(Brick* brick){
-	Mix_PlayChannel(-1, brick->getSound(), 0);
-	int halfBallSize = this->getTextureWithPosition()->getPosition().w / 2;
-	int x = this->getTextureWithPosition()->getAbsCenterX();
-	int y = this->getTextureWithPosition()->getAbsCenterY();
-	if ( x >= brick->getTextureWithPosition()->getX()-halfBallSize && x < brick->getTextureWithPosition()->getX2() + halfBallSize){
-		if (
-			(y >= brick->getTextureWithPosition()->getY()-halfBallSize && y <= brick->getTextureWithPosition()->getY()) ||
-			(y >= brick->getTextureWithPosition()->getY2() && y <= brick->getTextureWithPosition()->getY2() + halfBallSize)
-		){
-			dirY = -dirY;
-		}
-	}
-	if ( y >= brick->getTextureWithPosition()->getY()-halfBallSize && y <= brick->getTextureWithPosition()->getY2() + halfBallSize){
-		if ( 
-			(x >= brick->getTextureWithPosition()->getX() - halfBallSize && x <= brick->getTextureWithPosition()->getX()) ||
-			(x >= brick->getTextureWithPosition()->getX2() && x <= brick->getTextureWithPosition() -> getX2() + halfBallSize)
-		){
-			dirX = -dirX;
-		}
-	}
-}
-
-bool Ball::isBrickTouched(Brick *brick)
-{
-	bool result = false;
-	if (!brick->isDestroyed())
-	{
-		int x = this->getTextureWithPosition()->getAbsCenterX();
-		int y = this->getTextureWithPosition()->getAbsCenterY();
-		int halfBallSize = this->getTextureWithPosition()->getPosition().w / 2;
-		result =  x >= brick->getTextureWithPosition()->getX() - halfBallSize 
-		       && x <= brick->getTextureWithPosition()->getX2() + halfBallSize
-			   && y >= brick->getTextureWithPosition()->getY() - halfBallSize
-			   && y <=  brick->getTextureWithPosition()->getY2() + halfBallSize;
-	}
-	return result;
 }
 
 float Ball::getSpeed()
@@ -207,12 +137,27 @@ bool Ball::bouncesOnBare(Bare *bare)
 	return result;
 }
 
-void Ball::init(Wall *wall, Bare *bare) {
+void Ball::setDirX(float dirX) {
+	this->dirX = dirX;
+}
+
+float Ball::getDirX() {
+	return this->dirX;
+}
+
+void Ball::setDirY(float dirY) {
+	this->dirY = dirY;
+}
+
+float Ball::getDirY() {
+	return this->dirY;
+}
+
+void Ball::init(Bare *bare) {
 	SDL_Rect rect;
 	rect.x = UtilConstants::getInstance()->gameZone.w / 2 + UtilConstants::getInstance()->gameZone.x;
 	rect.y = (GlobalConstants::MAX_NUMBER_OF_BRICKS_ON_Y + 1) * GlobalConstants::BRICK_HEIGHT + UtilConstants::getInstance()->gameZone.y;
 	TextureWithPosition *textureWithPosition = new TextureWithPosition(InitUtils::getInstance()->getMapTextures()[Ball::TEXTURE_KEY], rect);
 	setTextureWithPosition(textureWithPosition);
 	setBare(bare);
-	setWall(wall);
 }
