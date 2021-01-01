@@ -63,6 +63,7 @@ void Ball::moveBall()
 	posY = posY + dirY;
 	getTextureWithPosition()->setX(round(posX));
 	getTextureWithPosition()->setY(round(posY));
+	CustomEventUtils::getInstance()->postEventBallMoved(this);
 }
 
 Bare *Ball::getBare()

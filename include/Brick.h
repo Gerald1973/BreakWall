@@ -12,6 +12,7 @@ public:
 	Brick();
 	virtual ~Brick();
 	void setValue(int value);
+	void performEvent(SDL_Event &event);
 	int getValue();
 	bool isDestroyed();
 	void setDestroyed(bool destroyed);

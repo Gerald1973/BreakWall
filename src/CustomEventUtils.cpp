@@ -74,3 +74,15 @@ CustomEventUtils::~CustomEventUtils() {
 	cout << "DEBUG CustomEventUtils destruction." << endl;
 	this->instance = NULL;
 }
+
+void CustomEventUtils::postEventBallMoved(Ball *ball) {
+	Uint32 myEventType = SDL_RegisterEvents(1);
+	if (myEventType != ((Uint32) -1)) {
+		SDL_Event event;
+		event.type = SDL_USEREVENT;
+		event.user.code = BALL_MOVED;
+		event.user.data1 = (void*) ball;
+		event.user.data2 = NULL;
+		SDL_PushEvent(&event);
+	}
+}
