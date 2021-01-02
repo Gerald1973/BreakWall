@@ -12,6 +12,7 @@
 #include <SDL2/SDL_image.h>
 #include "../include/GlobalConstants.h"
 #include "../include/FileUtils.hpp"
+#include <iostream>
 
 InitUtils::InitUtils() {
 	renderer = NULL;
@@ -104,6 +105,18 @@ void InitUtils::addTexture(std::string fileName, std::string key) {
 
 std::map<std::string, Mix_Music*> InitUtils::getMapMods() {
 	return mixMusics;
+}
+
+bool InitUtils::toggleFullScreen() {
+		bool result = true;
+	    Uint32 fullscreenFlag = SDL_WINDOW_FULLSCREEN_DESKTOP;
+	    bool isFullscreen = SDL_GetWindowFlags(this->pWindow) & fullscreenFlag;
+	    int tmp = SDL_SetWindowFullscreen(this->pWindow, isFullscreen ? 0 : fullscreenFlag);
+	    if (tmp < 0) {
+	    	std::cout << "Error : fullscreen not possible" << std::endl;
+	    	result = false;
+	    }
+	    return result;
 }
 
 InitUtils::~InitUtils() {

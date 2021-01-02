@@ -63,6 +63,7 @@ void GameStates::reset() {
 	paused = false;
 	started = false;
 	score = 0;
+	fullScreen = false;
 }
 
 int GameStates::getScore() {
@@ -83,4 +84,12 @@ int GameStates::getRemainingBricks() {
 
 void GameStates::setRemainingBricks(int remainingBricks) {
 	this->remainingBricks = remainingBricks;
+}
+
+bool GameStates::isFullScreen() {
+	return this->fullScreen;
+}
+
+void GameStates::setFullScreen(bool fullScreen) {
+	this->fullScreen = fullScreen;
 }

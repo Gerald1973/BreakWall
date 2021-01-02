@@ -44,6 +44,8 @@ public:
 	int getScore();
 	void setRemainingBricks(int remainingBricks);
 	void setScore(int score);
+	bool isFullScreen();
+	void setFullScreen(bool fullScreen);
 
 
 private:
@@ -53,6 +55,7 @@ private:
 	bool paused;
 	int score;
 	bool started;
+	bool fullScreen;
 	static inline GameStates *instance;
 	GameStates();
 	virtual ~GameStates();

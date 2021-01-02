@@ -108,6 +108,9 @@ int main(int argc, char **argv) {
 		if (keys[SDL_SCANCODE_ESCAPE]) {
 			loop = false;
 		}
+		if (keys[SDL_SCANCODE_F11]){
+			GameStates::getInstance()->setFullScreen(InitUtils::getInstance()->toggleFullScreen());
+		}
 
 		if (!GameStates::getInstance()->isStarted()) {
 			int halfBarSize = bare->getTextureWithPosition()->getOriginRect().w / 2;
@@ -136,7 +139,6 @@ int main(int argc, char **argv) {
 		SDL_SetRenderTarget(InitUtils::getInstance()->getRenderer(), NULL);
 		SDL_RenderCopy(InitUtils::getInstance()->getRenderer(), baseTexture, NULL, NULL);
 		SDL_RenderPresent(InitUtils::getInstance()->getRenderer());
-		wall->playSong();
 	}
 	InitUtils::getInstance()->destroy();
 	return 0;

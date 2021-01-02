@@ -39,6 +39,7 @@ public:
 	void addMixMusic(std::string fileName, std::string key);
 	void addSoundEffect(std::string fileName, std::string key);
 	void addTexture(std::string fileName, std::string key);
+	bool toggleFullScreen();
 
 private:
 	std::map<std::string, Mix_Music*> mixMusics;
