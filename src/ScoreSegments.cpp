@@ -16,7 +16,7 @@ ScoreSegments::ScoreSegments() {
 	this->sdlTexture = NULL;
 	this->numberOfDigit = 6;
 	this->score = 0;
-	InitUtils::getInstance()->addTexture("segments_48_64.png", TEXTURE_KEY);
+	InitUtils::getInstance()->addTexture("resources/images/segments_48_64.png", TEXTURE_KEY);
 }
 
 ScoreSegments::~ScoreSegments() {

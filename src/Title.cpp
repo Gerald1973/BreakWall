@@ -11,7 +11,7 @@
 
 Title::Title() {
 	this->textureWithPosition = NULL;
-	InitUtils::getInstance()->addTexture("breakwall_title.png", TEXTURE_KEY);
+	InitUtils::getInstance()->addTexture("resources/images/breakwall_title.png", TEXTURE_KEY);
 }
 
 Title::~Title() {

@@ -8,8 +8,8 @@
 Bare::Bare() {
 	this->sound = NULL;
 	this->textureWithPosition = NULL;
-	InitUtils::getInstance()->addTexture("bare.png", TEXTURE_KEY);
-	InitUtils::getInstance()->addSoundEffect("bare.wav", SOUND_KEY);
+	InitUtils::getInstance()->addTexture("resources/images/bare.png", TEXTURE_KEY);
+	InitUtils::getInstance()->addSoundEffect("resources/sound/bare.wav", SOUND_KEY);
 }
 
 Bare::~Bare() {

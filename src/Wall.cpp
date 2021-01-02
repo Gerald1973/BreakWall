@@ -101,7 +101,7 @@ void Wall::playSong() {
 }
 
 void Wall::initSong() {
-	this->setSongFileName("worldofw.mod");
+	this->setSongFileName("resources/mods/worldofw.mod");
 	this->setSongKey("level_001");
 	InitUtils::getInstance()->addMixMusic(this->getSongFileName(), getSongKey());
 	Mix_PlayMusic(InitUtils::getInstance()->getMapMods()[getSongKey()], 1);
