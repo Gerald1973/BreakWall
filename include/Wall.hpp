@@ -19,13 +19,11 @@ public:
 	void performEvent(SDL_Event &event);
 	void playSong();
 	int findIndex(Brick *bricks);
-	void build();
 	void render();
-	void init();
-	SDL_AudioDeviceID getSdlAudioDeviceId();
-	SDL_AudioDeviceID initSong();
+	void initBricks();
+	void initSong();
+	void resetSong();
 	void stopSong();
-	void printStatus(SDL_AudioDeviceID dev);
 protected:
 private:
 	std::vector<Brick*> bricks;

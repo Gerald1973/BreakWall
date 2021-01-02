@@ -35,13 +35,13 @@ public:
 	SDL_Window* getPWindow();
 	std::map<std::string, Mix_Chunk*> getMapSounds();
 	std::map<std::string, SDL_Texture*> getMapTextures();
-	std::map<std::string, std::vector<unsigned char>> getMapMods();
-	void addMod(std::string fileName, std::string key);
+	std::map<std::string, Mix_Music*> getMapMods();
+	void addMixMusic(std::string fileName, std::string key);
 	void addSoundEffect(std::string fileName, std::string key);
 	void addTexture(std::string fileName, std::string key);
 
 private:
-	std::map<std::string, std::vector<unsigned char>> mapMods;
+	std::map<std::string, Mix_Music*> mixMusics;
 	std::map<std::string, Mix_Chunk*> mapSounds;
 	std::map<std::string, SDL_Texture*> mapTextures;
 	SDL_Renderer *renderer;

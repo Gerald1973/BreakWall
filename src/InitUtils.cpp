@@ -41,6 +41,8 @@ int InitUtils::initRenderer() {
 	renderer = SDL_CreateRenderer(pWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE | SDL_RENDERER_PRESENTVSYNC);
 	baseTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_TARGET, GlobalConstants::SCREEN_WIDTH,
 			GlobalConstants::SCREEN_HEIGHT);
+	addTexture("brickRed.bmp", GlobalConstants::TEXTURE_KEY);
+	addSoundEffect("metal.wav", GlobalConstants::SOUND_KEY);
 	return 0;
 }
 
@@ -64,12 +66,12 @@ std::map<std::string, SDL_Texture*> InitUtils::getMapTextures() {
 	return mapTextures;
 }
 
-void InitUtils::addMod(std::string fileName, std::string key) {
-	if (mapMods.find(key) != mapMods.end()) {
-		std::cout << "WARNING: The following key " << key << " is already presents in the map mods." << std::endl;
+void InitUtils::addMixMusic(std::string fileName, std::string key) {
+	if (mixMusics.find(key) != mixMusics.end()) {
+		std::cout << "WARNING: The following key " << key << " is already presents in the map mixMusic." << std::endl;
 	} else {
-		std::vector<unsigned char> results = FileUtils::getInstance()->readFile(fileName);
-		mapMods[key] = results;
+		Mix_Music* result = Mix_LoadMUS(fileName.c_str());
+		mixMusics[key] = result;
 	}
 }
 
@@ -100,8 +102,8 @@ void InitUtils::addTexture(std::string fileName, std::string key) {
 	}
 }
 
-std::map<std::string, std::vector<unsigned char>> InitUtils::getMapMods() {
-	return mapMods;
+std::map<std::string, Mix_Music*> InitUtils::getMapMods() {
+	return mixMusics;
 }
 
 InitUtils::~InitUtils() {

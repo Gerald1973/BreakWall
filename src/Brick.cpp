@@ -11,8 +11,6 @@ Brick::Brick() {
 	this->destroyed = false;
 	this->textureWithPosition = NULL;
 	this->deadDirection = 1;
-	InitUtils::getInstance()->addTexture("brickRed.bmp", TEXTURE_KEY);
-	InitUtils::getInstance()->addSoundEffect("metal.wav", SOUND_KEY);
 }
 void Brick::setValue(int value) {
 	this->value = value;
@@ -109,9 +107,9 @@ void Brick::bounces(Ball *ball) {
 }
 
 void Brick::init() {
-	setSound(InitUtils::getInstance()->getMapSounds()[Brick::SOUND_KEY]);
+	setSound(InitUtils::getInstance()->getMapSounds()[GlobalConstants::SOUND_KEY]);
 	SDL_Rect tmpRect;
-	TextureWithPosition *textureWithPosition = new TextureWithPosition(InitUtils::getInstance()->getMapTextures()[Brick::TEXTURE_KEY], tmpRect);
+	TextureWithPosition *textureWithPosition = new TextureWithPosition(InitUtils::getInstance()->getMapTextures()[GlobalConstants::TEXTURE_KEY], tmpRect);
 	setTextureWithPosition(textureWithPosition);
 }
 

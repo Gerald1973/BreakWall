@@ -1,13 +1,10 @@
 #ifndef GLOBALCONSTANTS_H
 #define GLOBALCONSTANTS_H
+#include <string>
 
 class GlobalConstants
 {
 public:
-    static inline int MAX_NUMBER_OF_BRICKS_ON_X = 15;
-    static inline int MAX_NUMBER_OF_BRICKS_ON_Y = 20;
-    static inline int BRICK_HEIGHT = 16;
-    static inline int BRICK_WIDTH = 64;
     static inline int SCREEN_WIDTH = 960;
     static inline int SCREEN_HEIGHT = 540;
     static inline int SEVEN_SEGMENT_WIDTH = 48;
@@ -16,6 +13,14 @@ public:
     static inline int BALL_ZONE_Y=0;
     static inline int BALL_ZONE_WIDTH=960;
     static inline int BALL_ZONE_HEIGHT=476;
+    static inline int WALL_ZONE_X=0;
+    static inline int WALL_ZONE_Y=0;
+    static inline int WALL_ZONE_WIDTH=960;
+    static inline int WALL_ZONE_HEIGHT=284;
+    //Brick texture key
+    static inline std::string TEXTURE_KEY = "brick";
+    //Brick sound key
+    static inline std::string SOUND_KEY = "brick";
 protected:
 private:
 };

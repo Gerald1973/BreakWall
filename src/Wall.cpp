@@ -15,9 +15,6 @@ Wall::Wall() {
 Wall::~Wall() {
 }
 
-void Wall::build() {
-}
-
 void Wall::render() {
 	for (unsigned int i = 0; i < bricks.size(); i++) {
 		bricks[i]->render();
@@ -64,12 +61,16 @@ int Wall::findIndex(Brick *brick) {
 	return result;
 }
 
-void Wall::init() {
-	std::cout << "DEBUG: init wall" << std::endl;
+void Wall::initBricks() {
 	std::vector<Brick*> bricks;
-	for (int y = 0; y < GlobalConstants::MAX_NUMBER_OF_BRICKS_ON_Y; y = y + 3) {
+	int brickHeight;
+	int brickWidth;
+	SDL_QueryTexture(InitUtils::getInstance()->getMapTextures()[GlobalConstants::TEXTURE_KEY], nullptr, nullptr, &brickWidth, &brickHeight);
+	int maxNumberOfBricksOnX = (GlobalConstants::WALL_ZONE_WIDTH - GlobalConstants::WALL_ZONE_X) / brickWidth;
+	int maxNumberOfBricksOnY = (GlobalConstants::WALL_ZONE_HEIGHT - GlobalConstants::WALL_ZONE_Y) / brickHeight;
+	for (int y = 0; y < maxNumberOfBricksOnY; y++) {
 		int x = y % 2;
-		for (; x < GlobalConstants::MAX_NUMBER_OF_BRICKS_ON_X; x = x + 5) {
+		for (; x < maxNumberOfBricksOnX; x = x + 2) {
 			Brick *brick = new Brick();
 			brick->init();
 			brick->getTextureWithPosition()->setX(x * brick->getTextureWithPosition()->getPosition().w);
@@ -78,7 +79,6 @@ void Wall::init() {
 		}
 	}
 	setBricks(bricks);
-	build();
 }
 
 std::string Wall::getSongFileName() {
@@ -98,188 +98,19 @@ void Wall::setSongKey(std::string songKey) {
 }
 
 void Wall::playSong() {
-//	Uint8 *data = nullptr;
-//	Uint32 len = 64 * 1024;
-//	if(SDL_GetQueuedAudioSize(sdlAudioDeviceId) == 0){
-//		printStatus(sdlAudioDeviceId);
-//		std::cout << "Sample remaining : " << microModSDLPlayer->getSamplesRemaining() << std::endl;
-//		data = microModSDLPlayer->buildStream(len);
-//		if (data != nullptr){
-//			SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//			free(data);
-//		}
-//	}
 }
 
-
-void Wall::printStatus(SDL_AudioDeviceID dev)
-{
-    switch (SDL_GetAudioDeviceStatus(dev))
-    {
-        case SDL_AUDIO_STOPPED: printf("stopped\n"); break;
-        case SDL_AUDIO_PLAYING: printf("playing\n"); break;
-        case SDL_AUDIO_PAUSED: printf("paused\n"); break;
-        default: printf("???"); break;
-    }
+void Wall::initSong() {
+	this->setSongFileName("worldofw.mod");
+	this->setSongKey("level_001");
+	InitUtils::getInstance()->addMixMusic(this->getSongFileName(), getSongKey());
+	Mix_PlayMusic(InitUtils::getInstance()->getMapMods()[getSongKey()], 1);
 }
 
-SDL_AudioDeviceID Wall::initSong() {
-this->setSongFileName("worldofw.mod");
-this->setSongKey("level_001");
-Mix_Music *mixMusic = Mix_LoadMUS(this->getSongFileName().c_str());
-Mix_PlayMusic(mixMusic,1);
-//InitUtils::getInstance()->addMod(this->getSongFileName(), this->getSongKey());
-//std::vector<unsigned char> modFile = InitUtils::getInstance()->getMapMods()[this->getSongKey()];
-//std::cout << "Mod file size : " << modFile.size() << std::endl;
-//sdlAudioDeviceId =microModSDLPlayer->initialise(&modFile[0]);
-//Uint8 *data = nullptr;
-//Uint32 len = 64 * 1024;
-//Uint32 remainingByte = SDL_GetQueuedAudioSize(this->sdlAudioDeviceId);
-//
-//
-//
-//SDL_PauseAudioDevice(this->sdlAudioDeviceId, 0);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//data =microModSDLPlayer->buildStream(len - remainingByte);
-//SDL_QueueAudio(this->sdlAudioDeviceId, data, len);
-//free(data);
-//std::cout << "SDL_GetQueuedAudioSize 0 =" << SDL_GetQueuedAudioSize(this->sdlAudioDeviceId) << std::endl;
-//std::cout << "SDL_GetQueuedAudioSize  1=" << SDL_GetQueuedAudioSize(this->sdlAudioDeviceId) << std::endl;
-//return sdlAudioDeviceId;
-}
-
-SDL_AudioDeviceID Wall::getSdlAudioDeviceId() {
-//return sdlAudioDeviceId;
+void Wall::resetSong() {
+	Mix_RewindMusic();
 }
 
 void Wall::stopSong() {
-//SDL_PauseAudioDevice(sdlAudioDeviceId, 1);
-//SDL_ClearQueuedAudio(sdlAudioDeviceId);
+	Mix_HaltMusic();
 }

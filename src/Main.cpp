@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
 	Bare *bare = new Bare();
 	bare->init();
 	Wall *wall = new Wall();
-	wall->init();
+	wall->initBricks();
 	ScoreSegments *scoreSegments = new ScoreSegments();
 	scoreSegments->init();
 	Ball *ball = new Ball();
@@ -67,6 +67,10 @@ int main(int argc, char **argv) {
 						GameStates::getInstance()->setRemainingLives(5);
 						GameStates::getInstance()->setStarted(true);
 						GameStates::getInstance()->setScore(0);
+						wall->initBricks();
+						wall->initSong();
+						wall->resetSong();
+						ball->init(bare);
 					}
 				}
 				break;
@@ -115,7 +119,9 @@ int main(int argc, char **argv) {
 		if (GameStates::getInstance()->getRemainingBricks() == 0) {
 			GameStates::getInstance()->increaseLevelBy(1);
 			GameStates::getInstance()->setRemainingBricks(wall->getBricks().size());
-			wall->init();
+			wall->initBricks();
+			wall->initSong();
+			wall->resetSong();
 			ball->init(bare);
 		}
 

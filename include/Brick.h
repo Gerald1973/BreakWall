@@ -8,8 +8,6 @@
 
 class Brick {
 public:
-	static inline std::string TEXTURE_KEY = "brick";
-	static inline std::string SOUND_KEY = "brick";
 	Brick();
 	virtual ~Brick();
 	void setValue(int value);
