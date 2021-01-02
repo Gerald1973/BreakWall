@@ -8,7 +8,6 @@
 #ifndef INCLUDE_GAMESTATE_HPP_
 #define INCLUDE_GAMESTATE_HPP_
 
-#endif /* INCLUDE_GAMESTATE_HPP_ */
 #include <iostream>
 
 class GameStates {
@@ -60,3 +59,4 @@ private:
 	GameStates();
 	virtual ~GameStates();
 };
+#endif

@@ -5,6 +5,8 @@
 
 #include "TextureWithPosition.h"
 
+class Ball;
+
 class Bare
 {
     public:
@@ -18,6 +20,7 @@ class Bare
         void render();
         Mix_Chunk* getSound();
         void setSound(Mix_Chunk* sound);
+        bool bounces(Ball* ball);
     protected:
     private:
         TextureWithPosition* textureWithPosition;

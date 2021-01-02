@@ -4,7 +4,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
 #include "TextureWithPosition.h"
-#include "../include/Ball.h"
+#include "Ball.h"
 
 class Brick {
 public:

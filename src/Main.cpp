@@ -34,7 +34,7 @@ int main(int argc, char **argv) {
 	ScoreSegments *scoreSegments = new ScoreSegments();
 	scoreSegments->init();
 	Ball *ball = new Ball();
-	ball->init(bare);
+	ball->init();
 	Background *background = new Background();
 	background->init();
 	Title *title = new Title();
@@ -70,7 +70,7 @@ int main(int argc, char **argv) {
 						wall->initBricks();
 						wall->initSong();
 						wall->resetSong();
-						ball->init(bare);
+						ball->init();
 					}
 				}
 				break;
@@ -96,6 +96,7 @@ int main(int argc, char **argv) {
 					}
 				} else if (event.user.code == CustomEventUtils::Code::BALL_MOVED) {
 					wall->performEvent(event);
+					bare->bounces(ball);
 				} else if (event.user.code == CustomEventUtils::Code::BRICK_REMOVED) {
 					wall->performEvent(event);
 				} else if (event.user.code == CustomEventUtils::Code::BRICK_REMAINING) {
@@ -125,7 +126,7 @@ int main(int argc, char **argv) {
 			wall->initBricks();
 			wall->initSong();
 			wall->resetSong();
-			ball->init(bare);
+			ball->init();
 		}
 
 		background->render();

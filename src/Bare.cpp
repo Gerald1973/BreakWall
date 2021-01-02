@@ -2,7 +2,9 @@
 #include "../include/InitUtils.hpp"
 #include "../include/UtilConstants.h"
 #include "../include/CustomEventUtils.hpp"
-
+#include <SDL2/SDL_mixer.h>
+#include <cmath>
+#include "../include/Ball.h"
 #include <iostream>
 
 Bare::Bare() {
@@ -43,5 +45,29 @@ void Bare::init() {
 	textureWithPosition->setY(UtilConstants::getInstance()->gameZone.h - textureWithPosition->getPosition().h);
 	setTextureWithPosition(textureWithPosition);
 	setSound(InitUtils::getInstance()->getMapSounds()[Bare::SOUND_KEY]);
+}
+
+bool Bare::bounces(Ball *ball) {
+	bool result = false;
+	if (ball->getTextureWithPosition()->getX2() >= this->getTextureWithPosition()->getX()
+			&& ball->getTextureWithPosition()->getX() <= this->getTextureWithPosition()->getX2()
+			&& ball->getTextureWithPosition()->getY2() >= this->getTextureWithPosition()->getY()
+			&& ball->getTextureWithPosition()->getY() <= this->getTextureWithPosition()->getY2()) {
+		Mix_PlayChannel(-1, this->getSound(), 0);
+		float centerBare = this->getTextureWithPosition()->getAbsCenterX();
+		float centerBall = ball->getTextureWithPosition()->getAbsCenterX();
+		float halfWidhtBare = (this->getTextureWithPosition()->getPosition().w + ball->getTextureWithPosition()->getPosition().w) / 2;
+		float deltaCenter = centerBall - centerBare;
+		ball->setCoeffX(deltaCenter / halfWidhtBare);
+		float tmpCoeffY = sqrt(1 - ball->getCoeffX() * ball->getCoeffX());
+		ball->setCoeffY(tmpCoeffY);
+		std::cout << "DEBUG Coefficient X = " << ball->getCoeffX() << std::endl;
+		std::cout << "DEBUG Coefficient Y = " << ball->getCoeffY() << std::endl;
+		result = true;
+		ball->setDirX(ball->getCoeffX() * ball->getSpeed());
+		ball->setDirY(-ball->getCoeffY() * ball->getSpeed());
+		CustomEventUtils::getInstance()->postEventBareTouched();
+	}
+	return result;
 }
 

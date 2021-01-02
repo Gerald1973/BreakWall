@@ -11,18 +11,15 @@ Ball::Ball() {
 	this->dirX = 0;
 	this->speed = 8;
 	this->dirY = 8;
-	this->coeffy = 1;
+	this->coeffY = 1;
 	this->coeffX = 0;
-	this->textureWithPosition = NULL;
+	this->textureWithPosition = nullptr;
 	this->posX = 0;
 	this->posY = 0;
-	this->bare = NULL;
 	InitUtils::getInstance()->addTexture("resources/images/ball.png", TEXTURE_KEY);
 }
 
 Ball::~Ball() {
-	delete textureWithPosition;
-	delete bare;
 }
 
 void Ball::render() {
@@ -31,21 +28,12 @@ void Ball::render() {
 
 void Ball::moveBall() {
 	bouncesOnScreen();
-	bouncesOnBare(getBare());
 	//4 Move
 	posX = posX + dirX;
 	posY = posY + dirY;
 	getTextureWithPosition()->setX(round(posX));
 	getTextureWithPosition()->setY(round(posY));
 	CustomEventUtils::getInstance()->postEventBallMoved(this);
-}
-
-Bare* Ball::getBare() {
-	return bare;
-}
-
-void Ball::setBare(Bare *bare) {
-	this->bare = bare;
 }
 
 TextureWithPosition* Ball::getTextureWithPosition() {
@@ -96,31 +84,6 @@ bool Ball::bouncesOnScreen() {
 	return result;
 }
 
-bool Ball::bouncesOnBare(Bare *bare) {
-	bool result = false;
-	if (getTextureWithPosition()->getX2() >= bare->getTextureWithPosition()->getX()
-			&& getTextureWithPosition()->getX() <= bare->getTextureWithPosition()->getX2()
-			&& getTextureWithPosition()->getY2() >= bare->getTextureWithPosition()->getY()
-			&& getTextureWithPosition()->getY() <= bare->getTextureWithPosition()->getY2()) {
-		Mix_PlayChannel(-1, bare->getSound(), 0);
-		dirY = -dirY;
-		//calcul coeffX
-		float centerBare = (float) (bare->getTextureWithPosition()->getAbsCenterX());
-		float centerBall = (float) (getTextureWithPosition()->getAbsCenterX());
-		float halfWidht = (float) ((bare->getTextureWithPosition()->getPosition().w + getTextureWithPosition()->getPosition().w) / 2);
-		float deltaCenter = centerBall - centerBare;
-		coeffX = deltaCenter / halfWidht;
-		coeffy = sqrt(1 - coeffX * coeffX);
-		std::cout << "DEBUG Coefficient X = " << coeffX << "\n";
-		std::cout << "DEBUG Coefficient Y = " << coeffy << "\n";
-		result = true;
-		dirX = coeffX * speed;
-		dirY = -coeffy * speed;
-		CustomEventUtils::getInstance()->postEventBareTouched();
-	}
-	return result;
-}
-
 void Ball::setDirX(float dirX) {
 	this->dirX = dirX;
 }
@@ -137,16 +100,30 @@ float Ball::getDirY() {
 	return this->dirY;
 }
 
-void Ball::init(Bare *bare) {
+void Ball::init() {
 	SDL_Rect ballRect;
 	SDL_Texture *texture = InitUtils::getInstance()->getMapTextures()[Ball::TEXTURE_KEY];
 	int widthBall;
 	int heightBall;
 	SDL_QueryTexture(texture, nullptr, nullptr, &widthBall, &heightBall);
-	int halfBareSize = bare->getTextureWithPosition()->getPosition().w / 2;
-	ballRect.x = bare->getTextureWithPosition()->getX() + halfBareSize - widthBall / 2;
-	ballRect.y = bare->getTextureWithPosition()->getY() - heightBall;
+	ballRect.x = (GlobalConstants::BALL_ZONE_X +  GlobalConstants::BALL_ZONE_WIDTH -widthBall) /2;
+	ballRect.y =  GlobalConstants::WALL_ZONE_Y + GlobalConstants::WALL_ZONE_HEIGHT + heightBall;
 	TextureWithPosition *textureWithPosition = new TextureWithPosition(InitUtils::getInstance()->getMapTextures()[Ball::TEXTURE_KEY], ballRect);
 	setTextureWithPosition(textureWithPosition);
-	setBare(bare);
+}
+
+void Ball::setCoeffX(float coeffX) {
+	this->coeffX = coeffX;
+}
+
+void Ball::setCoeffY(float coeffY) {
+	this->coeffY = coeffY;
+}
+
+float Ball::getCoeffX() {
+	return this->coeffX;
+}
+
+float Ball::getCoeffY() {
+	return this->coeffY;
 }
