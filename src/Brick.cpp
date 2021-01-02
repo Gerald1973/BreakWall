@@ -53,15 +53,27 @@ void Brick::render() {
 void Brick::playDestroy() {
 	int y = getTextureWithPosition()->getY();
 	int h = getTextureWithPosition()->getPosition().h;
+	SDL_RendererFlip sdlRendererFlip = SDL_FLIP_NONE;
 	if (y < GlobalConstants::BALL_ZONE_Y + GlobalConstants::BALL_ZONE_HEIGHT - h) {
 		if (h == 0 || h == getTextureWithPosition()->getOriginRect().h) {
 			deadDirection = -deadDirection;
 		}
 		y = y + 2;
 		h = h + deadDirection;
+		if (h == 0){
+			sdlRendererFlip= SDL_FLIP_VERTICAL;
+		} else {
+			sdlRendererFlip = SDL_FLIP_NONE;
+		}
 		getTextureWithPosition()->setY(y);
 		getTextureWithPosition()->setH(h);
-		SDL_RenderCopy(InitUtils::getInstance()->getRenderer(), getTextureWithPosition()->getTexture(), NULL, &(getTextureWithPosition()->getPosition()));
+		SDL_RenderCopyEx(InitUtils::getInstance()->getRenderer(),
+				getTextureWithPosition()->getTexture(),
+				NULL,
+				&(getTextureWithPosition()->getPosition()),
+				0,
+				nullptr,
+				sdlRendererFlip);
 	} else {
 		CustomEventUtils::getInstance()->postEventBrickRemoved(this);
 	}
