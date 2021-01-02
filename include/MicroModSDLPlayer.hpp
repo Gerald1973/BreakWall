@@ -1,4 +1,6 @@
 #include <SDL2/SDL.h>
+#include <iostream>
+#include "MicroModUtils.hpp"
 
 #define __SAMPLING_FREQ__ 48000  /* 48khz. */
 #define __REVERB_BUF_LEN__ 4800  /* 50ms. */
@@ -9,22 +11,14 @@
 class MicroModSDLPlayer
 {
 public:
-    static inline MicroModSDLPlayer *getInstance()
-    {
-        if (!instance)
-        {
-            instance = new MicroModSDLPlayer();
-        }
-        return instance;
-    }
-
     int OVERSAMPLE;
     int NUM_CHANNELS;
     int SAMPLING_FREQ;
     int BUFFER_SAMPLES;
     long samplesRemaining;
     short reverbBuffer[__REVERB_BUF_LEN__];
-    short mixBuffer[__BUFFER_SAMPLES__ * __NUM_CHANNELS__ * __OVERSAMPLE__];
+    //short mixBuffer[__BUFFER_SAMPLES__ * __NUM_CHANNELS__ * __OVERSAMPLE__];
+    short* mixBuffer;
     long reverbLen, reverbIdx, filtL, filtR;
 
     void downSample(short *input, short *output, long count);
@@ -33,17 +27,15 @@ public:
     void callback(Uint8 *stream, int len);
     void terminationHandler(int signum);
     void printModuleInfo();
-    long initialise(unsigned char module[]);
+    long getSamplesRemaining();
+    SDL_AudioDeviceID initialise(unsigned char module[]);
     long playModule(unsigned char module[]);
-
-private:
-    static inline MicroModSDLPlayer *instance = NULL;
+    Uint8* buildStream(int len);
     MicroModSDLPlayer();
     ~MicroModSDLPlayer();
+private:
+    MicroModUtils* microModUtils;
+
 };
 
-void inline audioCallback(void *udata, Uint8 *stream, int len)
-{
-    MicroModSDLPlayer *ptr = MicroModSDLPlayer::getInstance();
-    ptr->callback(stream, len);
-}
+

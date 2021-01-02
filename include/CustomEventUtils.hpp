@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 #include "Ball.h"
+#include <vector>
+#include "../include/Wall.hpp"
 
 #include "Brick.h"
 
@@ -19,6 +21,7 @@ public:
         LEVEL_FINISHED = 3,
         BRICK_TOUCHED=40,
 		BRICK_REMOVED=41,
+		BRICK_REMAINING=42,
         BORDER_TOP_TOUCHED=50,
         BORDER_RIGHT_TOUCHED=51,
         BORDER_BOTTOM_TOUCHED=52,
@@ -31,6 +34,7 @@ public:
     void postEventSongStop(std::string *message);
     void postEventBrickRemoved(Brick* brick);
     void postEventBrickTouched(Brick* brick);
+    void postEventBrickRemaining(Wall* wall);
     void postEventBorderTouched(Code code);
     void postEventLiveFinished();
     void postEventBareTouched();

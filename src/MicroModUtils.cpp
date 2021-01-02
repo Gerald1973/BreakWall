@@ -418,16 +418,18 @@ void MicroModUtils::resample(channel *chan, short *buf, long offset,
 				break;
 			}
 			/* Subtract loop-length until within loop points. */
-			while (sidx >= lep1)
+			while (sidx >= lep1) {
 				sidx -= llen;
+			}
 		}
 		/* Calculate sample position at end. */
 		epos = sidx + ((buf_end - buf_idx) >> 1) * step;
 		/* Most of the cpu time is spent here. */
 		if (lamp || ramp) {
 			/* Only mix to end of current loop. */
-			if (epos > lep1)
+			if (epos > lep1){
 				epos = lep1;
+			}
 			if (lamp && ramp) {
 				/* Mix both channels. */
 				while (sidx < epos) {
@@ -438,12 +440,17 @@ void MicroModUtils::resample(channel *chan, short *buf, long offset,
 				}
 			} else {
 				/* Only mix one channel. */
-				if (ramp)
+				if (ramp){
 					buf_idx++;
+				}
 				while (sidx < epos) {
+					//std::cout << "DEBUG: resample 04_01_21_01 sidx:" << sidx << std::endl;
 					buf[buf_idx] += sdat[sidx >> FP_SHIFT] * ampl;
+					//std::cout << "DEBUG: resample 04_01_21_02" << std::endl;
 					buf_idx += 2;
+					//std::cout << "DEBUG: resample 04_01_21_03" << std::endl;
 					sidx += step;
+					//std::cout << "DEBUG: resample 04_01_21_04" << std::endl;
 				}
 				buf_idx &= -2;
 			}
@@ -515,13 +522,12 @@ long MicroModUtils::initialise(unsigned char* data, long sampling_rate) {
 		inst->loop_start = loop_start << FP_SHIFT;
 		inst->loop_length = loop_length << FP_SHIFT;
 		inst->sample_data = (signed char*) module_data + sample_data_offset;
-		cout << "DEBUG Instrument idx        : " << inst_idx << endl;
-		cout << "DEBUG ptrInstrument         : " << inst << endl;
-		cout << "DEBUG Instrument loop start : " << inst->loop_start << endl;
-		cout << "DEBUG Instrument loop length: " << inst->loop_length << endl;
-		cout << "DEBUG Instrument offset     : " << sample_data_offset << endl;
-		cout << "DEBUG Instrument length     : " << sample_length << endl;
-		cout << endl;
+//		cout << "DEBUG Instrument idx        : " << inst_idx << endl;
+//		cout << "DEBUG ptrInstrument         : " << inst << endl;
+//		cout << "DEBUG Instrument loop start : " << inst->loop_start << endl;
+//		cout << "DEBUG Instrument loop length: " << inst->loop_length << endl;
+//		cout << "DEBUG Instrument offset     : " << sample_data_offset << endl;
+//		cout << "DEBUG Instrument length     : " << sample_length << endl;
 		sample_data_offset += sample_length;
 	}
 	c2_rate = (num_channels > 4) ? 8363 : 8287;
@@ -619,7 +625,7 @@ void MicroModUtils::setGain(long value) {
 	gain = value;
 }
 
-void MicroModUtils::getAudio(short outputBuffer[], long count) {
+void MicroModUtils::getAudio(short* outputBuffer, long count) {
 	long offset, remain, chan_idx;
 	if (num_channels <= 0)
 		return;
@@ -629,7 +635,7 @@ void MicroModUtils::getAudio(short outputBuffer[], long count) {
 		if (remain > count)
 			remain = count;
 		for (chan_idx = 0; chan_idx < num_channels; chan_idx++) {
-			resample(&channels[chan_idx], &outputBuffer[0], offset, remain);
+			resample(&channels[chan_idx], outputBuffer, offset, remain);
 		}
 		tick_offset += remain;
 		if (tick_offset == tick_len) {
@@ -657,9 +663,9 @@ MicroModUtils::MicroModUtils() {
 	pl_count = 0;
 	pl_channel = 0;
 	random_seed = 0;
-	module_data = NULL;
-	pattern_data = NULL;
-	sequence = NULL;
+	module_data = nullptr;
+	pattern_data = nullptr;
+	sequence = nullptr;
 	song_length = 0;
 	restart = 0;
 	num_patterns = 0;
@@ -667,5 +673,5 @@ MicroModUtils::MicroModUtils() {
 }
 
 MicroModUtils::~MicroModUtils() {
-	MicroModUtils::instance = NULL;
+	//MicroModUtils::instance = nullptr;
 }

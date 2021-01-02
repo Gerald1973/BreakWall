@@ -29,10 +29,12 @@ public:
 	}
 
 	void addScore(int number);
+	void increaseLevelBy(int number);
 	int getCurrentLevel();
 	void setCurrentLevel(int currentLevel);
 	bool isPaused();
 	void setPaused(bool paused);
+	int getRemainingBricks();
 	int getRemainingLives();
 	void setRemainingLives(int remainingLives);
 	bool isStarted();
@@ -40,9 +42,12 @@ public:
 	void decreaseRemainingLive(int number);
 	void reset();
 	int getScore();
+	void setRemainingBricks(int remainingBricks);
 	void setScore(int score);
 
+
 private:
+	int remainingBricks;
 	int remainingLives;
 	int currentLevel;
 	bool paused;

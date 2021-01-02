@@ -22,6 +22,10 @@ void GameStates::setCurrentLevel(int currentLevel) {
 	this->currentLevel = currentLevel;
 }
 
+void GameStates::increaseLevelBy(int number){
+	this->currentLevel = this->currentLevel + number;
+}
+
 bool GameStates::isPaused() {
 	return paused;
 }
@@ -71,4 +75,12 @@ void GameStates::setScore(int score) {
 
 void GameStates::addScore(int number) {
 	score = score + number;
+}
+
+int GameStates::getRemainingBricks() {
+	return this->remainingBricks;
+}
+
+void GameStates::setRemainingBricks(int remainingBricks) {
+	this->remainingBricks = remainingBricks;
 }

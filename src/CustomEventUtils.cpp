@@ -18,6 +18,18 @@ void CustomEventUtils::postEventSongStop(string *message) {
 	}
 }
 
+void CustomEventUtils::postEventBrickRemaining(Wall* wall) {
+	Uint32 myEventType = SDL_RegisterEvents(1);
+	if (myEventType != ((Uint32) -1)) {
+		SDL_Event event;
+		event.type = SDL_USEREVENT;
+		event.user.code = BRICK_REMAINING;
+		event.user.data1 = wall;
+		event.user.data2 = NULL;
+		SDL_PushEvent(&event);
+	}
+}
+
 void CustomEventUtils::postEventBrickRemoved(Brick *brick) {
 	Uint32 myEventType = SDL_RegisterEvents(1);
 	if (myEventType != ((Uint32) -1)) {
@@ -28,7 +40,6 @@ void CustomEventUtils::postEventBrickRemoved(Brick *brick) {
 		event.user.data2 = NULL;
 		SDL_PushEvent(&event);
 	}
-
 }
 
 void CustomEventUtils::postEventBrickTouched(Brick *brick) {

@@ -9,7 +9,6 @@
 #include "../include/Brick.h"
 #include "../include/CustomEventUtils.hpp"
 #include "../include/InitUtils.hpp"
-#include "../include/MicroModSDLPlayer.hpp"
 #include "../include/ScoreSegments.hpp"
 #include "../include/TextureWithPosition.h"
 #include "../include/Title.hpp"
@@ -41,12 +40,7 @@ int main(int argc, char **argv) {
 	Title *title = new Title();
 	title->init();
 	bool loop = true;
-	//Test amiga mod
-	InitUtils::getInstance()->addMod("worldofw.mod", "mod_001");
-	std::vector<unsigned char> modFile = InitUtils::getInstance()->getMapMods()["mod_001"];
-	MicroModSDLPlayer::getInstance()->initialise(&modFile[0]);
-	SDL_PauseAudio(0);
-	//End test
+	wall->initSong();
 	while (loop) {
 		SDL_SetRenderTarget(InitUtils::getInstance()->getRenderer(), baseTexture);
 		SDL_RenderClear(InitUtils::getInstance()->getRenderer());
@@ -77,11 +71,7 @@ int main(int argc, char **argv) {
 				}
 				break;
 			case SDL_USEREVENT:
-				if (event.user.code == CustomEventUtils::Code::SONG_STOP) {
-					SDL_PauseAudio(1);
-					MicroModSDLPlayer::getInstance()->initialise(&modFile[0]);
-					SDL_PauseAudio(0);
-				} else if (event.user.code == CustomEventUtils::Code::BRICK_TOUCHED) {
+				if (event.user.code == CustomEventUtils::Code::BRICK_TOUCHED) {
 					Brick *brick = (Brick*) event.user.data1;
 					GameStates::getInstance()->addScore(brick->getValue());
 				} else if (event.user.code == CustomEventUtils::Code::BORDER_BOTTOM_TOUCHED) {
@@ -102,8 +92,11 @@ int main(int argc, char **argv) {
 					}
 				} else if (event.user.code == CustomEventUtils::Code::BALL_MOVED) {
 					wall->performEvent(event);
-				}  else if (event.user.code == CustomEventUtils::Code::BRICK_REMOVED) {
+				} else if (event.user.code == CustomEventUtils::Code::BRICK_REMOVED) {
 					wall->performEvent(event);
+				} else if (event.user.code == CustomEventUtils::Code::BRICK_REMAINING) {
+					std::cout << "DEBUG: Remaining bricks : " << wall->getBricks().size() << std::endl;
+					GameStates::getInstance()->setRemainingBricks(wall->getBricks().size());
 				}
 				break;
 			}
@@ -119,6 +112,13 @@ int main(int argc, char **argv) {
 			bare->getTextureWithPosition()->setX(barePosX);
 		}
 
+		if (GameStates::getInstance()->getRemainingBricks() == 0) {
+			GameStates::getInstance()->increaseLevelBy(1);
+			GameStates::getInstance()->setRemainingBricks(wall->getBricks().size());
+			wall->init();
+			ball->init(bare);
+		}
+
 		background->render();
 		wall->render();
 		bare->render();
@@ -130,6 +130,7 @@ int main(int argc, char **argv) {
 		SDL_SetRenderTarget(InitUtils::getInstance()->getRenderer(), NULL);
 		SDL_RenderCopy(InitUtils::getInstance()->getRenderer(), baseTexture, NULL, NULL);
 		SDL_RenderPresent(InitUtils::getInstance()->getRenderer());
+		wall->playSong();
 	}
 	InitUtils::getInstance()->destroy();
 	return 0;
