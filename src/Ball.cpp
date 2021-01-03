@@ -15,7 +15,8 @@ Ball::Ball() {
 	this->coeffY = 1;
 	this->coeffX = 0;
 	this->textureWithPosition = nullptr;
-	InitUtils::getInstance()->addTexture("resources/images/ball.png", TEXTURE_KEY);
+	InitUtils::getInstance()->addTexture("resources/images/ball.png", GlobalConstants::BALL_TEXTURE_KEY);
+	InitUtils::getInstance()->addSoundEffect("resources/sound/scream.wav", GlobalConstants::SOUND_KEY_BALL_DEAD);
 }
 
 Ball::~Ball() {
@@ -68,6 +69,7 @@ bool Ball::bouncesOnScreen() {
 	//bottom
 	if (y >= UtilConstants::getInstance()->gameZone.y + UtilConstants::getInstance()->gameZone.h - halfBallSize) {
 		CustomEventUtils::getInstance()->postEventBorderTouched(CustomEventUtils::Code::BORDER_BOTTOM_TOUCHED, this);
+		Mix_PlayChannel(-1, InitUtils::getInstance()->getMapSounds()[GlobalConstants::SOUND_KEY_BALL_DEAD], 0);
 	}
 	//left
 	if (x <= UtilConstants::getInstance()->gameZone.x + halfBallSize) {
@@ -94,7 +96,7 @@ float Ball::getDirY() {
 }
 
 void Ball::init() {
-	SDL_Texture *texture = InitUtils::getInstance()->getMapTextures()[Ball::TEXTURE_KEY];
+	SDL_Texture *texture = InitUtils::getInstance()->getMapTextures()[GlobalConstants::BALL_TEXTURE_KEY];
 	int widthBall;
 	int heightBall;
 	SDL_QueryTexture(texture, nullptr, nullptr, &widthBall, &heightBall);
@@ -110,7 +112,7 @@ void Ball::init() {
 		SDL_Rect ballRect;
 		ballRect.x = posX;
 		ballRect.y = posY;
-		textureWithPosition = new TextureWithPosition(InitUtils::getInstance()->getMapTextures()[Ball::TEXTURE_KEY], ballRect);
+		textureWithPosition = new TextureWithPosition(InitUtils::getInstance()->getMapTextures()[GlobalConstants::BALL_TEXTURE_KEY], ballRect);
 	} else {
 		textureWithPosition->setX(posX);
 		textureWithPosition->setY(posY);
@@ -146,11 +148,6 @@ void Ball::performEvent(SDL_Event &event) {
 			this->setGlued(false);
 		}
 		break;
-	case SDL_USEREVENT:
-		switch (event.user.code) {
-		case CustomEventUtils::Code::BORDER_BOTTOM_TOUCHED:
-			init();
-		}
 	}
 }
 

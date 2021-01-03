@@ -19,8 +19,10 @@ public:
     static inline int WALL_ZONE_HEIGHT=284;
     //Brick texture key
     static inline std::string TEXTURE_KEY = "brick";
-    //Brick sound key
+    static inline std::string BALL_TEXTURE_KEY= "ball";
+    //sound key
     static inline std::string SOUND_KEY = "brick";
+    static inline std::string SOUND_KEY_BALL_DEAD="sound_key_ball_dead";
 protected:
 private:
 };

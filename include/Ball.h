@@ -9,7 +9,6 @@
 
 class Ball {
 public:
-	static inline std::string TEXTURE_KEY = "ball";
 	Ball();
 	virtual ~Ball();
 	void render();

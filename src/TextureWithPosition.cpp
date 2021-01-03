@@ -23,6 +23,10 @@ TextureWithPosition::TextureWithPosition(SDL_Texture *texture, SDL_Rect position
 TextureWithPosition::TextureWithPosition(SDL_Texture *texture, int x, int y, int width, int height)
 {
     SDL_Rect position;
+    position.h = 0;
+    position.w = 0;
+    position.x = 0;
+    position.y = 0;
     this->position = position;
     this->texture = texture;
     int _width = 0;
@@ -131,8 +135,8 @@ void TextureWithPosition::setTexture(SDL_Texture *sdlTexture)
 
 void TextureWithPosition::setW(int w){
     this->position.w = w;
-};
+}
 
 void TextureWithPosition::setH(int h){
     this->position.h = h;
-};
+}
