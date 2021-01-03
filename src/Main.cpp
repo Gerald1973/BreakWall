@@ -82,6 +82,8 @@ int main(int argc, char **argv) {
 					GameStates::getInstance()->addScore(brick->getValue());
 				} else if (event.user.code == CustomEventUtils::Code::BORDER_BOTTOM_TOUCHED) {
 					GameStates::getInstance()->decreaseRemainingLive(1);
+					ball->performEvent(event);
+					bare->performEvent(event);
 				} else if (event.user.code == CustomEventUtils::Code::LIVE_FINISHED) {
 					GameStates::getInstance()->setCurrentLevel(1);
 					GameStates::getInstance()->setPaused(false);

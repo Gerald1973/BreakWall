@@ -35,7 +35,7 @@ public:
     void postEventBrickRemoved(Brick* brick);
     void postEventBrickTouched(Brick* brick);
     void postEventBrickRemaining(Wall* wall);
-    void postEventBorderTouched(Code code);
+    void postEventBorderTouched(Code code, Ball *);
     void postEventLiveFinished();
     void postEventBareTouched();
     void postEventBallMoved(Ball* ball);

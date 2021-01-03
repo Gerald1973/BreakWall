@@ -28,6 +28,7 @@ public:
 	void setCoeffY(float coeffY);
 	float getCoeffX();
 	float getCoeffY();
+	void performEvent(SDL_Event &event);
 protected:
 private:
 	TextureWithPosition* textureWithPosition;

@@ -71,10 +71,7 @@ bool Ball::bouncesOnScreen() {
 	}
 	//bottom
 	if (y >= UtilConstants::getInstance()->gameZone.y + UtilConstants::getInstance()->gameZone.h - halfBallSize) {
-		dirY = -dirY;
-		result = true;
-		CustomEventUtils::getInstance()->postEventBorderTouched(CustomEventUtils::Code::BORDER_BOTTOM_TOUCHED);
-
+		CustomEventUtils::getInstance()->postEventBorderTouched(CustomEventUtils::Code::BORDER_BOTTOM_TOUCHED, this);
 	}
 	//left
 	if (x <= UtilConstants::getInstance()->gameZone.x + halfBallSize) {
@@ -106,10 +103,19 @@ void Ball::init() {
 	int widthBall;
 	int heightBall;
 	SDL_QueryTexture(texture, nullptr, nullptr, &widthBall, &heightBall);
-	ballRect.x = (GlobalConstants::BALL_ZONE_X +  GlobalConstants::BALL_ZONE_WIDTH -widthBall) /2;
-	ballRect.y =  GlobalConstants::WALL_ZONE_Y + GlobalConstants::WALL_ZONE_HEIGHT + heightBall;
-	TextureWithPosition *textureWithPosition = new TextureWithPosition(InitUtils::getInstance()->getMapTextures()[Ball::TEXTURE_KEY], ballRect);
-	setTextureWithPosition(textureWithPosition);
+	this->posX = (GlobalConstants::BALL_ZONE_X + GlobalConstants::BALL_ZONE_WIDTH - widthBall) / 2;
+	this->posY = GlobalConstants::WALL_ZONE_Y + GlobalConstants::WALL_ZONE_HEIGHT + heightBall;
+	this->dirX = 0;
+	this->speed = 8;
+	this->dirY = 8;
+	this->coeffY = 1;
+	this->coeffX = 0;
+	if (this -> textureWithPosition == nullptr){
+		textureWithPosition = new TextureWithPosition(InitUtils::getInstance()->getMapTextures()[Ball::TEXTURE_KEY], ballRect);
+	} else {
+		textureWithPosition->setX(this->posX);
+		textureWithPosition->setY(this->posY);
+	}
 }
 
 void Ball::setCoeffX(float coeffX) {
@@ -126,4 +132,11 @@ float Ball::getCoeffX() {
 
 float Ball::getCoeffY() {
 	return this->coeffY;
+}
+
+void Ball::performEvent(SDL_Event &event) {
+	switch (event.user.code) {
+	case CustomEventUtils::Code::BORDER_BOTTOM_TOUCHED:
+		init();
+	}
 }

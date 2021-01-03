@@ -50,11 +50,11 @@ void CustomEventUtils::postEventBrickTouched(Brick *brick) {
 
 }
 
-void CustomEventUtils::postEventBorderTouched(Code code) {
+void CustomEventUtils::postEventBorderTouched(Code code, Ball* ball) {
 	SDL_Event event;
 	event.type = myEventType;
 	event.user.code = code;
-	event.user.data1 = nullptr;
+	event.user.data1 = ball;
 	event.user.data2 = nullptr;
 	event.user.windowID = SDL_GetWindowID(InitUtils::getInstance()->getPWindow());
 	SDL_PushEvent(&event);

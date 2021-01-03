@@ -3,13 +3,13 @@
 #include <iostream>
 #include "../include/Bare.hpp"
 #include "../include/InitUtils.hpp"
-#include "../include/UtilConstants.h"
 #include "../include/CustomEventUtils.hpp"
 #include "../include/Ball.h"
+#include "../include/GlobalConstants.h"
 
 Bare::Bare() {
-	this->sound = NULL;
-	this->textureWithPosition = NULL;
+	this->sound = nullptr;
+	this->textureWithPosition = nullptr;
 	InitUtils::getInstance()->addTexture("resources/images/bare.png", TEXTURE_KEY);
 	InitUtils::getInstance()->addSoundEffect("resources/sound/bare.wav", SOUND_KEY);
 }
@@ -39,19 +39,28 @@ void Bare::setSound(Mix_Chunk *sound) {
 }
 
 void Bare::init() {
-	SDL_Rect position;
-	TextureWithPosition *textureWithPosition = new TextureWithPosition(InitUtils::getInstance()->getMapTextures()[Bare::TEXTURE_KEY], position);
-	textureWithPosition->setX((UtilConstants::getInstance()->gameZone.w - textureWithPosition->getPosition().w) / 2);
-	textureWithPosition->setY(UtilConstants::getInstance()->gameZone.h - textureWithPosition->getPosition().h);
-	setTextureWithPosition(textureWithPosition);
+	int widhtBare;
+	int heightBare;
+	SDL_QueryTexture(InitUtils::getInstance()->getMapTextures()[TEXTURE_KEY], nullptr, nullptr, &widhtBare, &heightBare);
+	int posX = (GlobalConstants::BALL_ZONE_X + GlobalConstants::BALL_ZONE_WIDTH - widhtBare) / 2;
+	int posY = GlobalConstants::BALL_ZONE_Y + GlobalConstants::BALL_ZONE_HEIGHT - heightBare;
+	if (textureWithPosition == nullptr) {
+		this->textureWithPosition = new TextureWithPosition(InitUtils::getInstance()->getMapTextures()[TEXTURE_KEY], posX, posY, widhtBare, heightBare);
+	} else {
+		this->textureWithPosition->setX(posX);
+		this->textureWithPosition->setY(posY);
+	}
 	setSound(InitUtils::getInstance()->getMapSounds()[Bare::SOUND_KEY]);
 }
 
 void Bare::performEvent(SDL_Event &event) {
 	switch (event.user.code) {
-		case CustomEventUtils::Code::BALL_MOVED :
-			bounces((Ball*) event.user.data1);
-			break;
+	case CustomEventUtils::Code::BALL_MOVED:
+		bounces((Ball*) event.user.data1);
+		break;
+	case CustomEventUtils::Code::BORDER_BOTTOM_TOUCHED:
+		init();
+		break;
 	}
 }
 
