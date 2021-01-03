@@ -24,8 +24,6 @@ int main(int argc, char **argv) {
 	int posRand = 0;
 	SDL_Texture *baseTexture = InitUtils::getInstance()->getBaseTexture();
 	SDL_SetRelativeMouseMode(SDL_TRUE);
-	const Uint8 *keys = SDL_GetKeyboardState(NULL);
-	std::map<int, bool> mapKbd;
 	SDL_Event event;
 	Bare *bare = new Bare();
 	bare->init();
@@ -47,11 +45,15 @@ int main(int argc, char **argv) {
 		ball->moveBall();
 		while (SDL_PollEvent(&event)) {
 			switch (event.type) {
-			case SDL_KEYUP:
-				mapKbd[event.key.keysym.scancode] = false;
-				break;
 			case SDL_KEYDOWN:
-				keys = SDL_GetKeyboardState(NULL);
+				switch (event.key.keysym.sym) {
+				case SDLK_F11:
+					GameStates::getInstance()->setFullScreen(InitUtils::getInstance()->toggleFullScreen());
+					break;
+				case SDLK_ESCAPE:
+					loop = false;
+					break;
+				}
 				break;
 			case SDL_MOUSEMOTION:
 				if (GameStates::getInstance()->isStarted()) {
@@ -106,13 +108,6 @@ int main(int argc, char **argv) {
 				break;
 			}
 		}
-		if (keys[SDL_SCANCODE_ESCAPE]) {
-			loop = false;
-		}
-		if (keys[SDL_SCANCODE_F11]){
-			GameStates::getInstance()->setFullScreen(InitUtils::getInstance()->toggleFullScreen());
-		}
-
 		if (!GameStates::getInstance()->isStarted()) {
 			int halfBarSize = bare->getTextureWithPosition()->getOriginRect().w / 2;
 			int ballPosX = ball->getTextureWithPosition()->getAbsCenterX();
