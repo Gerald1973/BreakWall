@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <SDL2/sdl.h>
+#include <SDL2/SDL.h>
 
 class Brick;
 class Wall;
