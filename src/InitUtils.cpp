@@ -43,7 +43,7 @@ int InitUtils::initRenderer() {
 	baseTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_TARGET, GlobalConstants::SCREEN_WIDTH,
 			GlobalConstants::SCREEN_HEIGHT);
 	addTexture("resources/images/brick_red_pop.png", GlobalConstants::TEXTURE_KEY);
-	addSoundEffect("resources/sound/bare.wav", GlobalConstants::SOUND_KEY);
+	addSoundEffect("resources/sound/metal.wav", GlobalConstants::SOUND_KEY);
 	return 0;
 }
 
