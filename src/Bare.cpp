@@ -54,12 +54,19 @@ void Bare::init() {
 }
 
 void Bare::performEvent(SDL_Event &event) {
-	switch (event.user.code) {
-	case CustomEventUtils::Code::BALL_MOVED:
-		bounces((Ball*) event.user.data1);
+	switch (event.type) {
+	case SDL_MOUSEMOTION:
+		getTextureWithPosition()->setX(getTextureWithPosition()->getX() + event.motion.xrel);
 		break;
-	case CustomEventUtils::Code::BORDER_BOTTOM_TOUCHED:
-		init();
+	case SDL_USEREVENT:
+		switch (event.user.code) {
+		case CustomEventUtils::Code::BALL_MOVED:
+			bounces((Ball*) event.user.data1);
+			break;
+		case CustomEventUtils::Code::BORDER_BOTTOM_TOUCHED:
+			init();
+			break;
+		}
 		break;
 	}
 }
@@ -70,21 +77,25 @@ bool Bare::bounces(Ball *ball) {
 			&& ball->getTextureWithPosition()->getX() <= this->getTextureWithPosition()->getX2()
 			&& ball->getTextureWithPosition()->getY2() >= this->getTextureWithPosition()->getY()
 			&& ball->getTextureWithPosition()->getY() <= this->getTextureWithPosition()->getY2()) {
-		Mix_PlayChannel(-1, this->getSound(), 0);
-		float centerBare = this->getTextureWithPosition()->getAbsCenterX();
-		float centerBall = ball->getTextureWithPosition()->getAbsCenterX();
-		float halfWidhtBare = (this->getTextureWithPosition()->getPosition().w + ball->getTextureWithPosition()->getPosition().w) / 2;
-		float deltaCenter = centerBall - centerBare;
-		ball->setCoeffX(deltaCenter / halfWidhtBare);
-		float tmpCoeffY = sqrt(1 - ball->getCoeffX() * ball->getCoeffX());
-		ball->setCoeffY(tmpCoeffY);
-		std::cout << "DEBUG Coefficient X = " << ball->getCoeffX() << std::endl;
-		std::cout << "DEBUG Coefficient Y = " << ball->getCoeffY() << std::endl;
-		result = true;
-		ball->setDirX(ball->getCoeffX() * ball->getSpeed());
-		ball->setDirY(-ball->getCoeffY() * ball->getSpeed());
-		CustomEventUtils::getInstance()->postEventBareTouched();
+		if (!ball->isGlued()) {
+			Mix_PlayChannel(-1, this->getSound(), 0);
+			float centerBare = this->getTextureWithPosition()->getAbsCenterX();
+			float centerBall = ball->getTextureWithPosition()->getAbsCenterX();
+			float halfWidhtBare = (this->getTextureWithPosition()->getPosition().w + ball->getTextureWithPosition()->getPosition().w) / 2;
+			float deltaCenter = centerBall - centerBare;
+			ball->setCoeffX(deltaCenter / halfWidhtBare);
+			float tmpCoeffY = sqrt(1 - ball->getCoeffX() * ball->getCoeffX());
+			ball->setCoeffY(tmpCoeffY);
+			std::cout << "DEBUG Coefficient X = " << ball->getCoeffX() << std::endl;
+			std::cout << "DEBUG Coefficient Y = " << ball->getCoeffY() << std::endl;
+			result = true;
+			ball->setDirX(ball->getCoeffX() * ball->getSpeed());
+			ball->setDirY(-ball->getCoeffY() * ball->getSpeed());
+			CustomEventUtils::getInstance()->postEventBareTouched();
+		} else {
+			ball->setDirX(0);
+			ball->setDirY(0);
+		}
 	}
 	return result;
 }
-

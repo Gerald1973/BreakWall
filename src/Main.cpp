@@ -33,6 +33,7 @@ int main(int argc, char **argv) {
 	scoreSegments->init();
 	Ball *ball = new Ball();
 	ball->init();
+
 	Background *background = new Background();
 	background->init();
 	Title *title = new Title();
@@ -57,22 +58,32 @@ int main(int argc, char **argv) {
 				break;
 			case SDL_MOUSEMOTION:
 				if (GameStates::getInstance()->isStarted()) {
-					bare->getTextureWithPosition()->setX(bare->getTextureWithPosition()->getX() + event.motion.xrel);
+					ball->performEvent(event);
+					bare->performEvent(event);
 				}
 				break;
 			case SDL_MOUSEBUTTONUP:
 				std::cout << "Mouse up..." << std::endl;
 				if (event.button.button == SDL_BUTTON_LEFT) {
-					if (!GameStates::getInstance()->isStarted()) {
+					if (GameStates::getInstance()->isStarted()){
+						ball->performEvent(event);
+						bare->performEvent(event);
+					} else {
 						GameStates::getInstance()->setCurrentLevel(1);
 						GameStates::getInstance()->setPaused(false);
 						GameStates::getInstance()->setRemainingLives(5);
-						GameStates::getInstance()->setStarted(true);
 						GameStates::getInstance()->setScore(0);
 						wall->initBricks();
 						wall->initSong();
 						wall->resetSong();
+						bare->init();
 						ball->init();
+						int ballPosX = bare->getTextureWithPosition()->getAbsCenterX() - ball->getTextureWithPosition()->getPosition().w / 2;
+						int ballPosY = bare->getTextureWithPosition()->getY() - ball->getTextureWithPosition()->getPosition().h;
+						std::cout << "DEBUG: ball Y = " << ballPosY << std::endl;
+						ball->getTextureWithPosition()->setX(ballPosX);
+						ball->getTextureWithPosition()->setY(ballPosY);
+						GameStates::getInstance()->setStarted(true);
 					}
 				}
 				break;
@@ -84,6 +95,11 @@ int main(int argc, char **argv) {
 					GameStates::getInstance()->decreaseRemainingLive(1);
 					ball->performEvent(event);
 					bare->performEvent(event);
+					int ballPosX = bare->getTextureWithPosition()->getAbsCenterX() - ball->getTextureWithPosition()->getPosition().w / 2;
+					int ballPosY = bare->getTextureWithPosition()->getY() - ball->getTextureWithPosition()->getPosition().h;
+					std::cout << "DEBUG: ball Y = " << ballPosY << std::endl;
+					ball->getTextureWithPosition()->setX(ballPosX);
+					ball->getTextureWithPosition()->setY(ballPosY);
 				} else if (event.user.code == CustomEventUtils::Code::LIVE_FINISHED) {
 					GameStates::getInstance()->setCurrentLevel(1);
 					GameStates::getInstance()->setPaused(false);
@@ -111,6 +127,7 @@ int main(int argc, char **argv) {
 			}
 		}
 		if (!GameStates::getInstance()->isStarted()) {
+			ball->setGlued(false);
 			int halfBarSize = bare->getTextureWithPosition()->getOriginRect().w / 2;
 			int ballPosX = ball->getTextureWithPosition()->getAbsCenterX();
 			int barePosX = ballPosX - halfBarSize + posRand;

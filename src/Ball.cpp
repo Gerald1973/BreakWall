@@ -8,14 +8,13 @@
 #include "../include/GlobalConstants.h"
 
 Ball::Ball() {
+	this->glued = true;
 	this->dirX = 0;
 	this->speed = 8;
 	this->dirY = 8;
 	this->coeffY = 1;
 	this->coeffX = 0;
 	this->textureWithPosition = nullptr;
-	this->posX = 0;
-	this->posY = 0;
 	InitUtils::getInstance()->addTexture("resources/images/ball.png", TEXTURE_KEY);
 }
 
@@ -28,9 +27,8 @@ void Ball::render() {
 
 void Ball::moveBall() {
 	bouncesOnScreen();
-	//4 Move
-	posX = posX + dirX;
-	posY = posY + dirY;
+	float posX = getTextureWithPosition()->getX() + dirX;
+	float posY = getTextureWithPosition()->getY() + dirY;
 	getTextureWithPosition()->setX(round(posX));
 	getTextureWithPosition()->setY(round(posY));
 	CustomEventUtils::getInstance()->postEventBallMoved(this);
@@ -42,8 +40,6 @@ TextureWithPosition* Ball::getTextureWithPosition() {
 
 void Ball::setTextureWithPosition(TextureWithPosition *textureWithPosition) {
 	this->textureWithPosition = textureWithPosition;
-	posX = textureWithPosition->getX();
-	posY = textureWithPosition->getY();
 }
 
 float Ball::getSpeed() {
@@ -98,23 +94,26 @@ float Ball::getDirY() {
 }
 
 void Ball::init() {
-	SDL_Rect ballRect;
 	SDL_Texture *texture = InitUtils::getInstance()->getMapTextures()[Ball::TEXTURE_KEY];
 	int widthBall;
 	int heightBall;
 	SDL_QueryTexture(texture, nullptr, nullptr, &widthBall, &heightBall);
-	this->posX = (GlobalConstants::BALL_ZONE_X + GlobalConstants::BALL_ZONE_WIDTH - widthBall) / 2;
-	this->posY = GlobalConstants::WALL_ZONE_Y + GlobalConstants::WALL_ZONE_HEIGHT + heightBall;
+	int posX = (GlobalConstants::BALL_ZONE_X + GlobalConstants::BALL_ZONE_WIDTH - widthBall) / 2;
+	int posY = GlobalConstants::BALL_ZONE_Y + GlobalConstants::BALL_ZONE_HEIGHT - heightBall * 2;
 	this->dirX = 0;
 	this->speed = 8;
-	this->dirY = 8;
+	this->dirY = 0;
 	this->coeffY = 1;
 	this->coeffX = 0;
-	if (this -> textureWithPosition == nullptr){
+	this->setGlued(true);
+	if (this->textureWithPosition == nullptr) {
+		SDL_Rect ballRect;
+		ballRect.x = posX;
+		ballRect.y = posY;
 		textureWithPosition = new TextureWithPosition(InitUtils::getInstance()->getMapTextures()[Ball::TEXTURE_KEY], ballRect);
 	} else {
-		textureWithPosition->setX(this->posX);
-		textureWithPosition->setY(this->posY);
+		textureWithPosition->setX(posX);
+		textureWithPosition->setY(posY);
 	}
 }
 
@@ -135,8 +134,30 @@ float Ball::getCoeffY() {
 }
 
 void Ball::performEvent(SDL_Event &event) {
-	switch (event.user.code) {
-	case CustomEventUtils::Code::BORDER_BOTTOM_TOUCHED:
-		init();
+	switch (event.type) {
+	case SDL_MOUSEMOTION:
+		if (this->isGlued()) {
+			int posX = getTextureWithPosition()->getX() + event.motion.xrel;
+			getTextureWithPosition()->setX(posX);
+		}
+		break;
+	case SDL_MOUSEBUTTONUP:
+		if (this->isGlued()) {
+			this->setGlued(false);
+		}
+		break;
+	case SDL_USEREVENT:
+		switch (event.user.code) {
+		case CustomEventUtils::Code::BORDER_BOTTOM_TOUCHED:
+			init();
+		}
 	}
+}
+
+void Ball::setGlued(bool glued) {
+	this->glued = glued;
+}
+
+bool Ball::isGlued() {
+	return this->glued;
 }

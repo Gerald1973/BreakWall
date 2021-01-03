@@ -29,6 +29,8 @@ public:
 	float getCoeffX();
 	float getCoeffY();
 	void performEvent(SDL_Event &event);
+	void setGlued(bool glued);
+	bool isGlued();
 protected:
 private:
 	TextureWithPosition* textureWithPosition;
@@ -37,8 +39,7 @@ private:
 	float speed;
 	float coeffX;
 	float coeffY;
-	float posX;
-	float posY;
+	bool glued;
 };
 
 #endif
