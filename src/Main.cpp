@@ -65,7 +65,7 @@ int main(int argc, char **argv) {
 			case SDL_MOUSEBUTTONUP:
 				std::cout << "Mouse up..." << std::endl;
 				if (event.button.button == SDL_BUTTON_LEFT) {
-					if (GameStates::getInstance()->isStarted()){
+					if (GameStates::getInstance()->isStarted()) {
 						ball->performEvent(event);
 						bare->performEvent(event);
 					} else {
@@ -141,6 +141,13 @@ int main(int argc, char **argv) {
 			wall->initSong();
 			wall->resetSong();
 			ball->init();
+			bare->init();
+			int ballPosX = bare->getTextureWithPosition()->getAbsCenterX() - ball->getTextureWithPosition()->getPosition().w / 2;
+			int ballPosY = bare->getTextureWithPosition()->getY() - ball->getTextureWithPosition()->getPosition().h;
+			std::cout << "DEBUG: ball Y = " << ballPosY << std::endl;
+			ball->getTextureWithPosition()->setX(ballPosX);
+			ball->getTextureWithPosition()->setY(ballPosY);
+			GameStates::getInstance()->setStarted(true);
 		}
 
 		background->render();
