@@ -8,7 +8,7 @@
 #include "../include/GlobalConstants.h"
 
 Ball::Ball() {
-	this->glued = true;
+	this->glued = false;
 	this->dirX = 0;
 	this->speed = 8;
 	this->dirY = 8;
@@ -101,11 +101,11 @@ void Ball::init() {
 	int posX = (GlobalConstants::BALL_ZONE_X + GlobalConstants::BALL_ZONE_WIDTH - widthBall) / 2;
 	int posY = GlobalConstants::BALL_ZONE_Y + GlobalConstants::BALL_ZONE_HEIGHT - heightBall * 2;
 	this->dirX = 0;
-	this->speed = 8;
 	this->dirY = 0;
+	this->speed = 8;
 	this->coeffY = 1;
 	this->coeffX = 0;
-	this->setGlued(true);
+	this->setGlued(false);
 	if (this->textureWithPosition == nullptr) {
 		SDL_Rect ballRect;
 		ballRect.x = posX;
