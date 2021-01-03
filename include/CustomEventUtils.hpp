@@ -1,14 +1,14 @@
+#ifndef CUSTOM_EVENTUTILS_H
+#define CUSTOM_EVENTUTILS_H
+
 #include <iostream>
 #include <string>
-#include "Ball.h"
 #include <vector>
-#include "../include/Wall.hpp"
+#include <SDL2/sdl.h>
 
-#include "Brick.h"
-
-#define __CHANNELS__ 16
-#define __FP_SHIFT__ 14
-#define __FP_ONE__ 16384
+class Brick;
+class Wall;
+class Ball;
 
 class CustomEventUtils
 {
@@ -51,7 +51,8 @@ public:
 
 private:
     static inline CustomEventUtils *instance = NULL;
-
+    Uint32 myEventType;
     CustomEventUtils();
     ~CustomEventUtils();
 };
+#endif

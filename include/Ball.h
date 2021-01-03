@@ -3,7 +3,8 @@
 
 #include <SDL2/SDL.h>
 #include <string>
-#include "Bare.h"
+
+#include "Bare.hpp"
 #include "TextureWithPosition.h"
 
 class Ball {

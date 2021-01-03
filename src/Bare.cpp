@@ -1,11 +1,11 @@
-#include "../include/Bare.h"
+#include <SDL2/SDL_mixer.h>
+#include <cmath>
+#include <iostream>
+#include "../include/Bare.hpp"
 #include "../include/InitUtils.hpp"
 #include "../include/UtilConstants.h"
 #include "../include/CustomEventUtils.hpp"
-#include <SDL2/SDL_mixer.h>
-#include <cmath>
 #include "../include/Ball.h"
-#include <iostream>
 
 Bare::Bare() {
 	this->sound = NULL;
@@ -45,6 +45,14 @@ void Bare::init() {
 	textureWithPosition->setY(UtilConstants::getInstance()->gameZone.h - textureWithPosition->getPosition().h);
 	setTextureWithPosition(textureWithPosition);
 	setSound(InitUtils::getInstance()->getMapSounds()[Bare::SOUND_KEY]);
+}
+
+void Bare::performEvent(SDL_Event &event) {
+	switch (event.user.code) {
+		case CustomEventUtils::Code::BALL_MOVED :
+			bounces((Ball*) event.user.data1);
+			break;
+	}
 }
 
 bool Bare::bounces(Ball *ball) {

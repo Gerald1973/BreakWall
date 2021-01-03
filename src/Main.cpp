@@ -5,7 +5,6 @@
 
 #include "../include/Background.hpp"
 #include "../include/Ball.h"
-#include "../include/Bare.h"
 #include "../include/Brick.h"
 #include "../include/CustomEventUtils.hpp"
 #include "../include/InitUtils.hpp"
@@ -14,6 +13,7 @@
 #include "../include/Title.hpp"
 #include "../include/Wall.hpp"
 #include "../include/GameState.hpp"
+#include "../include/Bare.hpp"
 #ifdef __cplusplus
 #include <cstdlib>
 #else
@@ -98,7 +98,7 @@ int main(int argc, char **argv) {
 					}
 				} else if (event.user.code == CustomEventUtils::Code::BALL_MOVED) {
 					wall->performEvent(event);
-					bare->bounces(ball);
+					bare->performEvent(event);
 				} else if (event.user.code == CustomEventUtils::Code::BRICK_REMOVED) {
 					wall->performEvent(event);
 				} else if (event.user.code == CustomEventUtils::Code::BRICK_REMAINING) {

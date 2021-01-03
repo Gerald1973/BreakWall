@@ -17,6 +17,7 @@ class Bare
         void init();
         void setTextureWithPosition(TextureWithPosition* textureWithPosition);
         TextureWithPosition* getTextureWithPosition();
+        void performEvent(SDL_Event &event);
         void render();
         Mix_Chunk* getSound();
         void setSound(Mix_Chunk* sound);
