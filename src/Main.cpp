@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
 	Bare *bare = new Bare();
 	bare->init();
 	Wall *wall = new Wall();
-	wall->initBricks();
+	wall->init();
 	ScoreSegments *scoreSegments = new ScoreSegments();
 	scoreSegments->init();
 	Ball *ball = new Ball();
@@ -51,7 +51,6 @@ int main(int argc, char **argv) {
 	Title *title = new Title();
 	title->init();
 	bool loop = true;
-	wall->initSong();
 	while (loop) {
 		SDL_SetRenderTarget(InitUtils::getInstance()->getRenderer(), baseTexture);
 		SDL_RenderClear(InitUtils::getInstance()->getRenderer());
@@ -85,8 +84,7 @@ int main(int argc, char **argv) {
 						GameStates::getInstance()->setPaused(false);
 						GameStates::getInstance()->setRemainingLives(5);
 						GameStates::getInstance()->setScore(0);
-						wall->initBricks();
-						wall->initSong();
+						wall->init();
 						wall->resetSong();
 						initBareAndBall(bare, ball);
 						GameStates::getInstance()->setStarted(true);
@@ -136,8 +134,7 @@ int main(int argc, char **argv) {
 
 		if (GameStates::getInstance()->getRemainingBricks() == 0) {
 			GameStates::getInstance()->increaseLevelBy(1);
-			wall->initBricks();
-			wall->initSong();
+			wall->init();
 			wall->resetSong();
 			initBareAndBall(bare, ball);
 			GameStates::getInstance()->setRemainingBricks(wall->getBricks().size());

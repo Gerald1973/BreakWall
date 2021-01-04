@@ -61,7 +61,7 @@ int Wall::findIndex(Brick *brick) {
 	return result;
 }
 
-void Wall::initBricks() {
+void Wall::init() {
 	std::vector<Brick*> bricks;
 	int brickHeight;
 	int brickWidth;
@@ -79,6 +79,7 @@ void Wall::initBricks() {
 		}
 	}
 	setBricks(bricks);
+	initSong("Wall");
 }
 
 std::string Wall::getSongFileName() {
@@ -100,15 +101,12 @@ void Wall::setSongKey(std::string songKey) {
 void Wall::playSong() {
 }
 
-void Wall::initSong() {
-	this->setSongFileName("resources/mods/worldofw.mod");
-	this->setSongKey("level_001");
-	InitUtils::getInstance()->addMixMusic(this->getSongFileName(), getSongKey());
-	Mix_PlayMusic(InitUtils::getInstance()->getMapMods()[getSongKey()], -1);
-}
-
 void Wall::resetSong() {
 	Mix_RewindMusic();
+}
+
+void Wall::initSong(std::string key) {
+	Mix_PlayMusic(InitUtils::getInstance()->getMapMods()[key], -1);
 }
 
 void Wall::stopSong() {

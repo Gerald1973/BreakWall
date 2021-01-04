@@ -5,6 +5,7 @@
 #include "Brick.h"
 #include "GlobalConstants.h"
 #include "UtilConstants.h"
+#include <string>
 
 class Wall {
 public:
@@ -20,8 +21,8 @@ public:
 	void playSong();
 	int findIndex(Brick *bricks);
 	void render();
-	void initBricks();
-	void initSong();
+	void init();
+	void initSong(std::string key);
 	void resetSong();
 	void stopSong();
 protected:

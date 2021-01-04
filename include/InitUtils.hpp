@@ -13,6 +13,9 @@
 #include <map>
 #include <string>
 #include <vector>
+#include "GlobalConstants.h"
+
+class Wall;
 
 class InitUtils {
 public:
@@ -36,6 +39,7 @@ public:
 	std::map<std::string, Mix_Chunk*> getMapSounds();
 	std::map<std::string, SDL_Texture*> getMapTextures();
 	std::map<std::string, Mix_Music*> getMapMods();
+	std::map<int, Wall *> getMapWalls();
 	void addMixMusic(std::string fileName, std::string key);
 	void addSoundEffect(std::string fileName, std::string key);
 	void addTexture(std::string fileName, std::string key);
@@ -45,6 +49,11 @@ private:
 	std::map<std::string, Mix_Music*> mixMusics;
 	std::map<std::string, Mix_Chunk*> mapSounds;
 	std::map<std::string, SDL_Texture*> mapTextures;
+	std::map<int, Wall*> mapWalls;
+	void fillMixMusic();
+	void fillSoundEffect();
+	void fillTexture();
+	void fillWall();
 	SDL_Renderer *renderer;
 	SDL_Window *pWindow;
 	SDL_Texture *baseTexture;

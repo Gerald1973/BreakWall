@@ -11,7 +11,6 @@ Bare::Bare() {
 	this->sound = nullptr;
 	this->textureWithPosition = nullptr;
 	InitUtils::getInstance()->addTexture("resources/images/bare.png", TEXTURE_KEY);
-	InitUtils::getInstance()->addSoundEffect("resources/sound/bare.wav", SOUND_KEY);
 }
 
 Bare::~Bare() {
@@ -78,7 +77,7 @@ bool Bare::bounces(Ball *ball) {
 			&& ball->getTextureWithPosition()->getY2() >= this->getTextureWithPosition()->getY()
 			&& ball->getTextureWithPosition()->getY() <= this->getTextureWithPosition()->getY2()) {
 		if (!ball->isGlued()) {
-			Mix_PlayChannel(-1, this->getSound(), 0);
+			Mix_PlayChannel(-1,InitUtils::getInstance()->getMapSounds()[GlobalConstants::BARE_SOUND_KEY], 0);
 			float centerBare = this->getTextureWithPosition()->getAbsCenterX();
 			float centerBall = ball->getTextureWithPosition()->getAbsCenterX();
 			float halfWidhtBare = (this->getTextureWithPosition()->getPosition().w + ball->getTextureWithPosition()->getPosition().w) / 2;

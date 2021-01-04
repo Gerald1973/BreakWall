@@ -100,7 +100,7 @@ bool Brick::isTouchedByBall(Ball *ball) {
 }
 
 void Brick::bounces(Ball *ball) {
-	Mix_PlayChannel(-1, getSound(), 0);
+	Mix_PlayChannel(-1, InitUtils::getInstance()->getMapSounds()[GlobalConstants::BRICK_SOUND_KEY], 0);
 	int halfBallSize = this->getTextureWithPosition()->getPosition().w / 2;
 	int x = ball->getTextureWithPosition()->getAbsCenterX();
 	int y = ball->getTextureWithPosition()->getAbsCenterY();
@@ -119,7 +119,6 @@ void Brick::bounces(Ball *ball) {
 }
 
 void Brick::init() {
-	setSound(InitUtils::getInstance()->getMapSounds()[GlobalConstants::SOUND_KEY]);
 	SDL_Rect tmpRect;
 	TextureWithPosition *textureWithPosition = new TextureWithPosition(InitUtils::getInstance()->getMapTextures()[GlobalConstants::TEXTURE_KEY], tmpRect);
 	setTextureWithPosition(textureWithPosition);

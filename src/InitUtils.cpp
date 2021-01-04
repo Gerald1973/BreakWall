@@ -19,6 +19,10 @@ InitUtils::InitUtils() {
 	pWindow = NULL;
 	baseTexture = NULL;
 	initRenderer();
+	fillMixMusic();
+	fillSoundEffect();
+	fillTexture();
+	fillWall();
 }
 
 int InitUtils::initRenderer() {
@@ -43,7 +47,6 @@ int InitUtils::initRenderer() {
 	baseTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_TARGET, GlobalConstants::SCREEN_WIDTH,
 			GlobalConstants::SCREEN_HEIGHT);
 	addTexture("resources/images/brick_red_pop.png", GlobalConstants::TEXTURE_KEY);
-	addSoundEffect("resources/sound/metal.wav", GlobalConstants::SOUND_KEY);
 	return 0;
 }
 
@@ -71,7 +74,7 @@ void InitUtils::addMixMusic(std::string fileName, std::string key) {
 	if (mixMusics.find(key) != mixMusics.end()) {
 		std::cout << "WARNING: The following key " << key << " is already presents in the map mixMusic." << std::endl;
 	} else {
-		Mix_Music* result = Mix_LoadMUS(fileName.c_str());
+		Mix_Music *result = Mix_LoadMUS(fileName.c_str());
 		mixMusics[key] = result;
 	}
 }
@@ -108,15 +111,35 @@ std::map<std::string, Mix_Music*> InitUtils::getMapMods() {
 }
 
 bool InitUtils::toggleFullScreen() {
-		bool result = true;
-	    Uint32 fullscreenFlag = SDL_WINDOW_FULLSCREEN_DESKTOP;
-	    bool isFullscreen = SDL_GetWindowFlags(this->pWindow) & fullscreenFlag;
-	    int tmp = SDL_SetWindowFullscreen(this->pWindow, isFullscreen ? 0 : fullscreenFlag);
-	    if (tmp < 0) {
-	    	std::cout << "Error : fullscreen not possible" << std::endl;
-	    	result = false;
-	    }
-	    return result;
+	bool result = true;
+	Uint32 fullscreenFlag = SDL_WINDOW_FULLSCREEN_DESKTOP;
+	bool isFullscreen = SDL_GetWindowFlags(this->pWindow) & fullscreenFlag;
+	int tmp = SDL_SetWindowFullscreen(this->pWindow, isFullscreen ? 0 : fullscreenFlag);
+	if (tmp < 0) {
+		std::cout << "Error : fullscreen not possible" << std::endl;
+		result = false;
+	}
+	return result;
+}
+
+std::map<int, Wall*> InitUtils::getMapWalls() {
+}
+
+void InitUtils::fillMixMusic() {
+	this->addMixMusic("resources/mods/worldofw.mod", "Wall");
+	this->addMixMusic("resources/mods/twinkle_by_fred.mod", "Wall001");
+}
+
+void InitUtils::fillSoundEffect() {
+	this->addSoundEffect("resources/sound/scream.wav", GlobalConstants::BALL_DEAD_SOUND_KEY);
+	this->addSoundEffect("resources/sound/bare.wav", GlobalConstants::BARE_SOUND_KEY);
+	this->addSoundEffect("resources/sound/metal.wav", GlobalConstants::BRICK_SOUND_KEY);
+}
+
+void InitUtils::fillTexture() {
+}
+
+void InitUtils::fillWall() {
 }
 
 InitUtils::~InitUtils() {

@@ -16,7 +16,6 @@ Ball::Ball() {
 	this->coeffX = 0;
 	this->textureWithPosition = nullptr;
 	InitUtils::getInstance()->addTexture("resources/images/ball.png", GlobalConstants::BALL_TEXTURE_KEY);
-	InitUtils::getInstance()->addSoundEffect("resources/sound/scream.wav", GlobalConstants::SOUND_KEY_BALL_DEAD);
 }
 
 Ball::~Ball() {
@@ -69,7 +68,7 @@ bool Ball::bouncesOnScreen() {
 	//bottom
 	if (y >= UtilConstants::getInstance()->gameZone.y + UtilConstants::getInstance()->gameZone.h - halfBallSize) {
 		CustomEventUtils::getInstance()->postEventBorderTouched(CustomEventUtils::Code::BORDER_BOTTOM_TOUCHED, this);
-		Mix_PlayChannel(-1, InitUtils::getInstance()->getMapSounds()[GlobalConstants::SOUND_KEY_BALL_DEAD], 0);
+		Mix_PlayChannel(-1, InitUtils::getInstance()->getMapSounds()[GlobalConstants::BALL_DEAD_SOUND_KEY], 0);
 	}
 	//left
 	if (x <= UtilConstants::getInstance()->gameZone.x + halfBallSize) {

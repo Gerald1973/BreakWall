@@ -21,8 +21,10 @@ public:
     static inline std::string TEXTURE_KEY = "brick";
     static inline std::string BALL_TEXTURE_KEY= "ball";
     //sound key
-    static inline std::string SOUND_KEY = "brick";
-    static inline std::string SOUND_KEY_BALL_DEAD="sound_key_ball_dead";
+    static inline std::string BRICK_SOUND_KEY = "brick_key";
+    static inline std::string BALL_DEAD_SOUND_KEY="sound_key_ball_dead";
+    static inline std::string BARE_SOUND_KEY="bare_sound_key";
+    //Wall
 protected:
 private:
 };
