@@ -59,7 +59,7 @@ void GameStates::decreaseRemainingLive(int number) {
 
 void GameStates::reset() {
 	remainingLives = 5;
-	currentLevel = 1;
+	currentLevel = 0;
 	paused = false;
 	started = false;
 	score = 0;

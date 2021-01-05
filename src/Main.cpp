@@ -14,6 +14,7 @@
 #include "../include/Wall.hpp"
 #include "../include/GameState.hpp"
 #include "../include/Bare.hpp"
+#include "../include/WallRegistry.hpp"
 #ifdef __cplusplus
 #include <cstdlib>
 #else
@@ -39,7 +40,7 @@ int main(int argc, char **argv) {
 	SDL_Event event;
 	Bare *bare = new Bare();
 	bare->init();
-	Wall *wall = new Wall();
+	Wall* wall = WallRegistry::create(GameStates::getInstance()->getCurrentLevel());
 	wall->init();
 	ScoreSegments *scoreSegments = new ScoreSegments();
 	scoreSegments->init();
@@ -84,8 +85,8 @@ int main(int argc, char **argv) {
 						GameStates::getInstance()->setPaused(false);
 						GameStates::getInstance()->setRemainingLives(5);
 						GameStates::getInstance()->setScore(0);
+						wall = WallRegistry::create(GameStates::getInstance()->getCurrentLevel());
 						wall->init();
-						wall->resetSong();
 						initBareAndBall(bare, ball);
 						GameStates::getInstance()->setStarted(true);
 					}
@@ -134,8 +135,9 @@ int main(int argc, char **argv) {
 
 		if (GameStates::getInstance()->getRemainingBricks() == 0) {
 			GameStates::getInstance()->increaseLevelBy(1);
+			delete(wall);
+			wall=WallRegistry::create(GameStates::getInstance()->getCurrentLevel() % 2);
 			wall->init();
-			wall->resetSong();
 			initBareAndBall(bare, ball);
 			GameStates::getInstance()->setRemainingBricks(wall->getBricks().size());
 			if (!GameStates::getInstance()->isStarted()){

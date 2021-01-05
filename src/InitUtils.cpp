@@ -13,6 +13,9 @@
 #include "../include/GlobalConstants.h"
 #include "../include/FileUtils.hpp"
 #include <iostream>
+#include "../include/WallRegistry.hpp"
+#include "../include/Wall.hpp"
+#include "../include/Wall002.hpp"
 
 InitUtils::InitUtils() {
 	renderer = NULL;
@@ -22,7 +25,7 @@ InitUtils::InitUtils() {
 	fillMixMusic();
 	fillSoundEffect();
 	fillTexture();
-	fillWall();
+	registerWalls();
 }
 
 int InitUtils::initRenderer() {
@@ -75,7 +78,11 @@ void InitUtils::addMixMusic(std::string fileName, std::string key) {
 		std::cout << "WARNING: The following key " << key << " is already presents in the map mixMusic." << std::endl;
 	} else {
 		Mix_Music *result = Mix_LoadMUS(fileName.c_str());
-		mixMusics[key] = result;
+		if (result != nullptr){
+			mixMusics[key] = result;
+		} else {
+			std::cout << "ERROR:impossible to load the mod file " << fileName << " with the key " << key << std::endl;
+		}
 	}
 }
 
@@ -106,10 +113,6 @@ void InitUtils::addTexture(std::string fileName, std::string key) {
 	}
 }
 
-std::map<std::string, Mix_Music*> InitUtils::getMapMods() {
-	return mixMusics;
-}
-
 bool InitUtils::toggleFullScreen() {
 	bool result = true;
 	Uint32 fullscreenFlag = SDL_WINDOW_FULLSCREEN_DESKTOP;
@@ -122,12 +125,9 @@ bool InitUtils::toggleFullScreen() {
 	return result;
 }
 
-std::map<int, Wall*> InitUtils::getMapWalls() {
-}
-
 void InitUtils::fillMixMusic() {
 	this->addMixMusic("resources/mods/worldofw.mod", "Wall");
-	this->addMixMusic("resources/mods/twinkle_by_fred.mod", "Wall001");
+	this->addMixMusic("resources/mods/twinkle_by_fred_j.mod", "Wall002");
 }
 
 void InitUtils::fillSoundEffect() {
@@ -139,7 +139,10 @@ void InitUtils::fillSoundEffect() {
 void InitUtils::fillTexture() {
 }
 
-void InitUtils::fillWall() {
+
+void InitUtils::registerWalls() {
+	REGISTER_WALL(0, Wall::create);
+	REGISTER_WALL(1, Wall002::create);
 }
 
 InitUtils::~InitUtils() {
@@ -160,3 +163,12 @@ InitUtils::~InitUtils() {
 	SDL_DestroyWindow(pWindow);
 }
 
+Mix_Music* InitUtils::getMixMusic(std::string key) {
+	Mix_Music* result = nullptr;
+	if ( mixMusics.find(key) == mixMusics.end()){
+		std::cout << "DEBUG : The mod file " << key << " doesn't exist." << std::endl;
+	} else {
+		result = mixMusics[key];
+	}
+	return result;
+}

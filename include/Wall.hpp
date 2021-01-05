@@ -17,14 +17,17 @@ public:
 	void setBricks(std::vector<Brick*> bricks);
 	void setSongFileName(std::string songFileName);
 	void setSongKey(std::string songKey);
-	void performEvent(SDL_Event &event);
+	virtual void performEvent(SDL_Event &event);
 	void playSong();
 	int findIndex(Brick *bricks);
 	void render();
-	void init();
+	virtual void init();
 	void initSong(std::string key);
 	void resetSong();
 	void stopSong();
+	static Wall* create(){
+		return new Wall();
+	}
 protected:
 private:
 	std::vector<Brick*> bricks;

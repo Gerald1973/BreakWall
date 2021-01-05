@@ -13,6 +13,7 @@ Wall::Wall() {
 }
 
 Wall::~Wall() {
+	std::cout << "Wall destruction." << std::endl;
 }
 
 void Wall::render() {
@@ -106,7 +107,7 @@ void Wall::resetSong() {
 }
 
 void Wall::initSong(std::string key) {
-	Mix_PlayMusic(InitUtils::getInstance()->getMapMods()[key], -1);
+	Mix_PlayMusic(InitUtils::getInstance()->getMixMusic(key), -1);
 }
 
 void Wall::stopSong() {
