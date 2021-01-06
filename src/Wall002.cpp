@@ -4,6 +4,7 @@
 
 void Wall002::init() {
 	std::vector<Brick*> bricks;
+	this->background = new Background("resources/images/bad_girl.jpg");
 	int brickHeight;
 		int brickWidth;
 		SDL_QueryTexture(InitUtils::getInstance()->getMapTextures()[GlobalConstants::TEXTURE_KEY], nullptr, nullptr, &brickWidth, &brickHeight);

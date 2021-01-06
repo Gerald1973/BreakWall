@@ -6,6 +6,7 @@
 #include "GlobalConstants.h"
 #include "UtilConstants.h"
 #include <string>
+#include "Background.hpp"
 
 class Wall {
 public:
@@ -29,6 +30,7 @@ public:
 		return new Wall();
 	}
 protected:
+	Background* background;
 private:
 	std::vector<Brick*> bricks;
 	std::string songFileName;

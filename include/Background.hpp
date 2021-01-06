@@ -1,25 +1,16 @@
-/*
- * Background.h
- *
- *  Created on: 9 avr. 2016
- *      Author: Papa
- */
+#ifndef BACKGROUND_H
+#define BACKGROUND_H
 #include <SDL2/SDL.h>
 #include <string>
 
 #include "../include/TextureWithPosition.h"
 
-class Background
-{
+class Background {
 public:
-	static inline std::string TEXTURE_KEY="background001";
-	Background();
+	Background(std::string fileName);
 	virtual ~Background();
 	void render();
-	void init();
-	TextureWithPosition *getTextureWithPosition();
-	void setTextureWithPosition(TextureWithPosition *textureWithPosition);
-
 private:
 	TextureWithPosition *textureWithPosition;
 };
+#endif
