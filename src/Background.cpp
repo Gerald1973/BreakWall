@@ -1,10 +1,15 @@
 #include "../include/Background.hpp"
 #include "../include/InitUtils.hpp"
 #include "../include/UtilConstants.h"
+#include <SDL2/SDL.h>
 
-Background::Background() {
-	this->textureWithPosition = NULL;
-	InitUtils::getInstance()->addTexture("resources/images/winter_01.jpg", TEXTURE_KEY);
+using namespace std;
+
+Background::Background(string fileName) {
+	SDL_Texture* texture = InitUtils::getInstance()->loadTexture(fileName);
+	this->textureWithPosition = new TextureWithPosition(texture, GlobalConstants::BALL_ZONE_X, GlobalConstants::BALL_ZONE_Y, GlobalConstants::BALL_ZONE_WIDTH,
+			GlobalConstants::BALL_ZONE_HEIGHT);
+
 }
 
 Background::~Background() {
@@ -12,20 +17,6 @@ Background::~Background() {
 }
 
 void Background::render() {
-	SDL_RenderCopy(InitUtils::getInstance()->getRenderer(), getTextureWithPosition()->getTexture(), NULL, &(getTextureWithPosition()->getPosition()));
+	SDL_RenderCopy(InitUtils::getInstance()->getRenderer(), textureWithPosition->getTexture(), nullptr, &textureWithPosition->getPosition());
 }
 
-TextureWithPosition* Background::getTextureWithPosition() {
-	return this->textureWithPosition;
-}
-
-void Background::setTextureWithPosition(TextureWithPosition *textureWithPosition) {
-	this->textureWithPosition = textureWithPosition;
-}
-
-void Background::init() {
-	TextureWithPosition *textureWithPosition = new TextureWithPosition(InitUtils::getInstance()->getMapTextures()[Background::TEXTURE_KEY],
-			UtilConstants::getInstance()->gameZone.x, UtilConstants::getInstance()->gameZone.y, UtilConstants::getInstance()->gameZone.w,
-			UtilConstants::getInstance()->gameZone.h);
-	setTextureWithPosition(textureWithPosition);
-}

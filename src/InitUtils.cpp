@@ -78,7 +78,7 @@ void InitUtils::addMixMusic(std::string fileName, std::string key) {
 		std::cout << "WARNING: The following key " << key << " is already presents in the map mixMusic." << std::endl;
 	} else {
 		Mix_Music *result = Mix_LoadMUS(fileName.c_str());
-		if (result != nullptr){
+		if (result != nullptr) {
 			mixMusics[key] = result;
 		} else {
 			std::cout << "ERROR:impossible to load the mod file " << fileName << " with the key " << key << std::endl;
@@ -113,6 +113,15 @@ void InitUtils::addTexture(std::string fileName, std::string key) {
 	}
 }
 
+SDL_Texture* InitUtils::loadTexture(std::string fileName) {
+	SDL_Texture *result = nullptr;
+	result = IMG_LoadTexture(renderer, fileName.c_str());
+	if (result == nullptr) {
+		std::cout << "Impossible to load : " << fileName << " error:" << SDL_GetError() << std::endl;
+	}
+	return result;
+}
+
 bool InitUtils::toggleFullScreen() {
 	bool result = true;
 	Uint32 fullscreenFlag = SDL_WINDOW_FULLSCREEN_DESKTOP;
@@ -139,7 +148,6 @@ void InitUtils::fillSoundEffect() {
 void InitUtils::fillTexture() {
 }
 
-
 void InitUtils::registerWalls() {
 	REGISTER_WALL(0, Wall::create);
 	REGISTER_WALL(1, Wall002::create);
@@ -164,8 +172,8 @@ InitUtils::~InitUtils() {
 }
 
 Mix_Music* InitUtils::getMixMusic(std::string key) {
-	Mix_Music* result = nullptr;
-	if ( mixMusics.find(key) == mixMusics.end()){
+	Mix_Music *result = nullptr;
+	if (mixMusics.find(key) == mixMusics.end()) {
 		std::cout << "DEBUG : The mod file " << key << " doesn't exist." << std::endl;
 	} else {
 		result = mixMusics[key];

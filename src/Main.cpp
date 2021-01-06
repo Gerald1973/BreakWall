@@ -46,9 +46,6 @@ int main(int argc, char **argv) {
 	scoreSegments->init();
 	Ball *ball = new Ball();
 	ball->init();
-
-	Background *background = new Background();
-	background->init();
 	Title *title = new Title();
 	title->init();
 	bool loop = true;
@@ -81,10 +78,11 @@ int main(int argc, char **argv) {
 						ball->performEvent(event);
 						bare->performEvent(event);
 					} else {
-						GameStates::getInstance()->setCurrentLevel(1);
+						GameStates::getInstance()->setCurrentLevel(0);
 						GameStates::getInstance()->setPaused(false);
 						GameStates::getInstance()->setRemainingLives(5);
 						GameStates::getInstance()->setScore(0);
+						delete wall;
 						wall = WallRegistry::create(GameStates::getInstance()->getCurrentLevel());
 						wall->init();
 						initBareAndBall(bare, ball);
@@ -100,7 +98,7 @@ int main(int argc, char **argv) {
 					GameStates::getInstance()->decreaseRemainingLive(1);
 					initBareAndBall(bare, ball);
 				} else if (event.user.code == CustomEventUtils::Code::LIVE_FINISHED) {
-					GameStates::getInstance()->setCurrentLevel(1);
+					GameStates::getInstance()->setCurrentLevel(0);
 					GameStates::getInstance()->setPaused(false);
 					GameStates::getInstance()->setRemainingLives(5);
 					GameStates::getInstance()->setStarted(false);
@@ -144,8 +142,6 @@ int main(int argc, char **argv) {
 				ball->setGlued(false);
 			}
 		}
-
-		background->render();
 		wall->render();
 		bare->render();
 		ball->render();

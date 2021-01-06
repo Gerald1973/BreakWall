@@ -39,6 +39,7 @@ public:
 	std::map<std::string, Mix_Chunk*> getMapSounds();
 	std::map<std::string, SDL_Texture*> getMapTextures();
 	void addMixMusic(std::string fileName, std::string key);
+	SDL_Texture* loadTexture(std::string fileName);
 	Mix_Music*  getMixMusic(std::string key);
 	void addSoundEffect(std::string fileName, std::string key);
 	void addTexture(std::string fileName, std::string key);

@@ -14,9 +14,14 @@ Wall::Wall() {
 
 Wall::~Wall() {
 	std::cout << "Wall destruction." << std::endl;
+	delete background;
+	background = nullptr;
+	bricks.clear();
+	bricks.shrink_to_fit();
 }
 
 void Wall::render() {
+	this->background->render();
 	for (unsigned int i = 0; i < bricks.size(); i++) {
 		bricks[i]->render();
 	}
@@ -66,6 +71,7 @@ void Wall::init() {
 	std::vector<Brick*> bricks;
 	int brickHeight;
 	int brickWidth;
+	background = new Background("resources/images/donald_trump.jpg");
 	SDL_QueryTexture(InitUtils::getInstance()->getMapTextures()[GlobalConstants::TEXTURE_KEY], nullptr, nullptr, &brickWidth, &brickHeight);
 	int maxNumberOfBricksOnX = (GlobalConstants::WALL_ZONE_WIDTH - GlobalConstants::WALL_ZONE_X) / brickWidth;
 	int maxNumberOfBricksOnY = (GlobalConstants::WALL_ZONE_HEIGHT - GlobalConstants::WALL_ZONE_Y) / brickHeight;
