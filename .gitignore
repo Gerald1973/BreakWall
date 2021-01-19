@@ -18,3 +18,7 @@ breakwall
 /SDL2.dll
 /dist/
 /Default/
+/.project
+/.settings/
+/.vscode/
+/.cproject
