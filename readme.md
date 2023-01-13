@@ -2,9 +2,9 @@
 
 ## Prerequisite
 
-In order to develop this game you will need these dependencies: 
+In order to develop this game you will need the following dependencies.
 
-### Every systems:
+### Every systems
 
 SDL2_2.0.14  
 <https://www.libsdl.org/download-2.0.php>  
@@ -12,9 +12,9 @@ SDL2_mixer-2.0.4
 <https://www.libsdl.org/projects/SDL_mixer/>  
 SDL2_image-2.0.5  
 <https://www.libsdl.org/projects/SDL_image/>  
-	
+
 To compile these version of SDL use the script of the following url for help:
-https://github.com/Gerald1973/git_fetch_last_release
+<https://github.com/Gerald1973/git_fetch_last_release>
 
 ## Elements description
 
@@ -54,4 +54,4 @@ Preferred format, png for the transparent color.
 
 ### The sound
 
-The preferred format is not yet defind, wav looks like a good choice.
+The preferred format is not yet defined, wav looks like a good choice.
