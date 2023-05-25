@@ -30,7 +30,7 @@ all: compile
 compile:
 	@echo "File sources : $(SRC)"
 	@echo "Target       : $@"
-	$(CXX) $(SRC) $(INCLUDE_PATHS_LINUX) $(LIBRARY_PATHS_LINUX) $(COMPILER_FLAGS) -g $(LINKER_FLAGS_LINUX) -o $(EXE).exe
+	$(CXX) $(SRC) $(INCLUDE_PATHS_LINUX) $(LIBRARY_PATHS_LINUX) $(COMPILER_FLAGS) -g $(LINKER_FLAGS_LINUX) -Ofast -lm -o $(EXE).exe
 	
 all_windows: clean_windows
 	@echo "File sources : $(SRC)"
