@@ -9,7 +9,7 @@
             "name": "Breakwall and debug active file",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/breakwall",
+            "program": "${workspaceFolder}/breakwall.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
