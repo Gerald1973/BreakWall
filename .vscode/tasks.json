@@ -4,9 +4,8 @@
         {
             "label": "Breakwall build active file",
             "type": "shell",
-            "command": "",
+            "command": "make",
             "args": [
-                "make",
                 "--directory=${workspaceFolder};",
             ],
             "group":  {
@@ -16,7 +15,7 @@
             "presentation": {
                 "reveal":"always"
             },
-            "problemMatcher": "$msCompile"
+            "problemMatcher": "$gcc"
         }
     ]
 }
