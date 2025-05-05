@@ -72,29 +72,52 @@ void Bare::performEvent(SDL_Event &event) {
 
 bool Bare::bounces(Ball *ball) {
 	bool result = false;
-	if (ball->getTextureWithPosition()->getX2() >= this->getTextureWithPosition()->getX()
-			&& ball->getTextureWithPosition()->getX() <= this->getTextureWithPosition()->getX2()
-			&& ball->getTextureWithPosition()->getY2() >= this->getTextureWithPosition()->getY()
-			&& ball->getTextureWithPosition()->getY() <= this->getTextureWithPosition()->getY2()) {
-		if (!ball->isGlued()) {
-			Mix_PlayChannel(-1,InitUtils::getInstance()->getMapSounds()[GlobalConstants::BARE_SOUND_KEY], 0);
-			float centerBare = this->getTextureWithPosition()->getAbsCenterX();
-			float centerBall = ball->getTextureWithPosition()->getAbsCenterX();
-			float halfWidhtBare = (this->getTextureWithPosition()->getPosition().w + ball->getTextureWithPosition()->getPosition().w) / 2;
-			float deltaCenter = centerBall - centerBare;
-			ball->setCoeffX(deltaCenter / halfWidhtBare);
-			float tmpCoeffY = sqrt(1 - ball->getCoeffX() * ball->getCoeffX());
-			ball->setCoeffY(tmpCoeffY);
-			std::cout << "DEBUG Coefficient X = " << ball->getCoeffX() << std::endl;
-			std::cout << "DEBUG Coefficient Y = " << ball->getCoeffY() << std::endl;
-			result = true;
-			ball->setDirX(ball->getCoeffX() * ball->getSpeed());
-			ball->setDirY(-ball->getCoeffY() * ball->getSpeed());
-			CustomEventUtils::getInstance()->postEventBareTouched();
-		} else {
-			ball->setDirX(0);
-			ball->setDirY(0);
-		}
-	}
-	return result;
+    if (ball->getTextureWithPosition()->getX2() >= this->getTextureWithPosition()->getX()
+            && ball->getTextureWithPosition()->getX() <= this->getTextureWithPosition()->getX2()
+            && ball->getTextureWithPosition()->getY2() >= this->getTextureWithPosition()->getY()
+            && ball->getTextureWithPosition()->getY() <= this->getTextureWithPosition()->getY2()) {
+        if (!ball->isGlued()) {
+            Mix_PlayChannel(-1, InitUtils::getInstance()->getMapSounds()[GlobalConstants::BARE_SOUND_KEY], 0);
+            int centerBare = this->getTextureWithPosition()->getAbsCenterX();
+            int centerBall = ball->getTextureWithPosition()->getAbsCenterX();
+            int halfWidthBare = (this->getTextureWithPosition()->getPosition().w + ball->getTextureWithPosition()->getPosition().w) / 2;
+            int deltaCenter = centerBall - centerBare;
+            int segment = (deltaCenter * 5) / halfWidthBare;  // Divise la barre en 5 segments (-2 à 2)
+            int speed = ball->getSpeed();
+            switch (segment) {
+                case -2:  // Extrémité gauche
+                    ball->setDirX(-speed * 3 / 4);  // 75% de la vitesse vers la gauche
+                    ball->setDirY(-speed * 1 / 2);  // 50% de la vitesse vers le haut
+                    break;
+                case -1:  // Gauche
+                    ball->setDirX(-speed * 1 / 2);  // 50% de la vitesse vers la gauche
+                    ball->setDirY(-speed * 3 / 4);  // 75% de la vitesse vers le haut
+                    break;
+                case 0:   // Centre
+                    ball->setDirX(0);               // Pas de mouvement horizontal
+                    ball->setDirY(-speed);          // 100% de la vitesse vers le haut
+                    break;
+                case 1:   // Droite
+                    ball->setDirX(speed * 1 / 2);   // 50% de la vitesse vers la droite
+                    ball->setDirY(-speed * 3 / 4);  // 75% de la vitesse vers le haut
+                    break;
+                case 2:   // Extrémité droite
+                    ball->setDirX(speed * 3 / 4);   // 75% de la vitesse vers la droite
+                    ball->setDirY(-speed * 1 / 2);  // 50% de la vitesse vers le haut
+                    break;
+                default:  // Sécurité
+                    ball->setDirX(0);
+                    ball->setDirY(-speed);
+                    break;
+            }
+            std::cout << "DEBUG Segment = " << segment << std::endl;
+            std::cout << "DEBUG DirX = " << ball->getDirX() << ", DirY = " << ball->getDirY() << std::endl;
+            result = true;
+            CustomEventUtils::getInstance()->postEventBareTouched();
+        } else {
+            ball->setDirX(0);
+            ball->setDirY(0);
+        }
+    }
+    return result;
 }

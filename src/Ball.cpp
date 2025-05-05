@@ -12,8 +12,6 @@ Ball::Ball() {
 	this->dirX = 0;
 	this->speed = 8;
 	this->dirY = 8;
-	this->coeffY = 1;
-	this->coeffX = 0;
 	this->textureWithPosition = nullptr;
 	InitUtils::getInstance()->addTexture("resources/images/ball.png", GlobalConstants::BALL_TEXTURE_KEY);
 }
@@ -42,55 +40,85 @@ void Ball::setTextureWithPosition(TextureWithPosition *textureWithPosition) {
 	this->textureWithPosition = textureWithPosition;
 }
 
-float Ball::getSpeed() {
+int Ball::getSpeed() {
 	return this->speed;
 }
 
-void Ball::setSpeed(float speed) {
+void Ball::setSpeed(int speed) {
 	this->speed = speed;
 }
 
 bool Ball::bouncesOnScreen() {
-	bool result = false;
-	int x = this->getTextureWithPosition()->getAbsCenterX();
-	int y = this->getTextureWithPosition()->getAbsCenterY();
-	int halfBallSize = this->getTextureWithPosition()->getPosition().w / 2;
-	//top
-	if (y <= UtilConstants::getInstance()->gameZone.y + halfBallSize) {
-		dirY = -dirY;
-		result = true;
-	}
-	//right
-	if (x >= UtilConstants::getInstance()->gameZone.x + UtilConstants::getInstance()->gameZone.w - halfBallSize) {
-		dirX = -abs(dirX);
-		result = true;
-	}
-	//bottom
-	if (y >= UtilConstants::getInstance()->gameZone.y + UtilConstants::getInstance()->gameZone.h - halfBallSize) {
-		CustomEventUtils::getInstance()->postEventBorderTouched(CustomEventUtils::Code::BORDER_BOTTOM_TOUCHED, this);
-		Mix_PlayChannel(-1, InitUtils::getInstance()->getMapSounds()[GlobalConstants::BALL_DEAD_SOUND_KEY], 0);
-	}
-	//left
-	if (x <= UtilConstants::getInstance()->gameZone.x + halfBallSize) {
-		dirX = abs(dirX);
-		result = true;
-	}
-	return result;
+    bool result = false;
+    int x = this->getTextureWithPosition()->getAbsCenterX();
+    int y = this->getTextureWithPosition()->getAbsCenterY();
+    int halfBallSize = this->getTextureWithPosition()->getPosition().w / 2;
+
+    int top = UtilConstants::getInstance()->gameZone.y + halfBallSize;
+    int bottom = UtilConstants::getInstance()->gameZone.y + UtilConstants::getInstance()->gameZone.h - halfBallSize;
+    int left = UtilConstants::getInstance()->gameZone.x + halfBallSize;
+    int right = UtilConstants::getInstance()->gameZone.x + UtilConstants::getInstance()->gameZone.w - halfBallSize;
+
+    if (y <= top && x <= left) {
+        dirY = -dirY;
+        dirX = abs(dirX);
+        getTextureWithPosition()->setY(top);
+        getTextureWithPosition()->setX(left);
+        result = true;
+    } else if (y <= top && x >= right) { 
+        dirY = -dirY;
+        dirX = -abs(dirX);
+        getTextureWithPosition()->setY(top);
+        getTextureWithPosition()->setX(right);
+        result = true;
+    } else if (y >= bottom && x <= left) { // Coin inférieur gauche
+        CustomEventUtils::getInstance()->postEventBorderTouched(CustomEventUtils::Code::BORDER_BOTTOM_TOUCHED, this);
+        Mix_PlayChannel(-1, InitUtils::getInstance()->getMapSounds()[GlobalConstants::BALL_DEAD_SOUND_KEY], 0);
+        result = true;
+    } else if (y >= bottom && x >= right) { // Coin inférieur droit
+        CustomEventUtils::getInstance()->postEventBorderTouched(CustomEventUtils::Code::BORDER_BOTTOM_TOUCHED, this);
+        Mix_PlayChannel(-1, InitUtils::getInstance()->getMapSounds()[GlobalConstants::BALL_DEAD_SOUND_KEY], 0);
+        result = true;
+    } else {
+        // Vérifier les bords individuels
+        if (y <= top) { // Haut
+            dirY = -dirY;
+            getTextureWithPosition()->setY(top);
+            result = true;
+        }
+        if (x >= right) { // Droite
+            dirX = -abs(dirX);
+            getTextureWithPosition()->setX(right);
+            result = true;
+        }
+        if (y >= bottom) { // Bas
+            CustomEventUtils::getInstance()->postEventBorderTouched(CustomEventUtils::Code::BORDER_BOTTOM_TOUCHED, this);
+            Mix_PlayChannel(-1, InitUtils::getInstance()->getMapSounds()[GlobalConstants::BALL_DEAD_SOUND_KEY], 0);
+            result = true;
+        }
+        if (x <= left) { // Gauche
+            dirX = abs(dirX);
+            getTextureWithPosition()->setX(left);
+            result = true;
+        }
+    }
+
+    return result;
 }
 
-void Ball::setDirX(float dirX) {
+void Ball::setDirX(int dirX) {
 	this->dirX = dirX;
 }
 
-float Ball::getDirX() {
+int Ball::getDirX() {
 	return this->dirX;
 }
 
-void Ball::setDirY(float dirY) {
+void Ball::setDirY(int dirY) {
 	this->dirY = dirY;
 }
 
-float Ball::getDirY() {
+int Ball::getDirY() {
 	return this->dirY;
 }
 
@@ -104,8 +132,6 @@ void Ball::init() {
 	this->dirX = 0;
 	this->dirY = 0;
 	this->speed = 8;
-	this->coeffY = 1;
-	this->coeffX = 0;
 	this->setGlued(false);
 	if (this->textureWithPosition == nullptr) {
 		SDL_Rect ballRect;
@@ -116,22 +142,6 @@ void Ball::init() {
 		textureWithPosition->setX(posX);
 		textureWithPosition->setY(posY);
 	}
-}
-
-void Ball::setCoeffX(float coeffX) {
-	this->coeffX = coeffX;
-}
-
-void Ball::setCoeffY(float coeffY) {
-	this->coeffY = coeffY;
-}
-
-float Ball::getCoeffX() {
-	return this->coeffX;
-}
-
-float Ball::getCoeffY() {
-	return this->coeffY;
 }
 
 void Ball::performEvent(SDL_Event &event) {
