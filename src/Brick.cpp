@@ -101,21 +101,46 @@ bool Brick::isTouchedByBall(Ball *ball) {
 
 void Brick::bounces(Ball *ball) {
 	Mix_PlayChannel(-1, InitUtils::getInstance()->getMapSounds()[GlobalConstants::BRICK_SOUND_KEY], 0);
-	int halfBallSize = this->getTextureWithPosition()->getPosition().w / 2;
-	int x = ball->getTextureWithPosition()->getAbsCenterX();
-	int y = ball->getTextureWithPosition()->getAbsCenterY();
-	if (x >= getTextureWithPosition()->getX() - halfBallSize && x < getTextureWithPosition()->getX2() + halfBallSize) {
-		if ((y >= getTextureWithPosition()->getY() - halfBallSize && y <= getTextureWithPosition()->getY())
-				|| (y >= getTextureWithPosition()->getY2() && y <= getTextureWithPosition()->getY2() + halfBallSize)) {
-			ball->setDirY(-ball->getDirY());
-		}
-	}
-	if (y >= getTextureWithPosition()->getY() - halfBallSize && y <= getTextureWithPosition()->getY2() + halfBallSize) {
-		if ((x >= getTextureWithPosition()->getX() - halfBallSize && x <= getTextureWithPosition()->getX())
-				|| (x >= getTextureWithPosition()->getX2() && x <= getTextureWithPosition()->getX2() + halfBallSize)) {
-			ball->setDirX(-ball->getDirX());
-		}
-	}
+    
+    // Utiliser la largeur de la balle, pas celle de la brique
+    int halfBallSize = ball->getTextureWithPosition()->getPosition().w / 2;
+    int x = ball->getTextureWithPosition()->getAbsCenterX();
+    int y = ball->getTextureWithPosition()->getAbsCenterY();
+
+    // Définir les limites de la brique
+    int brickLeft = getTextureWithPosition()->getX();
+    int brickRight = getTextureWithPosition()->getX2();
+    int brickTop = getTextureWithPosition()->getY();
+    int brickBottom = getTextureWithPosition()->getY2();
+
+    // Calculer les distances entre le centre de la balle et les faces de la brique
+    int distTop = y - brickTop;
+    int distBottom = brickBottom - y;
+    int distLeft = x - brickLeft;
+    int distRight = brickRight - x;
+
+    // Déterminer la face la plus proche touchée
+    int minDistVertical = distTop < distBottom ? distTop : distBottom;
+    int minDistHorizontal = distLeft < distRight ? distLeft : distRight;
+
+    // Si la collision est principalement verticale (haut ou bas)
+    if (minDistVertical <= minDistHorizontal) {
+        if (distTop < distBottom) { // Touche le haut
+            ball->setDirY(-ball->getDirY());
+            ball->getTextureWithPosition()->setY(brickTop - halfBallSize); // Corriger la position
+        } else { // Touche le bas
+            ball->setDirY(-ball->getDirY());
+            ball->getTextureWithPosition()->setY(brickBottom + halfBallSize);
+        }
+    } else { // Collision principalement horizontale (gauche ou droite)
+        if (distLeft < distRight) { // Touche la gauche
+            ball->setDirX(-ball->getDirX());
+            ball->getTextureWithPosition()->setX(brickLeft - halfBallSize);
+        } else { // Touche la droite
+            ball->setDirX(-ball->getDirX());
+            ball->getTextureWithPosition()->setX(brickRight + halfBallSize);
+        }
+    }
 }
 
 void Brick::init() {
