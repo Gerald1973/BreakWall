@@ -147,7 +147,6 @@ int main(int argc, char **argv) {
             int ballPosX = ball->getTextureWithPosition()->getAbsCenterX();
             int barePosX = ballPosX - halfBarSize + posRand;
             bare->getTextureWithPosition()->setX(barePosX);
-            title->render();
         }
 
         if (GameStates::getInstance()->getRemainingBricks() == 0) {
@@ -171,6 +170,9 @@ int main(int argc, char **argv) {
         bare->render();
         ball->render();
         scoreSegments->render(GameStates::getInstance()->getScore());
+        if (!GameStates::getInstance()->isStarted()) {
+            title->render();
+        }
         SDL_SetRenderTarget(InitUtils::getInstance()->getRenderer(), NULL);
         SDL_RenderCopy(InitUtils::getInstance()->getRenderer(), baseTexture, NULL, NULL);
         SDL_RenderPresent(InitUtils::getInstance()->getRenderer());
