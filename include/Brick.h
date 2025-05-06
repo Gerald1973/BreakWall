@@ -31,7 +31,8 @@ private:
 	TextureWithPosition *textureWithPosition;
 	Mix_Chunk *sound;
 	int deadDirection;
-
+	int animationFrame = 0;
+	int animationDuration = 60;
 };
 
 #endif // BRICK_H

@@ -11,6 +11,7 @@ Brick::Brick() {
 	this->destroyed = false;
 	this->textureWithPosition = NULL;
 	this->deadDirection = 1;
+	this->animationDuration = 240;
 }
 void Brick::setValue(int value) {
 	this->value = value;
@@ -44,36 +45,34 @@ void Brick::setDestroyed(bool destroyed) {
 
 void Brick::render() {
 	if (!isDestroyed()) {
-		SDL_RenderCopy(InitUtils::getInstance()->getRenderer(), getTextureWithPosition()->getTexture(), NULL, &(getTextureWithPosition()->getPosition()));
-	} else {
-		playDestroy();
-	}
+        SDL_RenderCopy(InitUtils::getInstance()->getRenderer(), getTextureWithPosition()->getTexture(), NULL, &(getTextureWithPosition()->getPosition()));
+    } else {
+        playDestroy();
+        if (this->animationFrame < this->animationDuration) {  // Rendre tant que l'animation n'est pas terminée
+            SDL_RendererFlip sdlRendererFlip = (getTextureWithPosition()->getPosition().h == 0) ? SDL_FLIP_VERTICAL : SDL_FLIP_NONE;
+            SDL_RenderCopyEx(InitUtils::getInstance()->getRenderer(),
+                             getTextureWithPosition()->getTexture(),
+                             NULL,
+                             &(getTextureWithPosition()->getPosition()),
+                             0,
+                             nullptr,
+                             sdlRendererFlip);
+        }
+    }
 }
 
 void Brick::playDestroy() {
-	int y = getTextureWithPosition()->getY();
-	int h = getTextureWithPosition()->getPosition().h;
-	SDL_RendererFlip sdlRendererFlip = SDL_FLIP_NONE;
-	if (y < GlobalConstants::BALL_ZONE_Y + GlobalConstants::BALL_ZONE_HEIGHT - h) {
+    int y = getTextureWithPosition()->getY();
+    int h = getTextureWithPosition()->getPosition().h;
+	if (animationFrame <= animationDuration && y < GlobalConstants::BALL_ZONE_Y + GlobalConstants::BALL_ZONE_HEIGHT - h) {
 		if (h == 0 || h == getTextureWithPosition()->getOriginRect().h) {
-			deadDirection = -deadDirection;
+			deadDirection = -deadDirection;;
 		}
 		y = y + 2;
 		h = h + deadDirection;
-		if (h == 0){
-			sdlRendererFlip= SDL_FLIP_VERTICAL;
-		} else {
-			sdlRendererFlip = SDL_FLIP_NONE;
-		}
 		getTextureWithPosition()->setY(y);
 		getTextureWithPosition()->setH(h);
-		SDL_RenderCopyEx(InitUtils::getInstance()->getRenderer(),
-				getTextureWithPosition()->getTexture(),
-				NULL,
-				&(getTextureWithPosition()->getPosition()),
-				0,
-				nullptr,
-				sdlRendererFlip);
+		animationFrame++;
 	} else {
 		CustomEventUtils::getInstance()->postEventBrickRemoved(this);
 	}

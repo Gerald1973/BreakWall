@@ -36,7 +36,9 @@ void initBareAndBall(Bare* bare, Ball* ball){
 int main(int argc, char **argv) {
     int posRand = 0;
     SDL_Texture *baseTexture = InitUtils::getInstance()->getBaseTexture();
-    SDL_SetRelativeMouseMode(SDL_TRUE);
+    //SDL_SetRelativeMouseMode(SDL_TRUE);
+    SDL_SetRelativeMouseMode(SDL_FALSE);  // Désactiver le mode relatif en débogage
+    SDL_ShowCursor(SDL_ENABLE);
     SDL_Event event;
     Bare *bare = new Bare();
     bare->init();
