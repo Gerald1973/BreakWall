@@ -35,9 +35,13 @@ void initBareAndBall(Bare* bare, Ball* ball){
 
 int main(int argc, char **argv) {
     int posRand = 0;
+    int targetBarePosX = 0;
+    int frameCounter = 0;
+    const int TARGET_UPDATE_INTERVAL = 15;
+    const float LERP_FACTOR = 0.1f;
     SDL_Texture *baseTexture = InitUtils::getInstance()->getBaseTexture();
-    //SDL_SetRelativeMouseMode(SDL_TRUE);
-    SDL_SetRelativeMouseMode(SDL_FALSE);  // Désactiver le mode relatif en débogage
+    SDL_SetRelativeMouseMode(SDL_TRUE);
+    //SDL_SetRelativeMouseMode(SDL_FALSE);
     SDL_ShowCursor(SDL_ENABLE);
     SDL_Event event;
     Bare *bare = new Bare();
@@ -125,8 +129,6 @@ int main(int argc, char **argv) {
                     GameStates::getInstance()->setPaused(false);
                     GameStates::getInstance()->setRemainingLives(5);
                     GameStates::getInstance()->setStarted(false);
-                } else if (event.user.code == CustomEventUtils::Code::BARE_TOUCHED) {
-                    // Plus besoin de posRand ici, déplacé dans la condition !isStarted()
                 } else if (event.user.code == CustomEventUtils::Code::BALL_MOVED) {
                     wall->performEvent(event);
                     bare->performEvent(event);
@@ -142,13 +144,19 @@ int main(int argc, char **argv) {
 
         if (!GameStates::getInstance()->isStarted()) {
             ball->setGlued(false);
-            int halfBarSize = bare->getTextureWithPosition()->getOriginRect().w / 2;
-            posRand = rand() % (halfBarSize - 1);
-            int posOrNeg = rand() % 2;
-            if (posOrNeg == 0) posRand = -posRand;
-            int ballPosX = ball->getTextureWithPosition()->getAbsCenterX();
-            int barePosX = ballPosX - halfBarSize + posRand;
-            bare->getTextureWithPosition()->setX(barePosX);
+            if (frameCounter % TARGET_UPDATE_INTERVAL == 0) {
+                frameCounter = 0;
+                int halfBarSize = bare->getTextureWithPosition()->getOriginRect().w / 2;
+                posRand = rand() % (halfBarSize-1);
+                int posOrNeg = rand() % 2;
+                if (posOrNeg == 0) posRand = -posRand;
+                int ballPosX = ball->getTextureWithPosition()->getAbsCenterX();
+                targetBarePosX = ballPosX - halfBarSize + posRand; // Nouvelle position cible
+            }
+            int currentBarePosX = bare->getTextureWithPosition()->getX();
+            int newBarePosX = currentBarePosX + static_cast<int>((targetBarePosX - currentBarePosX) * LERP_FACTOR);
+            bare->getTextureWithPosition()->setX(newBarePosX);
+            frameCounter++;
         }
 
         if (GameStates::getInstance()->getRemainingBricks() == 0) {
