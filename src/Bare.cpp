@@ -83,29 +83,46 @@ bool Bare::bounces(Ball *ball) {
             int halfWidthBare = (this->getTextureWithPosition()->getPosition().w + ball->getTextureWithPosition()->getPosition().w) / 2;
             int deltaCenter = centerBall - centerBare;
             int segment = (deltaCenter * 5) / halfWidthBare;  // Divise la barre en 5 segments (-2 à 2)
-            int speed = ball->getSpeed();
+            float speed = (float) ball->getSpeed();
+            printf(" Segment %d \n",segment);
             switch (segment) {
-                case -2:  // Extrémité gauche
-                    ball->setDirX(-speed * 3 / 4);  // 75% de la vitesse vers la gauche
-                    ball->setDirY(-speed * 1 / 2);  // 50% de la vitesse vers le haut
+                case -4: 
+                    ball->setDirX(-speed * 0.73);
+                    ball->setDirY(-speed * 0.68);
                     break;
-                case -1:  // Gauche
-                    ball->setDirX(-speed * 1 / 2);  // 50% de la vitesse vers la gauche
-                    ball->setDirY(-speed * 3 / 4);  // 75% de la vitesse vers le haut
+                case -3:
+                    ball->setDirX(-speed * 0.65);
+                    ball->setDirY(-speed * 0.75);
                     break;
-                case 0:   // Centre
-                    ball->setDirX(0);               // Pas de mouvement horizontal
-                    ball->setDirY(-speed);          // 100% de la vitesse vers le haut
+                case -2:
+                    ball->setDirX(-speed * 0.5);
+                    ball->setDirY(-speed * 0.86);
                     break;
-                case 1:   // Droite
-                    ball->setDirX(speed * 1 / 2);   // 50% de la vitesse vers la droite
-                    ball->setDirY(-speed * 3 / 4);  // 75% de la vitesse vers le haut
+                case -1:
+                    ball->setDirX(-speed * 0.30);
+                    ball->setDirY(-speed * 0.95);
                     break;
-                case 2:   // Extrémité droite
-                    ball->setDirX(speed * 3 / 4);   // 75% de la vitesse vers la droite
-                    ball->setDirY(-speed * 1 / 2);  // 50% de la vitesse vers le haut
+                case 0:
+                    ball->setDirX(0);
+                    ball->setDirY(-speed);
                     break;
-                default:  // Sécurité
+                case 1:
+                    ball->setDirX(speed * 0.30);
+                    ball->setDirY(-speed * 0.95);
+                    break;
+                case 2:
+                    ball->setDirX(speed * 0.5);
+                    ball->setDirY(-speed * 0.86);
+                    break;
+                case 3:   
+                    ball->setDirX(speed * 0.65);
+                    ball->setDirY(-speed * 0.75);
+                    break;
+                case 4:  
+                    ball->setDirX(speed * 0.73);
+                    ball->setDirY(-speed * 0.68);
+                    break;
+                default:
                     ball->setDirX(0);
                     ball->setDirY(-speed);
                     break;
