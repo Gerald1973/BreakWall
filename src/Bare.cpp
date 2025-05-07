@@ -87,40 +87,40 @@ bool Bare::bounces(Ball *ball) {
             printf(" Segment %d \n",segment);
             switch (segment) {
                 case -4: 
-                    ball->setDirX(-speed * 0.73);
-                    ball->setDirY(-speed * 0.68);
+                    ball->setDirX(-speed * 0.73f);
+                    ball->setDirY(-speed * 0.68f);
                     break;
                 case -3:
-                    ball->setDirX(-speed * 0.65);
-                    ball->setDirY(-speed * 0.75);
+                    ball->setDirX(-speed * 0.65f);
+                    ball->setDirY(-speed * 0.75f);
                     break;
                 case -2:
-                    ball->setDirX(-speed * 0.5);
-                    ball->setDirY(-speed * 0.86);
+                    ball->setDirX(-speed * 0.5f);
+                    ball->setDirY(-speed * 0.86f);
                     break;
                 case -1:
-                    ball->setDirX(-speed * 0.30);
-                    ball->setDirY(-speed * 0.95);
+                    ball->setDirX(-speed * 0.30f);
+                    ball->setDirY(-speed * 0.95f);
                     break;
                 case 0:
                     ball->setDirX(0);
                     ball->setDirY(-speed);
                     break;
                 case 1:
-                    ball->setDirX(speed * 0.30);
-                    ball->setDirY(-speed * 0.95);
+                    ball->setDirX(speed * 0.30f);
+                    ball->setDirY(-speed * 0.95f);
                     break;
                 case 2:
-                    ball->setDirX(speed * 0.5);
-                    ball->setDirY(-speed * 0.86);
+                    ball->setDirX(speed * 0.5f);
+                    ball->setDirY(-speed * 0.86f);
                     break;
                 case 3:   
-                    ball->setDirX(speed * 0.65);
-                    ball->setDirY(-speed * 0.75);
+                    ball->setDirX(speed * 0.65f);
+                    ball->setDirY(-speed * 0.75f);
                     break;
                 case 4:  
-                    ball->setDirX(speed * 0.73);
-                    ball->setDirY(-speed * 0.68);
+                    ball->setDirX(speed * 0.73f);
+                    ball->setDirY(-speed * 0.68f);
                     break;
                 default:
                     ball->setDirX(0);
