@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=BreakWall
+Comment=A classic brick-breaking game
+Exec=/usr/bin/breakwall
+Type=Application
+Terminal=false
+Categories=Game;ArcadeGame;
+Icon=/usr/lib/breakwall/resources/images/breakwall_title.png

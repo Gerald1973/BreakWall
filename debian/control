@@ -1,0 +1,14 @@
+Source: breakwall
+Section: games
+Priority: optional
+Maintainer: Gérald Maréchal <gerald1973@example.com>
+Build-Depends: debhelper (>= 12), libsdl2-dev, libsdl2-mixer-dev, libsdl2-image-dev
+Standards-Version: 4.5.0
+Homepage: https://github.com/Gerald1973/BreakWall
+
+Package: breakwall
+Architecture: any
+Depends: libsdl2-2.0-0, libsdl2-mixer-2.0-0, libsdl2-image-2.0-0
+Description: BreakWall, a brick-breaking game
+ BreakWall is a classic brick-breaking game built with SDL2.
+ It features multiple levels, sound effects, and music from the Commodore Amiga era.

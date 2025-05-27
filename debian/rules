@@ -1,0 +1,19 @@
+#!/usr/bin/make -f
+
+%:
+	dh $@
+
+override_dh_auto_build:
+	$(MAKE)
+
+override_dh_auto_install:
+	mkdir -p $(CURDIR)/debian/breakwall/usr/lib/breakwall
+	mkdir -p $(CURDIR)/debian/breakwall/usr/lib/breakwall/resources
+	mkdir -p $(CURDIR)/debian/breakwall/usr/bin
+	mkdir -p $(CURDIR)/debian/breakwall/usr/share/applications
+	cp breakwall $(CURDIR)/debian/breakwall/usr/lib/breakwall/
+	cp -r resources/* $(CURDIR)/debian/breakwall/usr/lib/breakwall/resources/
+	cp debian/breakwall.desktop $(CURDIR)/debian/breakwall/usr/share/applications/
+	echo '#!/bin/sh' > $(CURDIR)/debian/breakwall/usr/bin/breakwall
+	echo 'cd /usr/lib/breakwall && ./breakwall' >> $(CURDIR)/debian/breakwall/usr/bin/breakwall
+	chmod +x $(CURDIR)/debian/breakwall/usr/bin/breakwall
