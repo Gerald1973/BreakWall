@@ -143,7 +143,6 @@ void Brick::bounces(Ball *ball) {
 }
 
 void Brick::init() {
-	std::cout << "Initttttttttt" << std::endl;
 	SDL_Rect tmpRect;
 	TextureWithPosition *textureWithPosition = new TextureWithPosition(InitUtils::getInstance()->getMapTextures()[GlobalConstants::TEXTURE_KEY], tmpRect);
 	setTextureWithPosition(textureWithPosition);
