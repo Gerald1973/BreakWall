@@ -18,3 +18,6 @@ breakwall
 /SDL2.dll
 /dist/
 /Default/
+concat.sh
+concatenated_files.txt
+obj/**.*

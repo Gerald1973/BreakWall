@@ -165,6 +165,10 @@ InitUtils::~InitUtils() {
 		std::cout << "Remove texture:" << mapTexturesIterator->first << "\n";
 		SDL_DestroyTexture(mapTexturesIterator->second);
 	}
+	for (auto& music : mixMusics) {
+        std::cout << "Remove music:" << music.first << "\n";
+        Mix_FreeMusic(music.second);
+    }
 	Mix_Quit();
 	IMG_Quit();
 	SDL_Quit();
