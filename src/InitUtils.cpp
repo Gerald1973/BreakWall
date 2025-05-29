@@ -16,6 +16,7 @@
 #include "../include/WallRegistry.hpp"
 #include "../include/Wall.hpp"
 #include "../include/Wall002.hpp"
+#include "../include/Wall003.hpp"
 
 InitUtils::InitUtils() {
 	renderer = NULL;
@@ -137,6 +138,7 @@ bool InitUtils::toggleFullScreen() {
 void InitUtils::fillMixMusic() {
 	this->addMixMusic("resources/mods/worldofw.mod", "Wall");
 	this->addMixMusic("resources/mods/twinkle_by_fred_j.mod", "Wall002");
+	this->addMixMusic("resources/mods/christ_1.mod", "Wall003");
 }
 
 void InitUtils::fillSoundEffect() {
@@ -151,6 +153,7 @@ void InitUtils::fillTexture() {
 void InitUtils::registerWalls() {
 	REGISTER_WALL(0, Wall::create);
 	REGISTER_WALL(1, Wall002::create);
+	REGISTER_WALL(2, Wall003::create);
 }
 
 InitUtils::~InitUtils() {
