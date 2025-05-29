@@ -105,8 +105,7 @@ int main(int argc, char **argv) {
                         GameStates::getInstance()->setRemainingLives(5);
                         GameStates::getInstance()->setScore(0);
                         delete wall;
-                        //wall = WallRegistry::create(GameStates::getInstance()->getCurrentLevel());
-						wall = WallRegistry::create(2);
+                        wall = WallRegistry::create(GameStates::getInstance()->getCurrentLevel());
                         if (!wall) {
                             std::cerr << "Erreur : Impossible de créer le mur" << std::endl;
                             loop = false;

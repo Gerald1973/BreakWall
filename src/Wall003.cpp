@@ -3,6 +3,7 @@
 #include <SDL2/SDL.h>
 #include "../include/InitUtils.hpp"
 #include "../include/GlobalConstants.h"
+#include "../include/MovingRotatingBrick.hpp"
 
 void Wall003::init()
 {
@@ -26,18 +27,33 @@ void Wall003::init()
 		{0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0}};
 
-	// Placer les briques selon le motif
+	int heartHeightPixels = GRID_HEIGHT * brickHeight;						   // 8 * 32 = 256 pixels
+	int offsetY = (GlobalConstants::WALL_ZONE_HEIGHT - heartHeightPixels) / 2; // (284 - 256) / 2 = 14 pixels
+
+	// Compteur pour alterner les types de briques
+	int brickCount = 0;
+
 	for (int y = 0; y < GRID_HEIGHT; y++)
 	{
 		for (int x = 0; x < GRID_WIDTH; x++)
 		{
 			if (heartPattern[y][x] == 1)
 			{
-				Brick *brick = new Brick();
+				Brick *brick;
+				// Alterner : une brique sur deux est une MovingRotatingBrick
+				if (brickCount % 2 == 0)
+				{
+					brick = new Brick();
+				}
+				else
+				{
+					brick = new MovingRotatingBrick();
+				}
 				brick->init();
 				brick->getTextureWithPosition()->setX(x * brickWidth);
-				brick->getTextureWithPosition()->setY(y * brickHeight);
+				brick->getTextureWithPosition()->setY(offsetY + y * brickHeight);
 				bricks.push_back(brick);
+				brickCount++; // Incrémenter le compteur
 			}
 		}
 	}

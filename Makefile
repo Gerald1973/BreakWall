@@ -23,7 +23,7 @@ LINKER_FLAGS_LINUX = -lSDL2main -lSDL2 -lSDL2_mixer -lSDL2_image -lm
 COMPILER_FLAGS = -Wall -Wuninitialized
 
 # Default target
-all: compile
+all: clean compile
 
 # Compile for Linux
 compile: $(OBJECTS)

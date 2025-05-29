@@ -11,7 +11,7 @@ public:
 	Brick();
 	virtual ~Brick();
 	void setValue(int value);
-	void performEvent(SDL_Event &event);
+	virtual void performEvent(SDL_Event &event);
 	int getValue();
 	bool isDestroyed();
 	bool isTouchedByBall(Ball* ball);
@@ -19,11 +19,11 @@ public:
 	void setDestroyed(bool destroyed);
 	TextureWithPosition* getTextureWithPosition();
 	void setTextureWithPosition(TextureWithPosition *textureWithPosition);
-	void render();
+	virtual void render();
 	Mix_Chunk* getSound();
 	void setSound(Mix_Chunk *sound);
 	void playDestroy();
-	void init();
+	virtual void init();
 protected:
 private:
 	int value;
