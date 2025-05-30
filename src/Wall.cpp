@@ -49,12 +49,7 @@ void Wall::performEvent(SDL_Event &event)
 	{
 		for (unsigned int i = 0; i < this->bricks.size(); i++)
 		{
-			Ball *ball = (Ball *)event.user.data1;
-			if (this->bricks[i]->isTouchedByBall(ball))
-			{
-				this->bricks[i]->performEvent(event);
-				break;
-			}
+			this->bricks[i]->performEvent(event);
 		}
 	}
 	else if (event.user.code == CustomEventUtils::Code::BRICK_REMOVED)
@@ -64,6 +59,13 @@ void Wall::performEvent(SDL_Event &event)
 		this->bricks.erase(bricks.begin() + index);
 		delete brick;
 		CustomEventUtils::getInstance()->postEventBrickRemaining(this);
+	}
+	else if (event.user.code == CustomEventUtils::Code::MISSILE_MOVED)
+	{
+		for (unsigned int i = 0; i < this->bricks.size(); i++)
+		{
+			this->bricks[i]->performEvent(event);
+		}
 	}
 }
 
@@ -101,9 +103,14 @@ void Wall::init()
 		for (; x < maxNumberOfBricksOnX; x = x + 2)
 		{
 			Brick *brick = NULL;
-			switch (brickCounter % 3){
-			case 1: brick = new MovingRotatingBrick();break;
-			case 2: brick = new ExplodingBrick();break;
+			switch (brickCounter % 3)
+			{
+			case 1:
+				brick = new MovingRotatingBrick();
+				break;
+			case 2:
+				brick = new ExplodingBrick();
+				break;
 			default:
 				brick = new Brick();
 				break;

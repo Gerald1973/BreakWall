@@ -24,7 +24,7 @@ public:
 	void setSound(Mix_Chunk *sound);
 	void playDestroy();
 	virtual void init();
-protected:
+    virtual bool isTouchedByMissile(Brick* missileBrick);
 private:
 	int value;
 	bool destroyed;
