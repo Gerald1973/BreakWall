@@ -19,7 +19,9 @@ ExplodingBrick::~ExplodingBrick() {
 }
 
 void ExplodingBrick::init() {
-    Brick::init(); // Call base class init
+    SDL_Rect tmpRect;
+	TextureWithPosition *textureWithPosition = new TextureWithPosition(InitUtils::getInstance()->getMapTextures()[GlobalConstants::EXPLODING_BRICK_TEXTURE_KEY], tmpRect);
+	setTextureWithPosition(textureWithPosition);
     isExploding = false;
     fragments.clear();
 }

@@ -51,6 +51,8 @@ int InitUtils::initRenderer() {
 	baseTexture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_TARGET, GlobalConstants::SCREEN_WIDTH,
 			GlobalConstants::SCREEN_HEIGHT);
 	addTexture("resources/images/brick_red_pop.png", GlobalConstants::TEXTURE_KEY);
+	addTexture("resources/images/brick_orange_pop.png", GlobalConstants::EXPLODING_BRICK_TEXTURE_KEY);
+	addTexture("resources/images/brick_pink_pop.png", GlobalConstants::ROTATING_BRICK_TEXTURE_KEY);
 	return 0;
 }
 

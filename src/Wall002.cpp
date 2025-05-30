@@ -1,6 +1,7 @@
 #include "../include/Wall002.hpp"
 #include <SDL2/SDL.h>
 #include "../include/InitUtils.hpp"
+#include "../include/ExplodingBrick.hpp"
 
 void Wall002::init() {
 	std::vector<Brick*> bricks;
@@ -12,7 +13,7 @@ void Wall002::init() {
 		int maxNumberOfBricksOnY = (GlobalConstants::WALL_ZONE_HEIGHT - GlobalConstants::WALL_ZONE_Y) / brickHeight;
 		for (int y = 0; y < maxNumberOfBricksOnY; y = y + 2) {
 			for (int x = 0; x < maxNumberOfBricksOnX; x++) {
-				Brick *brick = new Brick();
+				Brick *brick = new ExplodingBrick();
 				brick->init();
 				brick->getTextureWithPosition()->setX(x * brick->getTextureWithPosition()->getPosition().w);
 				brick->getTextureWithPosition()->setY(y * brick->getTextureWithPosition()->getPosition().h);

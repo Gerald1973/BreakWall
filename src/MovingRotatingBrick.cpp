@@ -21,11 +21,9 @@ MovingRotatingBrick::~MovingRotatingBrick() {
 }
 
 void MovingRotatingBrick::init() {
-	Brick::init(); // Call base class init
-    if (!getTextureWithPosition()) {
-        std::cerr << "ERROR: textureWithPosition is null in MovingRotatingBrick::init" << std::endl;
-        return;
-    }
+	SDL_Rect tmpRect;
+	TextureWithPosition *textureWithPosition = new TextureWithPosition(InitUtils::getInstance()->getMapTextures()[GlobalConstants::ROTATING_BRICK_TEXTURE_KEY], tmpRect);
+	setTextureWithPosition(textureWithPosition);
     isMoving = false;
     rotationAngle = 0.0f;
 }
