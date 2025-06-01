@@ -8,7 +8,7 @@
 void Wall003::init()
 {
 	std::vector<Brick *> bricks;
-	this->background = new Background("resources/images/super_heros_female.png");
+	this->background = new Background("resources/images/super_heros_female.jpg");
 
 	int brickHeight, brickWidth;
 	SDL_QueryTexture(InitUtils::getInstance()->getMapTextures()[GlobalConstants::TEXTURE_KEY], nullptr, nullptr, &brickWidth, &brickHeight);

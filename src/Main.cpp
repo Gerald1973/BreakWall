@@ -41,8 +41,8 @@ int main(int argc, char **argv)
 	const int TARGET_UPDATE_INTERVAL = 15;
 	const float LERP_FACTOR = 0.1f;
 	SDL_Texture *baseTexture = InitUtils::getInstance()->getBaseTexture();
-	// SDL_SetRelativeMouseMode(SDL_TRUE);
-	SDL_SetRelativeMouseMode(SDL_FALSE);
+	SDL_SetRelativeMouseMode(SDL_TRUE);
+	//SDL_SetRelativeMouseMode(SDL_FALSE);
 	SDL_ShowCursor(SDL_ENABLE);
 	SDL_Event event;
 	Bare *bare = new Bare();
