@@ -13,7 +13,7 @@ public:
 
     static inline FileUtils *getInstance()
     {
-        if (instance)
+        if (!instance)
         {
             instance = new FileUtils();
         }
