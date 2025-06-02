@@ -17,6 +17,7 @@
 #include "../include/Wall.hpp"
 #include "../include/Wall002.hpp"
 #include "../include/Wall003.hpp"
+#include "../include/Wall004.hpp"
 
 InitUtils::InitUtils() {
 	renderer = NULL;
@@ -138,6 +139,7 @@ void InitUtils::fillMixMusic() {
 	this->addMixMusic("resources/mods/worldofw.mod", "Wall");
 	this->addMixMusic("resources/mods/twinkle_by_fred_j.mod", "Wall002");
 	this->addMixMusic("resources/mods/christ_1.mod", "Wall003");
+	this->addMixMusic("resources/mods/_4k_introtune_.mod", "Wall004");
 }
 
 void InitUtils::fillSoundEffect() {
@@ -158,6 +160,7 @@ void InitUtils::registerWalls() {
 	REGISTER_WALL(0, Wall::create);
 	REGISTER_WALL(1, Wall002::create);
 	REGISTER_WALL(2, Wall003::create);
+	REGISTER_WALL(3, Wall004::create);
 }
 
 InitUtils::~InitUtils() {
