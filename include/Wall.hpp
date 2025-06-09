@@ -29,8 +29,32 @@ public:
 	static Wall* create(){
 		return new Wall();
 	}
+	void explodeAllBricks();
 protected:
 	Background* background;
+	struct StarFragment {
+        SDL_Rect position; // Position and size of the fragment
+        float dirX; // Normalized direction x
+        float dirY; // Normalized direction y
+        bool active; // Whether the fragment is still on screen
+    };
+	  // List of star fragments for explosion effect
+    std::vector<StarFragment> starFragments;
+    
+    // Number of star fragments per brick
+    static const int NUM_FRAGMENTS = 4;
+    
+    // Size of each star fragment
+    static const float STAR_SIZE;
+    
+    // Speed of star fragments
+    float starSpeed;
+    
+    // Create star fragments for a given brick position
+    void createStarFragments(const SDL_Rect& brickPos);
+    
+    // Update star fragments
+    void updateStarFragments();
 private:
 	std::vector<Brick*> bricks;
 	std::string songFileName;

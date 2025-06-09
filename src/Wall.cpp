@@ -9,6 +9,7 @@
 #include "../include/CustomEventUtils.hpp"
 #include "../include/MovingRotatingBrick.hpp"
 #include "../include/ExplodingBrick.hpp"
+#include "../include/SurpriseBrick.hpp"
 #include <iostream>
 
 Wall::Wall()
@@ -103,13 +104,16 @@ void Wall::init()
 		for (; x < maxNumberOfBricksOnX; x = x + 2)
 		{
 			Brick *brick = NULL;
-			switch (brickCounter % 3)
+			switch (brickCounter % 4)
 			{
 			case 1:
 				brick = new MovingRotatingBrick();
 				break;
 			case 2:
 				brick = new ExplodingBrick();
+				break;
+			case 3:
+				brick = new SurpriseBrick();
 				break;
 			default:
 				brick = new Brick();

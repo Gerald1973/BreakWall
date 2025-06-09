@@ -24,6 +24,7 @@ public:
 	static inline std::string MISSILE_BRICK_TEXTURE_KEY = "missilebrick";
 	static inline std::string MISSILE_TEXTURE_KEY="missile";
     static inline std::string BALL_TEXTURE_KEY= "ball";
+	static inline std::string BRICK_SURPRISE_TEXTURE_KEY= "suerprisebrick";
     //sound key
     static inline std::string BRICK_SOUND_KEY = "brick_key";
     static inline std::string BALL_DEAD_SOUND_KEY="sound_key_ball_dead";

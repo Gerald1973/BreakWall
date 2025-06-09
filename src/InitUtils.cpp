@@ -154,6 +154,7 @@ void InitUtils::fillTexture() {
 	addTexture("resources/images/brick_pink_pop.png", GlobalConstants::ROTATING_BRICK_TEXTURE_KEY);
 	addTexture("resources/images/brick_yellow_pop.png", GlobalConstants::MISSILE_BRICK_TEXTURE_KEY);
 	addTexture("resources/images/morgenstern.png", GlobalConstants::MISSILE_TEXTURE_KEY);
+	addTexture("resources/images/brick_ribbon.png", GlobalConstants::BRICK_SURPRISE_TEXTURE_KEY);
 }
 
 void InitUtils::registerWalls() {
