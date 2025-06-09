@@ -140,6 +140,8 @@ int main(int argc, char **argv) {
           GameStates::getInstance()->setRemainingBricks(wall->getBricks().size());
         } else if (event.user.code == CustomEventUtils::Code::SURPRISE_BRICK_FALLING) {
           bare->performEvent(event);
+		} else if (event.user.code == CustomEventUtils::Code::SURPRISE_BRICK_CATCH){
+			wall->performEvent(event);
 		}
         break;
       }

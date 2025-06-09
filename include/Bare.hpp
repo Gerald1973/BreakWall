@@ -2,7 +2,7 @@
 #define BARE_H
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
-//#include "Brick.h"
+#include "Brick.h"
 
 #include "TextureWithPosition.h"
 
@@ -22,7 +22,7 @@ public:
 	Mix_Chunk* getSound();
 	void setSound(Mix_Chunk *sound);
 	bool bounces(Ball *ball);
-	//bool isSurpriseCaught(Brick* brick); 
+	bool isSurpriseCaught(Brick* brick); 
 protected:
 private:
 	TextureWithPosition *textureWithPosition;
