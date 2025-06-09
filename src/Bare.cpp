@@ -59,16 +59,27 @@ void Bare::performEvent(SDL_Event &event) {
 		break;
 	case SDL_USEREVENT:
 		switch (event.user.code) {
-		case CustomEventUtils::Code::BALL_MOVED:
-			bounces((Ball*) event.user.data1);
-			break;
-		case CustomEventUtils::Code::BORDER_BOTTOM_TOUCHED:
-			init();
+			case CustomEventUtils::Code::BALL_MOVED:
+				bounces((Ball*) event.user.data1);
+				break;
+			case CustomEventUtils::Code::BORDER_BOTTOM_TOUCHED:
+				init();
+				break;
+			case CustomEventUtils::Code::SURPRISE_BRICK_FALLING:
+				// if (isSurpriseCaught((Brick *) event.user.data1)){
+					std::cout << "SURPRISE BRICK FALLING...." << std::endl;
+				// }
 			break;
 		}
 		break;
 	}
 }
+
+// bool Bare::isSurpriseCaught(Brick *brick) {
+//     SDL_Rect brickRect = brick->getTextureWithPosition()->getPosition();
+//     SDL_Rect bareRect = this->getTextureWithPosition()->getPosition();
+//     return (SDL_HasIntersection(&brickRect, &bareRect) == SDL_TRUE);
+// }
 
 bool Bare::bounces(Ball *ball) {
 	bool result = false;

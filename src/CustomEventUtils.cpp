@@ -126,3 +126,25 @@ void CustomEventUtils::postEventMissileMoved(Brick *missileBrick)
 	event.user.windowID = SDL_GetWindowID(InitUtils::getInstance()->getPWindow());
 	SDL_PushEvent(&event);
 }
+
+void CustomEventUtils::postEventSurpriseBrickCatch()
+{
+	SDL_Event event;
+	event.type = myEventType;
+	event.user.code = SURPRISE_BRICK_CATCH;
+	event.user.data1 = nullptr;
+	event.user.data2 = nullptr;
+	event.user.windowID = SDL_GetWindowID(InitUtils::getInstance()->getPWindow());
+	SDL_PushEvent(&event);
+}
+
+void CustomEventUtils::postEventSurpriseBrickFalling(Brick *surpriseBrick)
+{
+	SDL_Event event;
+	event.type = myEventType;
+	event.user.code = SURPRISE_BRICK_FALLING;
+	event.user.data1 = (void *)surpriseBrick;
+	event.user.data2 = nullptr;
+	event.user.windowID = SDL_GetWindowID(InitUtils::getInstance()->getPWindow());
+	SDL_PushEvent(&event);
+}

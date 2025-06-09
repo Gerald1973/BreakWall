@@ -49,19 +49,13 @@ void SurpriseBrick::updatePosition() {
   	TextureWithPosition *textureWithPosition = getTextureWithPosition();
 	if (textureWithPosition->getY2() > GlobalConstants::BALL_ZONE_HEIGHT) {
     	setDestroyed(true);
+		isFalling = false;
   	} else {
+		CustomEventUtils::getInstance()->postEventSurpriseBrickFalling(this);
   		textureWithPosition->setY(textureWithPosition->getY() + static_cast<int>(fallSpeed));
+
 	}
   }
-}
-
-bool SurpriseBrick::isCaughtByBare(Bare *bare) {
-  if (!isFalling || isDestroyed()) {
-    return false;
-  }
-  SDL_Rect brickRect = getTextureWithPosition()->getPosition();
-  SDL_Rect bareRect = bare->getTextureWithPosition()->getPosition();
-  return SDL_HasIntersection(&brickRect, &bareRect);
 }
 
 // Render the brick

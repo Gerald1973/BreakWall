@@ -138,7 +138,9 @@ int main(int argc, char **argv) {
         } else if (event.user.code == CustomEventUtils::Code::BRICK_REMAINING) {
           std::cout << "DEBUG: Remaining bricks : " << wall->getBricks().size() << std::endl;
           GameStates::getInstance()->setRemainingBricks(wall->getBricks().size());
-        }
+        } else if (event.user.code == CustomEventUtils::Code::SURPRISE_BRICK_FALLING) {
+          bare->performEvent(event);
+		}
         break;
       }
     }

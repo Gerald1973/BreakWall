@@ -29,7 +29,9 @@ public:
 		LIVE_FINISHED = 60,
 		BARE_TOUCHED = 70,
 		BALL_MOVED = 100,
-		MISSILE_MOVED = 101
+		MISSILE_MOVED = 101,
+		SURPRISE_BRICK_FALLING = 105,
+		SURPRISE_BRICK_CATCH = 110
 	};
 
 	void postEventSongStop(std::string *message);
@@ -41,6 +43,8 @@ public:
 	void postEventBareTouched();
 	void postEventBallMoved(Ball *ball);
 	void postEventMissileMoved(Brick *missileBrick);
+	void postEventSurpriseBrickCatch();
+	void postEventSurpriseBrickFalling(Brick *surpriseBrick);
 
 	static inline CustomEventUtils *getInstance()
 	{
