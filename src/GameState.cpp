@@ -93,3 +93,11 @@ bool GameStates::isFullScreen() {
 void GameStates::setFullScreen(bool fullScreen) {
 	this->fullScreen = fullScreen;
 }
+
+bool GameStates::isTransitioning() {
+	return this->transitioning;
+}
+
+void GameStates::setTransitioning(bool transitioning){
+	this->transitioning = transitioning;
+}

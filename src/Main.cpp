@@ -13,6 +13,7 @@
 #include "../include/ScoreSegments.hpp"
 #include "../include/TextureWithPosition.h"
 #include "../include/Title.hpp"
+// #include "../include/TransitionManager.hpp"
 #include "../include/Wall.hpp"
 #include "../include/WallRegistry.hpp"
 #ifdef __cplusplus
@@ -40,17 +41,14 @@ int main(int argc, char **argv) {
   const float LERP_FACTOR = 0.1f;
   SDL_Texture *baseTexture = InitUtils::getInstance()->getBaseTexture();
   SDL_SetRelativeMouseMode(SDL_TRUE);
-  // SDL_SetRelativeMouseMode(SDL_FALSE);
+  //SDL_SetRelativeMouseMode(SDL_FALSE);
   SDL_ShowCursor(SDL_ENABLE);
   SDL_Event event;
   Bare *bare = new Bare();
   bare->init();
   Wall *wall = WallRegistry::create(GameStates::getInstance()->getCurrentLevel());
-  if (!wall) {
-    std::cerr << "Erreur : Impossible de créer le mur" << std::endl;
-    return 1;
-  }
   wall->init();
+  GameStates::getInstance()->setRemainingBricks(wall->getBricks().size());
   ScoreSegments *scoreSegments = new ScoreSegments();
   scoreSegments->init();
   Ball *ball = new Ball();
@@ -64,12 +62,16 @@ int main(int argc, char **argv) {
   int frameTime;
   bool loop = true;
 
+  // TransitionManager transitionManager(InitUtils::getInstance()->getRenderer(), GlobalConstants::SCREEN_WIDTH, GlobalConstants::SCREEN_HEIGHT);
+
   while (loop) {
     frameStart = SDL_GetTicks();
-
     SDL_SetRenderTarget(InitUtils::getInstance()->getRenderer(), baseTexture);
     SDL_RenderClear(InitUtils::getInstance()->getRenderer());
-    ball->moveBall();
+
+    if (!GameStates::getInstance()->isTransitioning()) {
+      ball->moveBall();
+    }
 
     while (SDL_PollEvent(&event)) {
       switch (event.type) {
@@ -84,10 +86,13 @@ int main(int argc, char **argv) {
         case SDLK_ESCAPE:
           loop = false;
           break;
+        case SDLK_F12:
+          GameStates::getInstance()->setRemainingBricks(0);
+          break;
         }
         break;
       case SDL_MOUSEMOTION:
-        if (GameStates::getInstance()->isStarted()) {
+        if (GameStates::getInstance()->isStarted() && !GameStates::getInstance()->isTransitioning()) {
           ball->performEvent(event);
           bare->performEvent(event);
         }
@@ -95,24 +100,26 @@ int main(int argc, char **argv) {
       case SDL_MOUSEBUTTONUP:
         std::cout << "Mouse up..." << std::endl;
         if (event.button.button == SDL_BUTTON_LEFT) {
-          if (GameStates::getInstance()->isStarted()) {
-            ball->performEvent(event);
-            bare->performEvent(event);
-          } else {
-            GameStates::getInstance()->setCurrentLevel(0);
-            GameStates::getInstance()->setPaused(false);
-            GameStates::getInstance()->setRemainingLives(5);
-            GameStates::getInstance()->setScore(0);
-            delete wall;
-            wall = WallRegistry::create(GameStates::getInstance()->getCurrentLevel());
-            if (!wall) {
-              std::cerr << "Erreur : Impossible de créer le mur" << std::endl;
-              loop = false;
-              break;
+          if (!GameStates::getInstance()->isTransitioning()) {
+            if (GameStates::getInstance()->isStarted()) {
+              ball->performEvent(event);
+              bare->performEvent(event);
+            } else {
+              GameStates::getInstance()->setCurrentLevel(0);
+              GameStates::getInstance()->setPaused(false);
+              GameStates::getInstance()->setRemainingLives(5);
+              GameStates::getInstance()->setScore(0);
+              delete wall;
+              wall = WallRegistry::create(GameStates::getInstance()->getCurrentLevel());
+              if (!wall) {
+                std::cerr << "Erreur : Impossible de créer le mur" << std::endl;
+                loop = false;
+                break;
+              }
+              wall->init();
+              initBareAndBall(bare, ball);
+              GameStates::getInstance()->setStarted(true);
             }
-            wall->init();
-            initBareAndBall(bare, ball);
-            GameStates::getInstance()->setStarted(true);
           }
         }
         break;
@@ -140,9 +147,9 @@ int main(int argc, char **argv) {
           GameStates::getInstance()->setRemainingBricks(wall->getBricks().size());
         } else if (event.user.code == CustomEventUtils::Code::SURPRISE_BRICK_FALLING) {
           bare->performEvent(event);
-		} else if (event.user.code == CustomEventUtils::Code::SURPRISE_BRICK_CATCH){
-			wall->performEvent(event);
-		}
+        } else if (event.user.code == CustomEventUtils::Code::SURPRISE_BRICK_CATCH) {
+          wall->performEvent(event);
+        }
         break;
       }
     }
@@ -166,6 +173,7 @@ int main(int argc, char **argv) {
     }
 
     if (GameStates::getInstance()->getRemainingBricks() == 0) {
+      GameStates::getInstance()->setTransitioning(false);
       GameStates::getInstance()->increaseLevelBy(1);
       delete wall;
       wall = WallRegistry::create(GameStates::getInstance()->getCurrentLevel() % 3);
@@ -189,10 +197,11 @@ int main(int argc, char **argv) {
     if (!GameStates::getInstance()->isStarted()) {
       title->render();
     }
+
     SDL_SetRenderTarget(InitUtils::getInstance()->getRenderer(), NULL);
     SDL_RenderCopy(InitUtils::getInstance()->getRenderer(), baseTexture, NULL, NULL);
-    SDL_RenderPresent(InitUtils::getInstance()->getRenderer());
 
+    SDL_RenderPresent(InitUtils::getInstance()->getRenderer());
     frameTime = SDL_GetTicks() - frameStart;
     if (frameDelay > frameTime) {
       SDL_Delay(frameDelay - frameTime);
